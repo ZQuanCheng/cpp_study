@@ -1,0 +1,86 @@
+{
+    // 可以通过鼠标悬停在关键字（键名）上，查看官方解释。
+
+    // 如下是可能出现在 tasks.json, launch.json 中的变量 
+    // ${workspaceFolder} - 在 VS Code 中打开的文件夹的路径。这里表示/home/zqc/projects/helloworld
+    // ${fileDirname} - 当前打开文件的文件夹路径。如果当前打开的是launch.json，则表示/home/zqc/projects/helloworld/.vscode
+    // ${file} - 当前打开的文件。如果当前打开的是launch.json，${file}就表示的当前launch.json的绝对路径：/home/zqc/projects/helloworld/.vscode/launch.json
+    // ${fileBasenameNoExtension} - 当前打开的文件的基本名称，没有文件扩展名：如果我当前打开的是launch.json, ${fileBasenameNoExtension}就是launch
+    // ${cwd} - 启动 VS Code 时任务运行器task runner的当前工作目录:
+
+    // 更多变量看官方文档（https://code.visualstudio.com/docs/editor/variables-reference）；
+    
+    "configurations": [
+        {
+            // "name": "C/C++: g++ build and debug active file",   //初始生成的
+            "name": "~/projects/cpp_study/note/cpp_data_type: g++ build and debug active file", //起一个具有鲜明特征的名字   例如：工程项目路径: 描述
+
+            "type": "cppdbg",
+            // 是不是c/c++ extension定义的debug类型???
+            // type 告诉vscode编译器的类型，这里是cppdgb
+            // 这个是规定的，不是随便写
+
+            "request": "launch",
+            // 表示此配置是用于启动程序还是附加到已运行的实例上                         
+            // 有launch和attach可选，这里填launch，按下F5就可以启动调试了； 
+            // 为什么选 launch不选attach，是因为attach用来给正在执行的文件用的，比如网页中的组件，而launch是执行新文件
+
+            // "program": "${fileDirname}/${fileBasenameNoExtension}",
+            "program": "${workspaceFolder}/out/${fileBasenameNoExtension}",   //这个路径是输出可执行文件的，其他的不需要修改
+            // 程序所在路径和程序名
+            // 程序是指:当前打开文件的目录中，名字和当前文件相同，但无扩展名的可执行程序
+            // program 这个是你的可执行程序位置，根据tasks.json生成
+            // 可以简单理解为tasks.json中的代码会帮我们用cmake编译生成可执行文件，而launch.json中的代码是让系统来调试我们的可执行文件
+
+            "args": [],
+            // 这里填命令行参数（main函数的形参），如果没有可不填     
+
+            "stopAtEntry": false,
+            // 一般填false；为true时，在开始运行程序时，不立刻往后执行，先暂停一下；
+
+            "cwd": "${fileDirname}",
+            // "cwd": "${workspaceFolder}",                                 
+            // 目标工作目录，在哪个目录调试程序，一般在当前文件夹（项目所在文件夹）；   
+            // 也可以设置成当前文件所在的工作空间"${workspaceFolder}"  (https://zhuanlan.zhihu.com/p/92175757/)
+
+            "environment": [],
+            // 临时手动添加环境变量；
+
+            "externalConsole": false,
+            // 如果需要输入东西，最好修改为true使用外部控制台（在运行时额外打开终端）。
+            // 否则用vscode内置的控制台不能输入东西（不是内联控制台，内联控制台和外部控制台其实是一样的，但是这里调试的时候没有内联控制台这个选项）
+            // 如果需要输入东东，一定要将launch.json中的externalConsole设置为true，只有这种方法可以在调试时输入。
+
+            "MIMode": "gdb",
+            // 指定调试器gdb或lldb
+
+            "miDebuggerPath": "/usr/bin/gdb",                            
+            // 指定要运行的程序(Debugger所在的位置)；
+
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",  //为gdb采用整齐打印
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                },
+                {
+                    "description": "Set Disassembly Flavor to Intel",  //将反汇编风格设置为Intel
+                    "text": "-gdb-set disassembly-flavor intel",
+                    "ignoreFailures": true
+                }
+            ],
+            
+            // "preLaunchTask": "C/C++: g++ build active file",       //初始生成的
+            "preLaunchTask": "Build",             
+            // Tasks.json的label要和launch.json的preLaunchTask对应才可以
+            // tasks.json的label有三个，我们对应最后一个"Build"
+            
+            // 这个表示执行调试前要完成的任务         
+            // 该值需要与tasks.json中的label相同，否则调试时会提示找不到；
+            // 每次更改了程序需要重新build，然后再进行调试；这时，如果直接进行调试则运行的是上次build的结果。
+            // 通过在launch.json作如下更改可以使得每次调试之前会自动进行build，这样就不用每次调试前去手动bulid了。
+
+        }
+    ],
+    "version": "2.0.0"
+}

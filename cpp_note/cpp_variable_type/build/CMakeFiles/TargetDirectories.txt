@@ -1,0 +1,3 @@
+/home/zqc/projects/cpp_study/note/cpp_variable_type/build/CMakeFiles/rebuild_cache.dir
+/home/zqc/projects/cpp_study/note/cpp_variable_type/build/CMakeFiles/edit_cache.dir
+/home/zqc/projects/cpp_study/note/cpp_variable_type/build/CMakeFiles/main.dir
