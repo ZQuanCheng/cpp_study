@@ -30,7 +30,7 @@
 > **示例1：**
 > 
 > <div align=center>
-> <img src="./images/reverse_linked_list_1.jpg"  width="" height="" alt="no photo" title="" style="zoom:80%;"/>
+> <img src="./images/reverse_linked_list_1.jpg" style="zoom:80%;"/>
 > </div>
 > 
 > ```html
@@ -41,7 +41,7 @@
 > **示例2：**
 > 
 > <div align=center>
-> <img src="./images/reverse_linked_list_2.jpg"  width="" height="" alt="no photo" title="" style="zoom:80%;"/>
+> <img src="./images/reverse_linked_list_2.jpg" style="zoom:80%;"/>
 > </div>
 > 
 > ```html
@@ -85,7 +85,7 @@
 > <font color="yellow">逻辑1</font>
 > 
 > <div align=center>
-> <img src="./images/reverse_linked_list_3.jpg"  width="" height="" alt="no photo" title="" style="zoom:80%;"/>
+> <img src="./images/reverse_linked_list_3.jpg" style="zoom:80%;"/>
 > </div>
 > 
 > ```c++
@@ -119,7 +119,7 @@
 > <font color="yellow">逻辑2</font>
 > 
 > <div align=center>
-> <img src="./images/reverse_linked_list_4.jpg"  width="" height="" alt="no photo" title="" style="zoom:80%;"/>
+> <img src="./images/reverse_linked_list_4.jpg" style="zoom:80%;"/>
 > </div>
 > 
 > ```c++
@@ -161,7 +161,7 @@
 > 如果再定义一个新的链表，实现链表元素的反转，其实这是对内存空间的浪费。
 > 其实只需要改变链表的next指针的指向，直接将链表反转 ，而不用重新定义一个新的链表，如图所示:
 > <div align=center>
-> <img src="./images/reverse_linked_list_5.jpg"  width="" height="" alt="no photo" title="" style="zoom:80%;"/>
+> <img src="./images/reverse_linked_list_5.jpg" style="zoom:80%;"/>
 > </div>
 > 
 > 之前链表的头节点是元素1， 反转之后头结点就是元素5 ，这里并没有添加或者删除节点，仅仅是改变next指针的方向。
@@ -170,7 +170,7 @@
 > 
 > 我们拿有示例中的链表来举例，如动画所示：（纠正：动画应该是先移动pre，在移动cur）
 > <div align=center>
-> <img src="./images/reverse_linked_list_6.gif"  width="" height="" alt="no photo" title="" style="zoom:80%;"/>
+> <img src="./images/reverse_linked_list_6.gif" style="zoom:80%;"/>
 > </div>
 > 
 > 
@@ -193,7 +193,7 @@
 >         ListNode* pre = NULL;
 >         while(cur) {
 >             temp = cur->next;  // 保存一下 cur的下一个节点，因为接下来要改变cur->next
->             cur->next = pre; // 翻转操作
+>             cur->next = pre;  // 翻转操作
 >             // 更新pre 和 cur指针
 >             pre = cur;
 >             cur = temp;
@@ -291,7 +291,7 @@
 > 采用这种方法需要注意一点。就是当整个出栈循环结束以后，cur正好指向原来链表的第一个结点，而此时结点1中的next指向的是结点2，因此最后还需要cur.next = null
 > 
 > <div align=center>
-> <img src="./images/reverse_linked_list_7.jpg"  width="" height="" alt="no photo" title="" style="zoom:80%;"/>
+> <img src="./images/reverse_linked_list_7.jpg" style="zoom:80%;"/>
 > </div>
 > 
 

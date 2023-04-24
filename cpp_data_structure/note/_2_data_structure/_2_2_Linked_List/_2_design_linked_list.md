@@ -985,12 +985,12 @@ private:
 
 > 删除链表节点：
 > <div align=center>
-> <img src="./images/design_linked_list_1.png"  width="" height="" alt="no photo" title="" style="zoom:80%;"/>
+> <img src="./images/design_linked_list_1.png" style="zoom:80%;"/>
 > </div>
 > 
 > 添加链表节点：
 > <div align=center>
-> <img src="./images/design_linked_list_2.png"  width="" height="" alt="no photo" title="" style="zoom:80%;"/>
+> <img src="./images/design_linked_list_2.png" style="zoom:80%;"/>
 > </div>
 >
 > 这道题目设计链表的五个接口：

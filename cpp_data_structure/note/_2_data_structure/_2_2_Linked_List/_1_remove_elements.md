@@ -29,7 +29,7 @@
 >
 > 示例 1：
 > <div align=center>
-> <img src="./images/remove_elements_1.jpg"  width="" height="" alt="no photo" title="" style="zoom:80%;"/>
+> <img src="./images/remove_elements_1.jpg" style="zoom:80%;"/>
 > </div>
 > 
 > ```html
@@ -296,13 +296,13 @@ public:
 > 这里以链表 1 4 2 4 来举例，移除元素4。
 > 
 > <div align=center>
-> <img src="./images/remove_elements_2.png"  width="" height="" alt="no photo" title="" style="zoom:80%;"/>
+> <img src="./images/remove_elements_2.png" style="zoom:80%;"/>
 > </div>
 > 
 > 如果使用C，C++编程语言的话，不要忘了还要从内存中删除这两个移除的节点， 清理节点内存之后如图：
 > 
 > <div align=center>
-> <img src="./images/remove_elements_3.png"  width="" height="" alt="no photo" title="" style="zoom:80%;"/>
+> <img src="./images/remove_elements_3.png" style="zoom:80%;"/>
 > </div>
 >
 > **当然如果使用java ，python的话就不用手动管理内存了。**
@@ -318,7 +318,7 @@ public:
 > 来看第一种操作：直接使用原来的链表来进行移除。
 > 
 > <div align=center>
-> <img src="./images/remove_elements_4.png"  width="" height="" alt="no photo" title="" style="zoom:80%;"/>
+> <img src="./images/remove_elements_4.png" style="zoom:80%;"/>
 > </div>
 > 
 > 移除头结点和移除其他节点的操作是不一样的，因为链表的其他节点都是通过前一个节点来移除当前节点，而头结点没有前一个节点。
@@ -326,13 +326,13 @@ public:
 > 所以头结点如何移除呢，其实只要将头结点向后移动一位就可以，这样就从链表中移除了一个头结点。
 >
 > <div align=center>
-> <img src="./images/remove_elements_5.png"  width="" height="" alt="no photo" title="" style="zoom:80%;"/>
+> <img src="./images/remove_elements_5.png" style="zoom:80%;"/>
 > </div>
 > 
 > 依然别忘将原头结点从内存中删掉。
 > 
 > <div align=center>
-> <img src="./images/remove_elements_6.png"  width="" height="" alt="no photo" title="" style="zoom:80%;"/>
+> <img src="./images/remove_elements_6.png" style="zoom:80%;"/>
 > </div>
 >
 > 这样移除了一个头结点，是不是发现，在单链表中移除头结点 和 移除其他节点的操作方式是不一样，其实在写代码的时候也会发现，需要单独写一段逻辑来处理移除头结点的情况。
@@ -344,7 +344,7 @@ public:
 > 来看看如何设置一个虚拟头。依然还是在这个链表中，移除元素1。
 >
 > <div align=center>
-> <img src="./images/remove_elements_7.png"  width="" height="" alt="no photo" title="" style="zoom:80%;"/>
+> <img src="./images/remove_elements_7.png" style="zoom:80%;"/>
 > </div>
 >
 > 这里来给链表添加一个虚拟头结点为新的头结点，此时要移除这个旧头结点元素1。
