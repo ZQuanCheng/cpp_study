@@ -1,3 +1,0 @@
-/home/ubuntu/zqc/cpp_learn/build/CMakeFiles/rebuild_cache.dir
-/home/ubuntu/zqc/cpp_learn/build/CMakeFiles/main.dir
-/home/ubuntu/zqc/cpp_learn/build/CMakeFiles/edit_cache.dir

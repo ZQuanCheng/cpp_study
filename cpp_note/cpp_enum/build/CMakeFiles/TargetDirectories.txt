@@ -1,3 +1,0 @@
-/home/zqc/projects/cpp_study/note/cpp_enum/build/CMakeFiles/rebuild_cache.dir
-/home/zqc/projects/cpp_study/note/cpp_enum/build/CMakeFiles/edit_cache.dir
-/home/zqc/projects/cpp_study/note/cpp_enum/build/CMakeFiles/main.dir
