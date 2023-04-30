@@ -13,12 +13,9 @@ C++ 变量类型
 ## 编译、运行
 
 ```sh
-进入build路径
-$ cd build
-build中存放Cmake产生的中间文件
-$ cmake ..
-out中存放输出的可执行文件
-$ make
-运行可执行文件
-$ ../out/main
+# 赋予脚本所有者执行权限，允许该用户执行该脚本
+# r、w、x 分别表示读、写、执行权限 
+$ chmod +x build.sh 
+# 执行脚本
+$ ./build
 ``` 
