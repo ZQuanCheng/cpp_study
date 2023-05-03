@@ -77,7 +77,7 @@
 ### 总结
 > 
 > <div align=center>
-> <img src="./images/summary.png"  width="" height="" alt="no photo" title="" style="zoom:100%;"/>
+> <img src="./images/summary.png" style="zoom:100%;"/>
 > </div>
 > 
 > 这个图是 代码随想录知识星球成员：海螺人，所画，总结的非常好，分享给大家。
