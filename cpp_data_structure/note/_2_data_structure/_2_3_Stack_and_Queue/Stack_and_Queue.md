@@ -299,6 +299,15 @@
 > 
 
 
+#### 字符串类型`string` 也有类似栈的操作
+
+> `string::empty()`
+> `string::back()`
+> `string::push_back()`
+> `string::pop_back()`
+> 
+> 等等有很多，可以看看这些用法
+> 
 
 
 ### 不使用STL时，栈和队列的表示和实现

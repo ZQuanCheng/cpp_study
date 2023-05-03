@@ -551,7 +551,9 @@
 >> ```
 
 
-#### string对象的length()
+#### string对象的各种函数
+
+##### string对象的length()
 > `length()`只是用来获取字符串的长度。
 > 
 > 在获取字符串长度时，`size()`函数与`length()`函数作用相同。 
@@ -561,23 +563,31 @@
 > `sizeof()`运算符用来求对象所占内存空间的大小。
 > 
 
-#### string对象的insert()
+##### string对象的insert()
 
 
-#### string对象的erase()
+##### string对象的erase()
 
-#### string对象的append()和replace()
+##### string对象的append()和replace()
 
-#### string对象的assign()
+##### string对象的assign()
 
-#### string对象的搜索操作 各种find
+##### string对象的搜索操作 各种find
 
-#### string对象的compare操作
-
-
+##### string对象的compare操作
 
 
 
+
+#### 字符串类型`string` 也有类似栈的操作
+
+> `string::empty()`
+> `string::back()`
+> `string::push_back()`
+> `string::pop_back()`
+> 
+> 等等有很多，可以看看这些用法
+> 
 
 
 
