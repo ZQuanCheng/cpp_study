@@ -592,3 +592,195 @@
 
 
 
+#### 类型转换
+
+##### 总结
+
+> 
+> ```c++
+> string s1 = "123"; 
+> s1.c_str() // 将 string类型 转换为 const char*类型转换
+> 
+> #include <cstdlib> 
+> // 注： itoa()：将 int类型 转换为 const char*类型。
+> // 注： atoi()：将 const char*类型 转换为 int类型。
+> // 注： stoi()：将 string类型 转换为 int类型。
+> // 注： itos()：将 int类型 转换为 string类型。
+> // 注： stol（）：将 string类型 转换为 long int类型。
+> // 注： stol（）：将 string类型 转换为 long long int类型。
+> 
+> 一般转换的字符串长度不超过10
+> ```
+
+#####  `string`类型 转换为 `const char*`类型
+> ```c++
+> string s1 = "abc";
+> cout << s1.c_str() << endl;
+> ```
+> 
+> ```c++
+> #include <iostream>   // #include <iostream.h>  已过时，现在反对把.h符号继续用在标准的头文件中
+> using namespace std;  
+> #include <string>     // string类
+> 
+> #include <typeinfo>   // 查看变量类型 typeid(变量名).name()
+> 
+> string s1 = "123";
+> 
+> cout << "string s1 = \"" << s1 << "\"" << endl;
+> cout << "typeid(s1).name()为" << typeid(s1).name() << ", 表示:string 类型" << endl;
+> cout << "typeid(s1.c_str()).name()为" << typeid(s1.c_str()).name() << ", 表示:const char* 类型(字符指针常量)" << endl;
+> ```
+> 编译通过，运行结果如下
+> ```html
+> string s1 = "123" 
+> typeid(s1).name()为> NSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE, 表示:string 类型
+> typeid(s1.c_str()).name()为PKc, 表示:const char* 类型(字符指针常量)
+> ```
+
+##### `const char*`类型 转换为 `int`类型
+> ```c++
+> #include <iostream>   // #include <iostream.h>  已过时，现在反对把.h符号继续用在标准的头文件中
+> using namespace std;  
+> 
+> #include <cstdlib> 
+> // 注： itoa()：将 int类型 转换为 const char*类型。
+> // 注： atoi()：将 const char*类型 转换为 int类型。
+> 
+> #include <typeinfo>   // 查看变量类型 typeid(变量名).name()
+> 
+> char *s1 = "123"; // "123" 会被编译器 设置为string类型，这里会强制转换为const char* 类型
+> 
+> cout << "char *s1 = \"" << s1 << "\"" << endl;
+> cout << "typeid(s1).name()为" << typeid(s1).name() << ", 表示:const char* 类型(字符指针常量)" << endl;
+> cout << "typeid(atoi(s1)).name()为" << typeid(atoi(s1)).name() << ", 表示:int 类型" << endl;
+> ```
+> 编译`Warning`
+> ```html
+> /home/zqc/Desktop/test/test.cpp:177:12: 
+> warning: ISO C++ forbids converting a string constant to ‘char*’ [-Wwrite-strings]
+>  char *s1 = "abc";
+>             ^~~~~
+> ```
+> 运行结果如下
+> ```html
+> char *s1 = "123"
+> typeid(s1).name()为Pc, 表示:const char* 类型(字符指针常量)
+> typeid(atoi(s1)).name()为i, 表示:int 类型
+> ```
+
+
+
+
+
+##### `string`类型 转换为 `int`类型, 以`const char*`作为中转站
+> ```c++
+> #include <iostream>   // #include <iostream.h>  已过时，现在反对把.h符号继续用在标准的头文件中
+> using namespace std;  
+> #include <string>     // string类
+> 
+> #include <cstdlib> 
+> // 注： itoa()：将 int类型 转换为 const char*类型。
+> // 注： atoi()：将 const char*类型 转换为 int类型。
+> 
+> #include <typeinfo>   // 查看变量类型 typeid(变量名).name()
+> 
+> string s1 = "123";
+> 
+> // 先将string 转为 const char* 类型，即(s1).c_str()
+> // 再使用atoi() 函数 将 const char* 类型 转换为 int类型
+> cout << "string s1 = \"" << s1 << "\"" << endl;
+> cout << "typeid(s1).name()为" << typeid(s1).name() << ", 表示:string 类型" << endl;
+> cout << "typeid(s1.c_str()).name()为" << typeid(s1.c_str()).name() << ", 表示:const char* 类型(字符指针常量)" << endl;
+> cout << "typeid(atoi(s1.c_str())).name()为" << typeid(atoi(s1.c_str())).name() << ", 表示:int 类型" << endl;
+> ```
+> 编译通过，运行结果如下
+> ```html
+> string s1 = "123" 
+> typeid(s1).name()为> NSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE, 表示:string 类型
+> typeid(s1.c_str()).name()为PKc, 表示:const char* 类型(字符指针常量)
+> typeid(atoi(s1.c_str())).name()为i, 表示:int 类型
+> ```
+
+
+
+
+
+##### `atoi()`能否直接实现`string`类型 转换为 `int`类型转换？？？ 
+
+> <font color="red"> 会报错 </font>
+> 
+> ```c++
+> #include <iostream>   // #include <iostream.h>  已过时，现在反对把.h符号继续用在标准的头文件中
+> using namespace std;  
+> #include <string>     // string类
+> 
+> #include <cstdlib> 
+> // 注： itoa()：将 int类型 转换为 const char*类型。
+> // 注： atoi()：将 const char*类型 转换为 int类型。
+> 
+> #include <typeinfo>   // 查看变量类型 typeid(变量名).name()
+> 
+> string s1 = "123";
+> 
+> cout << "string s1 = \"" << s1 << "\"" << endl;
+> cout << "typeid(s1).name()为" << typeid(s1).name() << ", 表示:string 类型" << endl;
+> cout << "typeid(atoi(s1)).name()为" << typeid(atoi(s1)).name() << ", 表示:int 类型" << endl;
+> ```
+> 编译`Error`
+> ```html
+> /home/zqc/Desktop/test/test.cpp:181:53: 
+> error: cannot convert ‘std::__cxx11::string’ {aka ‘std::__cxx11::basic_string<char>’} to ‘const char*’
+>  cout << "typeid(atoi(s1)).name()为" << typeid(atoi(s1)).name() << ", 表示:int 类型" << endl;
+> ```
+
+
+
+##### `stoi()`可以直接实现`string`类型与`int`类型转换， 不用中转
+
+> 
+> ```c++
+> #include <iostream>   // #include <iostream.h>  已过时，现在反对把.h符号继续用在标准的头文件中
+> using namespace std;  
+> #include <string>     // string类
+> 
+> #include <cstdlib> 
+> // 注： itoa()：将 int类型 转换为 const char*类型。
+> // 注： atoi()：将 const char*类型 转换为 int类型。
+> // 注： stoi()：将 string类型 转换为 int类型。
+> 
+> #include <typeinfo>   // 查看变量类型 typeid(变量名).name()
+> 
+> string s1 = "123";
+> 
+> cout << "string s1 = \"" << s1 << "\"" << endl;
+> cout << "typeid(s1).name()为" << typeid(s1).name() << ", 表示:string 类型" << endl;
+> cout << "typeid(stoi(s1)).name()为" << typeid(stoi(s1)).name() << ", 表示:int 类型" << endl;
+> ```
+> 编译通过，运行结果如下
+> ```html
+> string s1 = "123"
+> typeid(s1).name()为NSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE, 表示:string 类型
+> typeid(stoi(s1)).name()为i, 表示:int 类型
+> ```
+
+
+##### 总结
+
+> 
+> ```c++
+> string s1 = "123"; 
+> s1.c_str() // 将 string类型 转换为 const char*类型转换
+> 
+> #include <cstdlib> 
+> // 注： itoa()：将 int类型 转换为 const char*类型。
+> // 注： atoi()：将 const char*类型 转换为 int类型。
+> // 注： stoi()：将 string类型 转换为 int类型。
+> // 注： itos()：将 int类型 转换为 string类型。
+> // 注： stol（）：将 string类型 转换为 long int类型。
+> // 注： stol（）：将 string类型 转换为 long long int类型。
+> 
+> 一般转换的字符串长度不超过10
+> ```
+
+

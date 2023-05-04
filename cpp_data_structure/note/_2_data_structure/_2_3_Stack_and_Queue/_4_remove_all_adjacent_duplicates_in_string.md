@@ -137,7 +137,10 @@ using namespace std;
 #include <string>   // string类
 #include <queue>       // C++ queue 容器适配器
 #include <stack>       // C++ stack 容器适配器
-#include <deque>       // C++ deque 容器
+// #include <deque>       // C++ deque 容器
+#include <cstdlib>    // 注： itoa()：将整型值转换为字符串。
+                      // 注： atoi()：将字符串转换为整型值。
+                      // 在windows系统下，用如下语句,控制台不会输出后马上消失。system("pause"); 
 int main()
 {
     string s = "abbaca";

@@ -218,7 +218,8 @@
 > };
 > ```
 > 很多初始值，以及有些语句是多余的
-> <font color="yellow">最终版代码如下：</font>
+> 
+> <font color="yellow">最终版代码如下(18 / 20 个通过)：</font>
 > ```c++
 > class Solution {
 > public:
