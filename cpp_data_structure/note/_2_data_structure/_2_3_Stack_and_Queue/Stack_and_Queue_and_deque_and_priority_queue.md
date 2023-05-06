@@ -493,10 +493,91 @@ https://blog.csdn.net/qq_50533529/article/details/124673008
 > 插入元素后自动排序了
 >
 > 
+> 举例2
+>
+> ```c++
+> #include <iostream>   
+> using namespace std; 
+> #include <vector>      // C++ vector 容器
+> #include <queue>       // C++ queue 容器适配器  priority_queue 容器适配器
+> #include <stack>       // C++ stack 容器适配器
+> int main()
+> {
+>     cout << "input: 1, 3, -1, -3, 5, 3, 6, 7";
+>     vector<int> nums = {1,3,-1,-3,5,3,6,7};  
+>     cout << endl << endl; 
 > 
-
-
-
+>     // priority_queue  default
+>     cout << "priority_queue<int> pq1: "; 
+>     priority_queue<int> pq1; 
+>     for(size_t i=0; i<nums.size(); i++){
+>         pq1.push(nums[i]);
+>     }
+>     while(!pq1.empty()){
+>         cout << pq1.top() << ", "; 
+>         pq1.pop();
+>     }
+>     cout << endl << endl;     
+> 
+>     // pq1.emplace(0);
+>     for(size_t i=0; i<nums.size(); i++){
+>         pq1.push(nums[i]);
+>     }
+>     pq1.emplace(0);
+>     cout << "After pq1.emplace(0): "; 
+>     while(!pq1.empty()){
+>         cout << pq1.top() << ", "; 
+>         pq1.pop();
+>     }
+>     cout << endl << endl;        
+> 
+> 
+>     // priority_queue  pair
+>     cout << "priority_queue<pair<int, int>> pq2: "; 
+>     priority_queue<pair<int, int>> pq2; 
+>     for(size_t i=0; i<nums.size(); i++){
+>         pq2.emplace(nums[i], i);
+>     }
+>     while(!pq2.empty()){
+>         cout << pq2.top().first << "(i[" << pq2.top().second << "])" << ", "; 
+>         pq2.pop();
+>     }
+>     cout << endl << endl;     
+> 
+>     // pq2.emplace(16, 8);
+>     for(size_t i=0; i<nums.size(); i++){
+>         pq2.emplace(nums[i], i);
+>     }
+>     pq2.emplace(16, 8);
+>     cout << "After pq2.emplace(16, 8): "; 
+>     while(!pq2.empty()){
+>         cout << pq2.top().first << "(i[" << pq2.top().second << "])" << ", "; 
+>         pq2.pop();
+>     }
+>     cout << endl << endl;        
+> 
+> 
+> 
+>     cout << endl;
+>     pause();
+> 
+>     return 0;
+> }        
+> ```
+> 
+> 编译并运行，结果如下
+> ```html
+> input: 1, 3, -1, -3, 5, 3, 6, 7
+> 
+> priority_queue<int> pq1: 7, 6, 5, 3, 3, 1, -1, -3, 
+> 
+> After pq1.emplace(0): 7, 6, 5, 3, 3, 1, 0, -1, -3, 
+> 
+> priority_queue<pair<int, int>> pq2: 7(i[7]), 6(i[6]), 5(i[4]), 3(i[5]), 3(i[1]), 1(i[0]), -1(i[2]), -3(i[3]), 
+> 
+> After pq2.emplace(16, 8): 16(i[8]), 7(i[7]), 6(i[6]), 5(i[4]), 3(i[5]), 3(i[1]), 1(i[0]), -1(i[2]), -3(i[3]), 
+> ```
+> 
 
 
 #### 单调队列 注意这里指的不是优先级队列`std::priority_queue`（虽然也是单调的）
@@ -731,6 +812,10 @@ https://blog.csdn.net/qq_50533529/article/details/124673008
 > pq1.swap(pq2);    //7. 交换内容，用x的内容交换容器适配器（* this）的内容，将一个优先级队列的内容与另一个相同类型（大小可以不同）的优先级队列进行交换。
 > ```
 >
+
+
+
+
 
 
 ##### 比较stack、queue、deque、priority_queue
