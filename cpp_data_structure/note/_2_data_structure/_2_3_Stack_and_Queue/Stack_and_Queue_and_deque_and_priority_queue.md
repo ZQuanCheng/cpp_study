@@ -325,13 +325,196 @@ https://blog.csdn.net/qq_50533529/article/details/124673008
 
 
 
-#### 学习如何使用双端deque，兼具stack和queue的优点
+
+
+
+#### 优先级队列   std::priority_queue
+
+> 
+> `_6_sliding_window_maximum.md`
+>
+> https://blog.csdn.net/weixin_57761086/article/details/126802156
+>
+>
+> 优先队列是一种容器适配器，采用了堆（`heap`, 本质上完全二叉树）这样的数据结构，保证了第一个元素总是整个优先队列中**最大的**(或**最小的**)元素。
+> 
+> 优先队列默认使用`vector`作为底层存储数据的容器，在`vector`上使用了堆算法将`vector`中的元素构造成堆的结构，所以其实我们就可以把它当作堆，**凡是需要用堆的位置，都可以考虑优先队列**。(所以需要先学习堆)
+>
+> 
+> <font color="yellow"> 栈、队列、优先级的定义方式 </font>
+> 
+> ```c++
+> stack<Type, Container> // (<数据类型，底层容器类型>） std::vector、std::list、std::deque
+> queue<Type, Container> // (<数据类型，底层容器类型>） std::list、std::deque
+> priority_queue<Type, Container, Compare> // (<数据类型，底层容器类型，比较方式类>）
+> ``` 
+>
+>
+> 什么是优先队列中元素的比较方式？
+> 之前也提到了，优先队列其实就是堆，堆中元素都是有固定大小关系的。比如大堆：每个结点的值都不大于它的双亲结点，堆顶元素是最大的。堆中会存储各种各样的元素，所以它们的比较方式自然不会相同，**编译器中的比较方式类只能比较内置类型，所以自定义类的比较方式是需要用户自己给出的，并且需要手动填充到Compare 参数的位置**。
+> 
+>
+> <font color="yellow"> 优先级队列`std::priority_queue`定义的举例 </font>
+> 
+> ```c++
+> // container adapter 容器适配器
+> #include <vector>  
+> #include <queue>        
+> // std::queue  队列, 有三种可选底层容器vector、list、deque
+> // std::priority_queue  优先队列
+> 
+> std::queue<int> q;     
+> // 默认以deque为底层容器
+> 
+> priority_queue<int> pq1; // 等价于priority_queue<int, vector<int>, less<int>> pq;
+> // 默认以vector为底层容器；vector<int>是承载底层数据结构堆 （heap）的容器
+> // 默认以less为比较方式，左边小于右边的时候返回true，此时优先队列就是大堆，所以优先队列默认就是大堆。
+> 
+> //大堆：每个结点的值都不大于它的双亲结点，堆顶元素是最大的。 又叫（大顶堆，大根堆）
+> //小堆：每个结点的值都不小于它的双亲结点，堆顶元素是最小的。 
+> 
+> priority_queue<int,vector<int>,greater<int> > pq2;
+> // less<int>表示数字大的优先级越大，greater<int>表示数字小的优先级越大。 
+> ```
+>
+> <font color="green"> 优先级队列（priority_queue）的对外接口: </font> 
+> ```c++
+> #include<queue>
+> priority_queue<int> pq;
+> pq.push()      //1. 入队首元素（即堆顶元素），自动排序到对应位置
+> pq.pop()       //2. 出队首元素（即堆顶元素）
+> pq.size()      //3. 返回队列中元素个数，求队列的大小 ，
+> pq.empty()     //4. 判断队列是否为空，如果队列为空则返回 true, 否则返回 false;
+> pq.top()       //5. 返回优先级队列的队首元素（即堆顶元素）的引用
+>
+> pq.emplace(val)  //6. （构造并插入元素）功能与push()相同，只是多了调用构造函数的功能
+> 
+> std::priority_queue<int> pq1,pq2;
+> pq1.swap(pq2);    //7. 交换内容，用x的内容交换容器适配器（* this）的内容，将一个优先级队列的内容与另一个相同类型（大小可以不同）的优先级队列进行交换。
+> ```
+>
+>
+> <font color="yellow"> 看看比较方式的具体显示 </font>
+>
+> ```c++
+> #include <iostream>   
+> using namespace std; 
+> #include <vector>      // C++ vector 容器
+> #include <queue>       // C++ queue 容器适配器  priority_queue 容器适配器
+> #include <stack>       // C++ stack 容器适配器
+> int main()
+> {
+>     cout << "input: 1, 3, -1, -3, 5, 3, 6, 7";
+>     vector<int> nums = {1,3,-1,-3,5,3,6,7};  
+>     cout << endl << endl; 
+> 
+>     // stack
+>     cout << "stack<int> s: "; 
+>     stack<int> s;
+>     for(size_t i=0; i<nums.size(); i++){
+>         s.push(nums[i]);
+>     }
+>     while(!s.empty()){
+>         cout << s.top() << ", ";   
+>         s.pop();
+>     }
+>     cout << endl << endl; 
+> 
+>     // queue
+>     cout << "queue<int> q: "; 
+>     queue<int> q;
+>     for(size_t i=0; i<nums.size(); i++){
+>         q.push(nums[i]);
+>     }
+>     while(!q.empty()){
+>         cout << q.front() << ", "; 
+>         q.pop();
+>     }
+>     cout << endl << endl;     
+> 
+>     // priority_queue  default
+>     cout << "priority_queue<int> pq1: "; 
+>     priority_queue<int> pq1; 
+>     for(size_t i=0; i<nums.size(); i++){
+>         pq1.push(nums[i]);
+>     }
+>     while(!pq1.empty()){
+>         cout << pq1.top() << ", "; 
+>         pq1.pop();
+>     }
+>     cout << endl << endl;     
+> 
+>     // priority_queue less
+>     cout << "priority_queue<int, vector<int>, less<int>> pq2: ";     
+>     priority_queue<int, vector<int>, less<int>> pq2;
+>     for(size_t i=0; i<nums.size(); i++){
+>         pq2.push(nums[i]);
+>     }
+>     while(!pq2.empty()){
+>         cout << pq2.top() << ", "; 
+>         pq2.pop();
+>     }
+>     cout << endl << endl;   
+> 
+>     // priority_queue greater
+>     cout << "priority_queue<int, vector<int>, greater<int>> pq3: "; 
+>     priority_queue<int, vector<int>, greater<int>> pq3;
+>     for(size_t i=0; i<nums.size(); i++){
+>         pq3.push(nums[i]);
+>     }
+>     while(!pq3.empty()){
+>         cout << pq3.top() << ", "; 
+>         pq3.pop();
+>     }
+>     cout << endl << endl;   
+> 
+>     cout << endl;
+>     pause();
+> 
+>     return 0;
+> }        
+> ```
+> 编译并运行，结果如下
+> ```html
+> input: 1, 3, -1, -3, 5, 3, 6, 7
+> 
+> stack<int> s: 7, 6, 3, 5, -3, -1, 3, 1, 
+> 
+> queue<int> q: 1, 3, -1, -3, 5, 3, 6, 7, 
+> 
+> priority_queue<int> pq1: 7, 6, 5, 3, 3, 1, -1, -3, 
+> 
+> priority_queue<int, vector<int>, less<int>> pq2: 7, 6, 5, 3, 3, 1, -1, -3, 
+> 
+> priority_queue<int, vector<int>, greater<int>> pq3: -3, -1, 1, 3, 3, 5, 6, 7, 
+>     
+> ```
+>
+> 插入元素后自动排序了
+>
+> 
+> 
+
+
+
+
+
+#### 单调队列 注意这里指的不是优先级队列`std::priority_queue`（虽然也是单调的）
+
+> 
+> `_6_sliding_window_maximum.md`
+>
+
+
+
+
+
 
 
 
 #### 总结
 
-##### 栈（stack）的对外接口
+##### 栈（std::stack）的对外接口
 > <font color="green"> 栈（stack）的对外接口：</font>
 >
 > 函数原型
@@ -412,7 +595,7 @@ https://blog.csdn.net/qq_50533529/article/details/124673008
 > 
 
 
-##### 队列（queue）的对外接口
+##### 队列（std::queue）的对外接口
 > <font color="green"> 队列（queue）的对外接口: </font> 
 >
 > 函数原型
@@ -424,7 +607,7 @@ https://blog.csdn.net/qq_50533529/article/details/124673008
 > T front()
 > T back()
 > void emplace()    // 在队列尾部添加一个新元素。这个新元素是通过构造函数的参数传递参数构建的。该成员函数有效地调用底层容器的成员函数emplace_back，并转发参数。
-> void swap(queue& s)   // 将本容器中的元素与参数容器中的元素互换。
+> void swap(queue& q)   // 将本容器中的元素与参数容器中的元素互换。
 > ```
 >
 > 举例
@@ -438,7 +621,7 @@ https://blog.csdn.net/qq_50533529/article/details/124673008
 > q.front()     //5. 返回队头元素的引用
 > q.back()      //6. 返回队尾元素的引用
 >
-> q.emplace(val)  //6. 在队列尾部添加一个新元素, 功能与push()相同。 std::deque::emplace_back()
+> q.emplace(val)  //6. （构造并插入元素）在队列尾部添加一个新元素, 功能与push()相同。 std::deque::emplace_back()
 > 
 > std::stack<int> q1,q2;
 > q1.swap(s2);    //7. 交换内容，用x的内容交换容器适配器（* this）的内容
@@ -446,7 +629,7 @@ https://blog.csdn.net/qq_50533529/article/details/124673008
 > 
 > 
 
-
+##### 双端队列（std::deque）的对外接口
 
 > <font color="green"> 双端队列（deque）的对外接口: </font>
 > 
@@ -463,16 +646,134 @@ https://blog.csdn.net/qq_50533529/article/details/124673008
 > T front()
 > T back()
 > 
-> insert(iterator, T)
+> insert(iterator, T)        // 在队列中的某个位置添加一个新元素
 > 
-> void emplace(iterator, T)   
-> void emplace_front(T)
-> void emplace_back(T)
+> void emplace(iterator, T)  // 在队列中的某个位置添加一个新元素, 功能与insert()相同
+> void emplace_front(T)      // 在队列头部添加一个新元素, 功能与push_front()相同
+> void emplace_back(T)       // 在队列尾部添加一个新元素, 功能与push_back()相同
 > 
-> void swap(queue& s)   // 将本容器中的元素与参数容器中的元素互换。
+> void swap(queue& d)   // 将本容器中的元素与参数容器中的元素互换。
 > ```
 >
 > 举例
+> ```c++
+> #include<deque>
+> deque<int> d;
+> d.push_front()     //1. 入队列，队头插入元素。
+> d.push_back()      //2. 入队列，队尾插入元素。
+> d.pop_front()      //3. 出队列，队头删除元素。
+> d.pop_back()       //4. 出队列，队尾删除元素。 
+> d.size()           //5. 返回队列中元素个数，求队列的大小 ，
+> d.empty()          //6. 判断队列是否为空，如果队列为空则返回 true, 否则返回 false;
+> d.front()          //7. 返回队头元素的引用
+> d.back()           //8. 返回队尾元素的引用
+>
+> d.insert(iterator, value);  //9. 指定位置添加新元素
+>
+> d.emplace(iterator, value)  //10. （构造并插入元素）在队列中的某个位置添加一个新元素, 功能与insert()相同。
+> d.emplace_front()  //11. （构造并插入元素）在队列头部添加一个新元素, 功能与push_front()相同。 
+> d.emplace_back()   //12. （构造并插入元素）在队列尾部添加一个新元素, 功能与push_back()相同。 
+> 
+> std::deque<int> d1,d2;
+> d1.swap(d2);    //13. 交换内容，用x的内容交换容器适配器（* this）的内容
+> ```
+>
+> 注意
+> ```c++
+> 
+> emplace_back(type) 对应 push_back(type)
+> 
+> emplace_front(type) 对应于 push_front()
+> 
+> emplace(i, type) 对应于 insert(iterator, value)
+>
+> 但是
+> 对于stack 和 queue，只有push()操作，所以也只有emplace()操作，此时它们是相对应的。
+> ```
+> 
+> <font color="yellow"> 注意使用 `top()`、`front()`、`back()` 函数之前，必须用` empty()` 判断是否为空。 </font>
+>
+> 
+
+
+##### 优先级队列（std::priority_queue）的对外接口
+
+> <font color="green"> 优先级队列（priority_queue）的对外接口: </font>
+> 
+> https://zhuanlan.zhihu.com/p/364408441
+>
+>
+> 函数原型
+> ```c++
+> void push(T)	
+> void pop()
+> int size()
+> bool empty()
+> T top()
+> void emplace()   //（构造并插入元素）功能与push()相同，只是多了调用构造函数的功能
+> void swap(priority_queue& pq)   // 将本容器中的元素与参数容器中的元素互换。
+> ```
+>
+> 举例
+> 
+> ```c++
+> #include<queue>
+> priority_queue<int> pq;
+> pq.push()      //1. 入队首元素（即堆顶元素），自动排序到对应位置
+> pq.pop()       //2. 出队首元素（即堆顶元素）
+> pq.size()      //3. 返回队列中元素个数，求队列的大小 ，
+> pq.empty()     //4. 判断队列是否为空，如果队列为空则返回 true, 否则返回 false;
+> pq.top()       //5. 返回优先级队列的队首元素（即堆顶元素）的引用
+>
+> pq.emplace(val)  //6. （构造并插入元素）功能与push()相同，只是多了调用构造函数的功能
+> 
+> std::priority_queue<int> pq1,pq2;
+> pq1.swap(pq2);    //7. 交换内容，用x的内容交换容器适配器（* this）的内容，将一个优先级队列的内容与另一个相同类型（大小可以不同）的优先级队列进行交换。
+> ```
+>
+
+
+##### 比较stack、queue、deque、priority_queue
+
+> <font color="green"> 栈（stack）的对外接口：</font>
+> ```c++
+> // 只能在栈顶(栈的尾部)进行插入和删除操作。
+> #include<stack>
+> stack<int> s;
+> s.push();       //1. 入栈（压栈），栈顶(栈的尾部)插入元素。即 std::depue::push_back()
+> s.pop();        //2. 出栈（弹栈），栈顶(栈的尾部)删除元素。即 std::depue::pop_back()
+> s.size();       //3. 返回栈中元素个数，求栈的大小 ，
+> s.empty();      //4. 判断栈是否为空，如果栈为空则返回 true, 否则返回 false;
+> s.top();        //5. 返回栈顶(栈的尾部)元素的值
+>                 //   如果堆栈容器为空，则会导致未定义的行为
+>
+> s.emplace(val)  //6. 在堆栈顶部添加一个新元素, 功能与push()相同。std::deque::emplace_back()
+> 
+> std::stack<int> s1,s2;
+> s1.swap(s2);    //7. 交换内容，用x的内容交换容器适配器（* this）的内容
+> ```
+> 
+
+> <font color="green"> 队列（queue）的对外接口: </font> 
+> ```c++
+> #include<queue>
+> queue<int> q;
+> q.push()      //1. 入队列，队尾插入元素。即 std::depue::push_back()
+> q.pop()       //2. 出队列，队头删除元素。即 std::depue::pop_front()
+> q.size()      //3. 返回队列中元素个数，求队列的大小 ，
+> q.empty()     //4. 判断队列是否为空，如果队列为空则返回 true, 否则返回 false;
+> q.front()     //5. 返回队头元素的引用
+> q.back()      //6. 返回队尾元素的引用
+>
+> q.emplace(val)  //6. 在队列尾部添加一个新元素, 功能与push()相同。 std::deque::emplace_back()
+> 
+> std::stack<int> q1,q2;
+> q1.swap(s2);    //7. 交换内容，用x的内容交换容器适配器（* this）的内容
+> ```
+>
+
+
+> <font color="green"> 双端队列（deque）的对外接口: </font>
 > ```c++
 > #include<deque>
 > deque<int> d;
@@ -495,18 +796,31 @@ https://blog.csdn.net/qq_50533529/article/details/124673008
 > d1.swap(d2);    //13. 交换内容，用x的内容交换容器适配器（* this）的内容
 > ```
 >
-> 注意
+
+
+> <font color="green"> 优先级队列（priority_queue）的对外接口: </font> 
 > ```c++
-> 
-> emplace_back(type) 对应 push_back(type)
-> 
-> emplace_front(type) 对应于 push_front()
-> 
-> emplace(i, type) 对应于 insert(iterator, value)
+> #include<queue>
+> priority_queue<int> pq;
+> pq.push()      //1. 入队首元素（即堆顶元素），自动排序到对应位置
+> pq.pop()       //2. 出队首元素（即堆顶元素）
+> pq.size()      //3. 返回队列中元素个数，求队列的大小 ，
+> pq.empty()     //4. 判断队列是否为空，如果队列为空则返回 true, 否则返回 false;
+> pq.top()       //5. 返回优先级队列的队首元素（即堆顶元素）的引用
 >
-> 但是
-> 对于stack 和 queue，只有push()操作，所以也只有emplace()操作，此时它们是相对应的。
+> pq.emplace(val)  //6. （构造并插入元素）功能与push()相同，只是多了调用构造函数的功能
+> 
+> std::priority_queue<int> pq1,pq2;
+> pq1.swap(pq2);    //7. 交换内容，用x的内容交换容器适配器（* this）的内容，将一个优先级队列的内容与另一个相同类型（大小可以不同）的优先级队列进行交换。
 > ```
+>
+
+
+
+
+
+
+
 
 
 
