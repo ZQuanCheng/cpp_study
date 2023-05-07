@@ -323,11 +323,6 @@ https://blog.csdn.net/qq_50533529/article/details/124673008
 
 
 
-
-
-
-
-
 #### 优先级队列   std::priority_queue
 
 > 
@@ -393,8 +388,10 @@ https://blog.csdn.net/qq_50533529/article/details/124673008
 > pq1.swap(pq2);    //7. 交换内容，用x的内容交换容器适配器（* this）的内容，将一个优先级队列的内容与另一个相同类型（大小可以不同）的优先级队列进行交换。
 > ```
 >
->
-> <font color="yellow"> 看看比较方式的具体显示 </font>
+
+##### 1. 看看比较方式的具体显示
+
+> <font color="yellow"> 1. 看看比较方式的具体显示 </font>
 >
 > ```c++
 > #include <iostream>   
@@ -492,8 +489,10 @@ https://blog.csdn.net/qq_50533529/article/details/124673008
 >
 > 插入元素后自动排序了
 >
-> 
-> 举例2
+
+#####  2. 结合`pair`使用
+
+> <font color="yellow"> 2. 结合`pair`使用</font>
 >
 > ```c++
 > #include <iostream>   
@@ -577,7 +576,119 @@ https://blog.csdn.net/qq_50533529/article/details/124673008
 > 
 > After pq2.emplace(16, 8): 16(i[8]), 7(i[7]), 6(i[6]), 5(i[4]), 3(i[5]), 3(i[1]), 1(i[0]), -1(i[2]), -3(i[3]), 
 > ```
+>
+>
+
+#####  3. 自定义比较类
+
+> <font color="yellow"> 3. 自定义比较类 </font>
+>
+> https://blog.csdn.net/Strengthennn/article/details/119078911
 > 
+> <font color="yellow"> 需要注意的是：使用仿函数对优先队列进行自定义排序，需要在声明priority_queue对象时显式地定义Container类型和Compare类型，即: </font>
+> ```c++
+> priority_queue<pair<int, int>, vector<pair<int, int>>, mycomparison> pri_que
+> // priority_queue<pair<int,int>> pri_que;
+> ```
+> <font color="yellow"> 比较类的定义方式如下（返回true时，前后交换位置）</font>
+> 
+> ```c++
+> // 返回true时，front的优先级低于back的优先级。即返回true时，交换位置，front排在back的后面)
+> class Cmp {
+> public:
+>     bool operator()(const pair<string, int>& front, const pair<string, int>& back) {
+>         return front.second > back.second; // 如果想要得到int递增序列（top最小） 
+>         return front.second < back.second; // 如果想要得到int递减序列（top最大）      
+>         // priority_queue自定义函数的比较与sort正好是相反的
+>         // 也就是说，如果你是把大于号作为第一关键字的比较方式，那么堆顶的元素就是第一关键字最小的
+>    }
+> };
+> 
+> // 大顶堆，top最大
+> class top_max {
+> public:
+>     bool operator()(const pair<string, int>& front, const pair<string, int>& back) {
+>         return front.second < back.second; // top最大     
+>         // 返回true时，交换位置，front排在back的后面
+>         // 这里是按照递减序列排序（top最大）
+>    }
+> };
+> 
+> // 大小顶堆，top最小
+> class top_min {
+> public:
+>     bool operator()(const pair<string, int>& front, const pair<string, int>& back) {
+>         return front.second > back.second; // top最小
+>         // 返回true时，交换位置，front排在back的后面
+>         // 这里是按照递增序列排序（top最小）
+>    }
+> };
+> ```
+> <font color="yellow"> 例子如下</font>
+> ```c++
+> #include<queue>
+> #include<vector>
+> #include<string>
+> 
+> // 返回true时，交换位置，front排在back的后面
+> class top_max {
+> public:
+>     bool operator()(const pair<string, int>& front, const pair<string, int>& back) {
+>         return front.second < back.second; // top最小
+>         // return front.second > back.second; // top最大
+> 
+>         // 返回true时，交换位置，front排在back的后面
+>         // 这里是按照递减序列排序（top最大）
+>    }
+> };
+> 
+> int main()
+> {
+>     priority_queue<pair<string, int>, vector<pair<string, int>>, top_max> pri_que;
+>
+>     vector<string> name = {"wang", "zhang", "liu", "li", "zhao", "zhou"};
+>     vector<int> grade = {78, 69, 97, 85, 100, 92};
+> 
+>     for(size_t i=0; i < name.size(); i++){
+>         pri_que.emplace(name[i], grade[i]); // 不能是push
+>     }
+>     
+>     while(!pri_que.empty()){
+>         cout << "name:" << pri_que.top().first << ", grade:" << pri_que.top().second << endl; 
+>         pri_que.pop();
+>     }
+> 
+>     cout << endl;
+>     pause();
+> 
+>     return 0;
+> }        
+> ```
+> 编译并运行，结果如下
+> ```c++
+> name:zhao, grade:100
+> name:liu, grade:97
+> name:zhou, grade:92
+> name:li, grade:85
+> name:wang, grade:78
+> name:zhang, grade:69
+> ```
+>
+> <font color="yellow"> 题目：见`_7_top_k_frequent_elements.md`代码随想录的解法</font>
+>
+> <font color="yellow"> 代码随想录的讨论：</font>
+> > https://leetcode.cn/problems/top-k-frequent-elements/description/
+> > 
+> > 大家对这个比较运算在建堆时是如何应用的，为什么左大于右就会建立小顶堆，反而建立大顶堆比较困惑。
+> > 
+> > <font color="yellow"> 例如我们在写快排的`cmp`函数的时候，`return left>right` 就是从大到小，`return left<right` 就是从小到大。</font>
+> > 
+> > <font color="yellow"> 优先级队列的定义正好反过来了，可能和优先级队列的源码实现有关（我没有仔细研究），我估计是底层实现上优先队列队首指向后面，队尾指向最前面的缘故！</font>
+> > 
+> 
+
+
+
 
 
 #### 单调队列 注意这里指的不是优先级队列`std::priority_queue`（虽然也是单调的）

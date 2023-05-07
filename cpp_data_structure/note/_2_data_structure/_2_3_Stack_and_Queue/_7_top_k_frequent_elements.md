@@ -103,10 +103,10 @@ public:
         }
         // 截止目前，时间复杂度为O(n)
         
-        // 优先级队列pair<value, frequency>
-        priority_queue<pair<int,int>> pq; 
+        // 优先级队列pair<frequency, value>
+        priority_queue<pair<int,int>> pri_que; 
         for(size_t i=0; i < v.size(); i++) {
-            pq.emplace(f[i], v[i]); 
+            pri_que.emplace(f[i], v[i]); 
             // priority_queue<pair<>>的比较规则：先比较第一个元素，第一个相等比较第二个
             // 按照出现频率排序，pair就需要把f放在前面
         } 
@@ -115,8 +115,8 @@ public:
         // 存储结果
         vector<int> result; 
         for(size_t i=0; i < k; i++) {  //前k个
-           result.push_back(pq.top().second); 
-           pq.pop();
+           result.push_back(pri_que.top().second); 
+           pri_que.pop();
         }
         // 截止目前，时间复杂度为O(n+2k)，最坏是O(3n)        
 
@@ -124,6 +124,126 @@ public:
     }
 };
 ```
+
+#### 我的解法 优化，可以自定义比较类，不用把f[i]放在前面
+
+```c++
+class Solution {
+public:
+    class top_max {
+    public:
+        bool operator()(const pair<int, int>& front, const pair<int, int>& back) {
+            return front.second < back.second; // top最大
+            // return front.second > back.second; // top最小
+
+            // 返回true时，交换位置，front排在back的后面
+            // 这里是按照递增序列排序（top最小）
+        }
+    };
+
+    vector<int> topKFrequent(vector<int>& nums, int k) {
+        // 存储value，值
+        vector<int> v; 
+        // 存储frequency，出现频次
+        vector<int> f; 
+
+        v.push_back(nums[0]); // 先放进去第一个
+        f.push_back(1);       // 第一个数的目前出现次数为1
+
+        // 开始遍历，从nums[1]开始，计算出现次数
+        for(size_t i=1; i < nums.size(); i++) {
+            // 查看是否之前已经出现该值
+            vector<int>::iterator it = find(v.begin(), v.end(), nums[i]);  // 返回[first，end）中第一个等于nums[i]的位置；若未找到，返回end。
+            if(it != v.end()) { // num[i] 在前面已经出现了，已经存储到v中
+                // 计算出数组v中的位置
+                int location = it - v.begin();
+                // 修改数组f中的对应位置的频次值，+1
+                f[location] = f[location] + 1;
+            }
+            else { // it == v.end() num[i] 之前未出现
+                v.push_back(nums[i]); // 第一次出现这个数，先放进去
+                f.push_back(1);       // 对应的前出现次数为1            
+            }
+        }
+        // 截止目前，时间复杂度为O(n)
+        
+        // 优先级队列pair<value, frequency>
+        priority_queue<pair<int,int>, vector<pair<int,int>>, top_max> pri_que; 
+        for(size_t i=0; i < v.size(); i++) {
+            pri_que.emplace(v[i], f[i]); 
+            // priority_queue<pair<>>的比较规则：比较第二个元素，top.second最大
+        } 
+        // 截止目前，时间复杂度为O(n+k)，最坏是O(2n)
+
+        // 存储结果
+        vector<int> result; 
+        for(size_t i=0; i < k; i++) {  //前k个
+           result.push_back(pri_que.top().first); 
+           pri_que.pop();
+        }
+        // 截止目前，时间复杂度为O(n+2k)，最坏是O(3n)        
+
+        return result;
+    }
+};
+```
+
+
+
+
+#### 可以把我的解法中“扫描每个数字的频次”，简化为用`std::unordered_map`统计频次，即代码随想录解法的大顶堆版本
+
+```c++
+class Solution {
+public:
+    class top_max {
+    public:
+        bool operator()(const pair<int, int>& front, const pair<int, int>& back) {
+            return front.second < back.second; // top最大
+            // return front.second > back.second; // top最小
+
+            // 返回true时，交换位置，front排在back的后面
+            // 这里是按照递增序列排序（top最小）
+        }
+    };
+
+    vector<int> topKFrequent(vector<int>& nums, int k) {
+        // 要统计元素出现频率
+        unordered_map<int, int> map; // map<nums[i],对应出现的次数>
+        for (int i = 0; i < nums.size(); i++) {
+            map[nums[i]]++;
+        }
+
+        // 对频率排序
+        // 定义一个大顶堆
+        //priority_queue<pair<int, int>, vector<pair<int, int>>, mycomparison> pri_que;
+        priority_queue<pair<int, int>, vector<pair<int, int>>, top_max> pri_que;
+
+        // 扫面所有频率的数值
+        for (unordered_map<int, int>::iterator it = map.begin(); it != map.end(); it++) {
+            pri_que.push(*it);
+        }
+
+        // 找出前K个高频元素，大顶堆先弹出的是最大的
+        vector<int> result(k);
+        for (int i = k - 1; i >= 0; i--) {
+            result[i] = pri_que.top().first;
+            pri_que.pop();
+        }
+        return result;
+
+    }
+};
+```
+
+
+
+
+
+
+
+
+
 
 
 
@@ -184,7 +304,8 @@ public:
     class mycomparison {
     public:
         bool operator()(const pair<int, int>& lhs, const pair<int, int>& rhs) {
-            return lhs.second > rhs.second;
+            return lhs.second > rhs.second;  // top的second最小
+            // 返回true时，交换位置，lhs排在rhs的后面
         }
     };
     vector<int> topKFrequent(vector<int>& nums, int k) {
@@ -217,6 +338,54 @@ public:
     }
 };
 ```
+
+
+##### 代码随想录优化：不用小顶堆，用大顶堆也可以。优点：代码更简洁，不用固定堆大小
+```c++
+class Solution {
+public:
+    class top_max {
+    public:
+        bool operator()(const pair<int, int>& front, const pair<int, int>& back) {
+            return front.second < back.second; // top最大
+            // return front.second > back.second; // top最小
+
+            // 返回true时，交换位置，front排在back的后面
+            // 这里是按照递增序列排序（top最小）
+        }
+    };
+
+    vector<int> topKFrequent(vector<int>& nums, int k) {
+        // 要统计元素出现频率
+        unordered_map<int, int> map; // map<nums[i],对应出现的次数>
+        for (int i = 0; i < nums.size(); i++) {
+            map[nums[i]]++;
+        }
+
+        // 对频率排序
+        // 定义一个大顶堆
+        //priority_queue<pair<int, int>, vector<pair<int, int>>, mycomparison> pri_que;
+        priority_queue<pair<int, int>, vector<pair<int, int>>, top_max> pri_que;
+
+        // 扫面所有频率的数值
+        for (unordered_map<int, int>::iterator it = map.begin(); it != map.end(); it++) {
+            pri_que.push(*it);
+        }
+
+        // 找出前K个高频元素，大顶堆先弹出的是最大的
+        vector<int> result(k);
+        for (int i = k - 1; i >= 0; i--) {
+            result[i] = pri_que.top().first;
+            pri_que.pop();
+        }
+        return result;
+
+    }
+};
+```
+
+
+
 
 
 
