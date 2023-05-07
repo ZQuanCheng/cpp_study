@@ -212,6 +212,8 @@ public:
 > https://leetcode.cn/problems/sliding-window-maximum/solutions/543426/hua-dong-chuang-kou-zui-da-zhi-by-leetco-ki6m/\
 > 
 > `priority_queue<pair<int, int>> pq;`
+>
+> <font color="yellow">`priority_queue<pair<>>`的比较规则：先比较第一个元素，第一个相等比较第二个</font>
 > 
 > 先把前`k`个`pair(value, location)`加入优先级队列
 >
@@ -296,7 +298,7 @@ public:
     }
 };
 ```
-> 这样我们的代码逻辑可以变为
+> <font color="yellow">这样我们的代码逻辑变为</font>
 >
 > `priority_queue<pair<int, int>> pq;`
 > 
