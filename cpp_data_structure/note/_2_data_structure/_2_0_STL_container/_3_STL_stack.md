@@ -8,15 +8,35 @@
 
 --------------------------------------------------------------------------------
 
+```c++
+// STL（标准模板库） 
+#include <array>       // C++ array 容器
+#include <vector>      // C++ vector 容器
+#include <list>        // C++ list 容器
+#include <stack>       // C++ stack 容器适配器
+#include <queue>       // C++ queue 容器适配器  priority_queue 容器适配器
+#include <deque>       // C++ deque 容器
+#include <string>      // C++ string 容器
+#include <map>         // C++ map 容器
+#include <set>         // C++ set 容器
+
+// 与STL 容器有关的头文件
+// <algorithm>是标准模版库（STL）中最重要的头文件之一，提供了大量基于迭代器的非成员模板函数。
+#include <algorithm>   // remove()、remove_if()、find_if()、sort、...
+// https://blog.csdn.net/szplzx1314/article/details/120644640
+```
+
+--------------------------------------------------------------------------------
+
 # STL container adapter 容器适配器
 
 --------------------------------------------------------------------------------
 
-## std::stack
+## std::stack 栈
 
-## _2_STL_stack.md
+## _3_STL_stack.md
+
 --------------------------------------------------------------------------------
-
 
 #### 栈（std::stack）的对外接口
 > <font color="green"> 栈（stack）的对外接口：</font>

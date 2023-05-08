@@ -24,15 +24,15 @@ using namespace std;  // C++标准库定义的标准命名空间.
 #include <cctype>   // string对象的各种字符处理函数，如toupper、isupper、
 
 // STL（标准模板库） 
-#include <array>      // C++ array 容器
-#include <vector>     // C++ vector 容器
+#include <array>       // C++ array 容器
+#include <vector>      // C++ vector 容器
 #include <list>        // C++ list 容器
-#include <string>     // C++ string 容器
+#include <stack>       // C++ stack 容器适配器
+#include <queue>       // C++ queue 容器适配器  priority_queue 容器适配器
+#include <deque>       // C++ deque 容器
+#include <string>      // C++ string 容器
 #include <map>         // C++ map 容器
 #include <set>         // C++ set 容器
-#include <deque>       // C++ deque 容器
-#include <queue>       // C++ queue 容器适配器
-#include <stack>       // C++ stack 容器适配器
 
 
 // 与STL 容器有关的头文件
