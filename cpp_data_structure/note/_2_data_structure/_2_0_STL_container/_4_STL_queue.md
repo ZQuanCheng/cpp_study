@@ -10,15 +10,17 @@
 
 ```c++
 // STL（标准模板库） 
-#include <array>       // C++ array 容器
-#include <vector>      // C++ vector 容器
-#include <list>        // C++ list 容器
-#include <stack>       // C++ stack 容器适配器
-#include <queue>       // C++ queue 容器适配器  priority_queue 容器适配器
-#include <deque>       // C++ deque 容器
-#include <string>      // C++ string 容器
-#include <map>         // C++ map 容器
-#include <set>         // C++ set 容器
+#include <array>               // std::array                                    容器
+#include <vector>              // std::vector                                   容器
+#include <list>                // std::list                                     容器
+#include <stack>               // std::stack                                    容器适配器
+#include <queue>               // std::queue          std::priority_queue       容器适配器
+#include <deque>               // std::deque                                    容器
+#include <string>              // std::string                                   容器
+#include <map>                 // std::map            std::multimap             容器   
+#include <set>                 // std::set            std::multiset             容器
+#include <unordered_map>       // std::unordered_map  std::unordered_multimap   容器
+#include <unordered_set>       // std::unordered_set  std::unordered_multiset   容器
 
 // 与STL 容器有关的头文件
 // <algorithm>是标准模版库（STL）中最重要的头文件之一，提供了大量基于迭代器的非成员模板函数。
@@ -202,7 +204,8 @@
 > 
 > priority_queue<int> pq1; // 等价于priority_queue<int, vector<int>, less<int>> pq;
 > // 默认以vector为底层容器；vector<int>是承载底层数据结构堆 （heap）的容器
-> // 默认以less为比较方式，左边小于右边的时候返回true，此时优先队列就是大堆，所以优先队列默认就是大堆。
+> // 默认以less为比较方式，左边小于右边的时候返回true, 返回true则交换位置，所以排在top的最大，此时优先队列就是大堆，所以优先队列默认就是大堆。 
+> // 如果以greater为比较方式，左边大于右边的时候返回true, 返回true则交换位置，所以排在top的最小，此时优先队列就是小堆，所以优先队列默认就是小堆。 
 > 
 > //大堆：每个结点的值都不大于它的双亲结点，堆顶元素是最大的。 又叫（大顶堆，大根堆）
 > //小堆：每个结点的值都不小于它的双亲结点，堆顶元素是最小的。 
@@ -419,6 +422,17 @@
 >
 
 #####  3. 自定义比较类
+
+> <font color="yellow"> 其实自定义比较类的原理和内置比较类是一样的 </font>
+> 
+> 我们看一看内置比较类`std::less`、`std::greater`
+> 
+> 默认以`less`为比较方式，左边小于右边的时候返回`true`, 返回`true`则交换位置，所以排在`top`的最大`max`，此时优先队列就是大堆，所以优先队列默认就是大堆。 
+> 
+> 如果以`greater`为比较方式，左边大于右边的时候返回`true`, 返回`true`则交换位置，所以排在`top`的最小`min`，此时优先队列就是小堆，所以优先队列默认就是小堆。 
+>
+> <font color="yellow"> 注意重点：返回`true`则交换位置 </font>
+> 
 
 > <font color="yellow"> 3. 自定义比较类 </font>
 >
