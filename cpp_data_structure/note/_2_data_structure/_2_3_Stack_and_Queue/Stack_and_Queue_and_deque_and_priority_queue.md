@@ -603,13 +603,293 @@ https://blog.csdn.net/qq_50533529/article/details/124673008
 > <font color="yellow"> 3. 自定义比较类 </font>
 >
 > https://blog.csdn.net/Strengthennn/article/details/119078911
+>
+> <font color="gree"> 
+> 
+> 两种情况：
+> 
+> * 如果对象是结构体或类，可以在结构体或类的定义中重载 `<` 和 `>` 运算符，也可以定义仿函数
+> > 并不是一定要同时定义 `<` 和 `>` 运算符
+> > `priority_queue`中
+> > * 默认使用`less<T>`判断式比较元素大小，因此可以只定义 `<` 符号的重载以满足使用
+> > 
+> > * 如果使用`greater<T>`判断式比较元素大小，因此可以可以只定义 `>` 符号的重载以满足使用
+> > 
+>
+> * 如果没有结构体或类，只能用仿函数
+>
+> 为了更具有普适性，一般我用仿函数
+>
+> </font>
+>
+
+>
+> **第一种：小于号重载**
+> <font color="yellow"> 例子如下</font>
+> ```c++
+> #include<queue>
+> 
+> struct Node {
+>     int size;
+>     int price;
+>     // 重载<运算符
+>     bool operator<(const Node &b) const {
+>         return this->size == b.size ? this->price > b.price : this->size < b.size;
+>     }
+> };
+> 
+> int main()
+> {
+>     priority_queue<Node> priorityQueue;
+>     // 等价于priority_queue<Node, vector<Node>, less<Node>> priorityQueue;
+>     for (int i = 0; i < 5; i++) {
+>         priorityQueue.push(Node{i, 5 - i});
+>     }
+>     for (int i = 0; i < 5; i++) {
+>         priorityQueue.push(Node{i, 10 - i});
+>     }
+>     while (!priorityQueue.empty()) {
+>         Node top = priorityQueue.top();
+>         cout << "size:" << top.size << " price:" << top.price << endl;
+>         priorityQueue.pop();
+>     }
+> 
+>     cout << endl;
+>     pause();
+> 
+>     return 0;
+> }        
+> ```
+> 编译并运行，结果如下
+> ```c++
+> size:4 price:1
+> size:4 price:6
+> size:3 price:2
+> size:3 price:7
+> size:2 price:3
+> size:2 price:8
+> size:1 price:4
+> size:1 price:9
+> size:0 price:5
+> size:0 price:10
+> ```
+>
+
+>
+> **第二种：大于号重载**
+> <font color="yellow"> 例子如下</font>
+> ```c++
+> #include<queue>
+> 
+> struct Node {
+>     int size;
+>     int price;
+>     // 重载>运算符
+>     bool operator>(const Node &b) const {
+>         return this->size == b.size ? this->price < b.price : this->size > b.size;
+>     }
+> };
+> 
+> int main()
+> {
+>     priority_queue<Node, vector<Node>, greater<Node>> priorityQueue;
+>     for (int i = 0; i < 5; i++) {
+>         priorityQueue.push(Node{i, 5 - i});
+>     }
+>     for (int i = 0; i < 5; i++) {
+>         priorityQueue.push(Node{i, 10 - i});
+>     }
+>     while (!priorityQueue.empty()) {
+>         Node top = priorityQueue.top();
+>         cout << "size:" << top.size << " price:" << top.price << endl;
+>         priorityQueue.pop();
+>     }
+> 
+>     cout << endl;
+>     pause();
+> 
+>     return 0;
+> }        
+> ```
+> 编译并运行，结果如下
+> ```c++
+> size:0 price:10
+> size:0 price:5
+> size:1 price:9
+> size:1 price:4
+> size:2 price:8
+> size:2 price:3
+> size:3 price:7
+> size:3 price:2
+> size:4 price:6
+> size:4 price:1
+> ```
+>
+
+
+
+
+>
+> **第三种：仿函数的应用**
+>
+> <font color="yellow"> "仿函数"比较类的定义方式如下（返回true时，前后交换位置）</font>
+> 
+> ```c++
+> 
+> // 返回true时，a的优先级低于b的优先级。即返回true时，交换位置，a排在b的后面)
+> class Cmp {
+> public:  
+>     bool operator()(const Node &a, const Node &b) { // 条件运算符
+>         return a.size == b.size ? a.price > b.price : a.size < b.size; // top的size最大, size相同时price小的排前面
+>         return a.size == b.size ? a.price < b.price : a.size > b.size; // top的size最小, size相同时price大的排前面     
+>         // priority_queue自定义函数的比较与sort正好是相反的
+>         // 也就是说，如果你是把大于号作为第一关键字的比较方式，那么堆顶的元素就是第一关键字最小的
+>    }
+> };
+> 
+> 
+> // top的size最大，price最小
+> class top_sizemax_pricemin {
+> public:
+>     bool operator()(const Node &a, const Node &b) { // 条件运算符
+>         return a.size == b.size ? a.price > b.price : a.size < b.size; // top的size最大, size相同时price小的排前面  
+>         // 返回true时，交换位置，front排在back的后面
+>    }
+> };
+> 
+> 
+> // top的size最小，price最大
+> class top_sizemin_pricemax {
+> public:
+>     bool operator()(const Node &a, const Node &b) { // 条件运算符
+>         return a.size == b.size ? a.price < b.price : a.size > b.size; // top的size最大, size相同时price小的排前面  
+>         // 返回true时，交换位置，front排在back的后面
+>    }
+> };
+> 
+> ```
+> 
+> <font color="yellow"> 例1</font>
+> ```c++
+> #include<queue>
+> 
+> struct Node {
+>     int size;
+>     int price;
+> };
+> 
+> // top的size最大，price最小
+> class top_sizemax_pricemin {
+> public:
+>     bool operator()(const Node &a, const Node &b) { // 条件运算符
+>         return a.size == b.size ? a.price > b.price : a.size < b.size; // top的size最大, size相同时price小的排前面  
+>         // 返回true时，交换位置，front排在back的后面
+>    }
+> };
+> 
+> int main()
+> {
+>     priority_queue<Node, vector<Node>, top_sizemax_pricemin> priorityQueue;
+>     for (int i = 0; i < 5; i++) {
+>         priorityQueue.push(Node{i, 5 - i});
+>     }
+>     for (int i = 0; i < 5; i++) {
+>         priorityQueue.push(Node{i, 10 - i});
+>     }
+>     while (!priorityQueue.empty()) {
+>         Node top = priorityQueue.top();
+>         cout << "size:" << top.size << " price:" << top.price << endl;
+>         priorityQueue.pop();
+>     }
+> 
+>     cout << endl;
+>     pause();
+> 
+>     return 0;
+> }        
+> ```
+> 编译并运行，结果如下
+> ```c++
+> size:4 price:1
+> size:4 price:6
+> size:3 price:2
+> size:3 price:7
+> size:2 price:3
+> size:2 price:8
+> size:1 price:4
+> size:1 price:9
+> size:0 price:5
+> size:0 price:10
+> ```
+>
+> <font color="yellow"> 例2</font>
+> ```c++
+> #include<queue>
+> 
+> struct Node {
+>     int size;
+>     int price;
+> };
+> 
+> // top的size最小，price最大
+> class top_sizemin_pricemax {
+> public:
+>     bool operator()(const Node &a, const Node &b) { // 条件运算符
+>         return a.size == b.size ? a.price < b.price : a.size > b.size; // top的size最大, size相同时price小的排前面  
+>         // 返回true时，交换位置，front排在back的后面
+>    }
+> };
+> 
+> int main()
+> {
+>     priority_queue<Node, vector<Node>, top_sizemin_pricemax> priorityQueue;
+>     for (int i = 0; i < 5; i++) {
+>         priorityQueue.push(Node{i, 5 - i});
+>     }
+>     for (int i = 0; i < 5; i++) {
+>         priorityQueue.push(Node{i, 10 - i});
+>     }
+>     while (!priorityQueue.empty()) {
+>         Node top = priorityQueue.top();
+>         cout << "size:" << top.size << " price:" << top.price << endl;
+>         priorityQueue.pop();
+>     }
+> 
+>     cout << endl;
+>     pause();
+> 
+>     return 0;
+> }        
+> ```
+> 编译并运行，结果如下
+> ```c++
+> size:0 price:10
+> size:0 price:5
+> size:1 price:9
+> size:1 price:4
+> size:2 price:8
+> size:2 price:3
+> size:3 price:7
+> size:3 price:2
+> size:4 price:6
+> size:4 price:1
+> ```
+>
+
+
+
+
+
+
+
+> **对象非结构体或类定义时，只能使用仿函数**
 > 
 > <font color="yellow"> 需要注意的是：使用仿函数对优先队列进行自定义排序，需要在声明priority_queue对象时显式地定义Container类型和Compare类型，即: </font>
 > ```c++
 > priority_queue<pair<int, int>, vector<pair<int, int>>, mycomparison> pri_que
 > // priority_queue<pair<int,int>> pri_que;
 > ```
-> <font color="yellow"> 比较类的定义方式如下（返回true时，前后交换位置）</font>
+> <font color="yellow"> "仿函数"比较类的定义方式如下（返回true时，前后交换位置）</font>
 > 
 > ```c++
 > // 返回true时，front的优先级低于back的优先级。即返回true时，交换位置，front排在back的后面)

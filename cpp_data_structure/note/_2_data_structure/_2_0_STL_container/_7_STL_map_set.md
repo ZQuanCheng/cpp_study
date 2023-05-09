@@ -420,9 +420,11 @@
 > ```
 > 
 
-#####  std::map 讲解 + 例子
+##### std::map 讲解 + 例子
 
-`map`的创建以及初始化列表
+> https://blog.csdn.net/qq_28584889/article/details/83855734
+
+1. `map`的创建以及初始化列表
 >
 > `map`类模板有`5`个类型参数，但是一般只需要指定前`2`个模板参数的值。第一个是键值(`type_K key`)的类型，第二个是所保存对象的类型(`type_T obj`)。我们通常所用的一种构造一个map对象的方法是：
 > 
@@ -446,7 +448,7 @@
 >
 
 
-`map`的一般常用属性（方法）
+2. `map`的一般常用属性（方法）
 >
 > ```c++
 > size         返回有效元素个数
@@ -457,52 +459,453 @@
 > 
 
 
-`map`插入数据
+3. `map`插入数据
 >
-> 在构造`map`容器后，我们就可以往里面插入数据了。这里讲`3`种常见的数据插入方法。
+> 在构造`map`容器后，我们就可以往里面插入数据了。这里讲`4`种常见的数据插入方法。
+>
+> <font color="yellow">用`emplace`最简洁</font>
 > 
-> **第一种：用insert函数插入pair数据**
+> **第一种：用`insert`函数插入`pair`数据**
 >
 > ```c++
-
+> map<string, int> mapStudent;//创建map
+> mapStudent.insert(pair<string, int>("student_one", 22));
+> mapStudent.insert(pair<string, int>("student_two", 25));
+> mapStudent.insert(pair<string, int>("student_three", 21));
 > ```
+> 或者使用`make_pair`
+> ```c++
+> map<string, int> mapStudent;
+> mapStudent.insert(make_pair("student_one", 22));
+> mapStudent.insert(make_pair("student_two", 25));
+> mapStudent.insert(make_pair("student_three", 21));
+> ```
+> 
+> **第二种：用`insert`函数插入`value_type`数据**
+>
+> ```c++
+> map<string, int> mapStudent;//创建map
+> mapStudent.insert(map<string, int>::value_type("student_one", 22));
+> mapStudent.insert(map<string, int>::value_type("student_two", 25));
+> mapStudent.insert(map<string, int>::value_type("student_three", 21));
+> ```
+> 
+> **第三种：用数组方式插入数据**
+>
+> ```c++
+> map<string, int> mapStudent;//创建map
+> mapStudent["student_one"] = 22;
+> mapStudent["student_two"] = 25;
+> mapStudent["student_three"] = 21;
+> ```
+> 
+> **第四种：用`emplace`函数插入数据**
+>
+> ```c++
+> map<string, int> mapStudent;
+> mapStudent.emplace("student_one", 22);
+> mapStudent.emplace("student_two", 25);
+> mapStudent.emplace("student_three", 21);
+> ```
+> 
+> 这几种插入方法的区别：
+> 
+> * 用`insert`函数的效果是一样的，在数据的插入上涉及到集合的唯一性这个概念，即<font color="yellow">当`map`中有某个关键字时，`insert`操作是失败的。</font>
+> 
+> * `emplace`插入效果跟`insert`效果一样。
+> 
+> * 用数组方式插入数据就不同，它可以覆盖以前该关键字对应的值。
+>
+> 
+
+4. `map`数据的访问和遍历
+>
+> ```c++
+> map访问和查找元素的常用方法有：
+> ====================================================================
+>
+> operator[]    访问元素，也可以用于修改某个元素的value值；
+>               不进行下标（关键字）是否存在的检查
+>               （即如果关键字不存在，程序运行不会出错）
+>               访问到某个元素时，如果该元素的键值不存在则直接创建该元素，返回是初始的值
+>               （比如int型的初始为0，则返回0，string初始为NULL，则返回NULL）
+> 
+> at            访问元素，也可以用于修改某个元素的value值；
+>               会进行下标（关键字）是否存在的检查，
+>               如果关键字不存在，则会拋出 out_of_range 异常。
+>
+> ====================================================================
+> 
+> 利用迭代器访问元素
+> 
+> **********************************************************************
+> map<K, T>::iterator it;
+> (*it).first;             // the key value (of type Key)  
+> (*it).second;            // the mapped value (of type T)
+> (*it);                   // the "element value" (of type pair<const Key,T>) 
+> 元素的键值和value值分别是迭代器的first和second属性。也可以用迭代器指针直接访问。
+> it->first;               // same as (*it).first   (the key value)
+> it->second;              // same as (*it).second  (the mapped value) 
+>
+> ********************************************************************
+>
+> 迭代器的成员函数：
+> begin 　　 返回指向容器起始位置的迭代器（iterator） 
+> end 　　   返回指向容器末尾位置的迭代器 
+> cbegin　   返回指向容器起始位置的常迭代器（const_iterator） 
+> cend 　　  返回指向容器末尾位置的常迭代器（当不需要对元素进行写访问时使用常迭代器）
+> rbegin     返回指向容器起始位置的反向迭代器（reverse_iterator）
+> rend       返回指向容器末尾位置的反向迭代器 
+>
+> ####################################################################
+> 
+> 查找某键值的元素是否存在：
+> count      若存在，返回1；不存在返回0
+> find       若存在返回指向元素的迭代器指针，不存在返回end()
+> ====================================================================
+> ```
+> 
+> 1. 使用前向迭代器遍历`map`
+>
+> ```c++
+> //使用前向迭代器遍历map
+> map<string, int>::iterator iter;
+> for (iter = mapStudent.begin(); iter != mapStudent.end(); iter++)
+> 	cout << iter->first << " " << iter->second << endl;
+>  
+> //当然也可以使用迭代器指针解引用的形式访问
+> for (map<string, int>::iterator iter = mapStudent.begin(); iter != mapStudent.end(); iter++)
+> 	cout << (*iter).first << " " << (*iter).second << endl;
+> ```
+>
+> <font color="yellow">当然，这两种形式的访问都是可以改变元素中的`value`值的，即可以进行写访问。例子如下：</font>
+>
+> ```c++
+> map<string, int> mapStudent;      //创建map
+> mapStudent["student_one"] = 22;   //mapStudent.emplace("student_one", 22);
+> mapStudent["student_two"] = 25;   //mapStudent.emplace("student_two", 25);
+> mapStudent["student_three"] = 21; //mapStudent.emplace("student_three", 21);
+>  
+> map<string, int>::iterator iter;
+> for (iter = mapStudent.begin(); iter != mapStudent.end(); iter++)
+> 	cout << iter->first << " " << iter->second << endl; //遍历
+>
+> cout << endl;
+> 
+> for (iter = mapStudent.begin(); iter != mapStudent.end(); iter++)
+> 	 (*iter).second = 100; //将mapStudent中的元素value值全部改为100
+>  
+> for (iter = mapStudent.begin(); iter != mapStudent.end(); iter++)
+> 	cout << iter->first << " " << iter->second << endl; //遍历
+> ```
+> 输出结果如下：
+> ```c++
+> student_one 22
+> student_three 21
+> student_two 25
+> 
+> student_one 100
+> student_three 100
+> student_two 100
+> ```
+>
+> <font color="yellow">如果改用`const_iterator`，则两种方式都不能进行写访问。</font>
+> 
+> 
+> 2. 使用反向迭代器遍历`map`
+>
+> ```c++
+> map<string, int>::reverse_iterator iter;
+>  
+> for (iter = mapStudent.rbegin(); iter != mapStudent.rend(); iter++)
+> 	cout << iter->first << " " << iter->second << endl; //反向遍历
+> ```
+> 
+> 反向迭代器，顾名思义，就是倒着访问容器中元素的。
+>
+> 
+> 3. 使用`auto`关键字
+>
+> `C++`中`auto`关键字具有自动进行类型检查的功能，可以少些不少代码。比如可以将`1.`中的代码直接改为：
+> 
+> ```c++
+> for (auto it = mapStudent.begin(); it != mapStudent.end(); it++)
+> 	cout << it->first << " " << it->second << endl; //遍历
+> ```
+> 
+> <font color="yellow">当然你还可以使用范围`for`语句更简练的遍历`map`容器：</font>
+>
+> ```c++
+> for (auto x : mapStudent){
+> 	cout << x.first << " " << x.second << endl;
+> }
+> ```
+>
+> <font color="yellow">如果需要对元素进行写操作的话，循环变量`x`必须要声明成引用类型`&x`</font>。
+>
+> <font color="yellow">在`范围for语句`中，预存了`end()`的值，一旦在序列中添加（删除）元素，end函数的值就可能变的无效了, 所以如果要增删，就不要用`范围for语句`</font> 
+> 
+> 4. 使用数组的方式遍历数组，略~
+>
+> 
+
+
+5. `map`数据的删除
+>
+> `map`容器中删除一个元素要使用`erase`函数，只要有以下几种用法。
+> 
+> ```c++
+> //使用关键字删除
+> int res = mapStudent.erase("student_one"); //删除成功返回1，失败返回0；只有使用关键字删除时才有返回值
+> cout << "res=" << res << endl;
+>  
+> //使用迭代器删除
+> map<string, int>::iterator iter;
+> iter = mapStudent.find("student_two");
+> mapStudent.erase(iter);
+>  
+> //使用迭代器删除一个范围的元素
+> auto it = mapStudent.begin();
+> mapStudent.erase(it, mapStudent.find("student_two"));
+> ```
+> 
+> 
+
+
+6. `map`中关键词的排序
+> 
+> `STL map`中重载`operator()<`的运算符，默认是采用小于号来排序的，以上代码在排序上是不存在任何问题的，因为上面的关键字是`string`类型，它本身支持小于号运算。`string`类型的关键字排序是按照字符串中的字符的顺序，如果第一个字符相同就比较第二个，如果前两个都相同就比较第三个，以此类推..... 如果关键词是`int`型的话，就直接按照大小排序了。
+>
+> 在一些特殊情况，比如关键字是一个结构体，涉及到排序就会出现问题，因为它没有小于号操作，`insert`等函数在编译的时候过不去，下面给出两个方法解决这个问题。
+>
+>
+> <font color="gree"> 
+> 
+> 两种情况：
+> 
+> * 如果对象是结构体或类，可以在结构体或类的定义中重载 `<` 和 `>` 运算符，也可以定义仿函数
+> > 并不是一定要同时定义 `<` 和 `>` 运算符
+> > `priority_queue`中
+> > * 默认使用`less<T>`判断式比较元素大小，因此可以只定义 `<` 符号的重载以满足使用
+> > 
+> > * 如果使用`greater<T>`判断式比较元素大小，因此可以可以只定义 `>` 符号的重载以满足使用
+> > 
+>
+> * 如果没有结构体或类，只能用仿函数
+>
+> 为了更具有普适性，一般我用仿函数
+>
+> </font>
+>
+
+> **第一种：无重载，无仿函数，无法编译通过**，程序举例
+```c++
+#include <iostream>
+#include <string>
+#include <map>
+ 
+using namespace std;
+ 
+typedef struct tagStudentInfo
+{
+	int nID;
+    string strName;
+}StudentInfo, *PStudentInfo;  //学生信息
+ 
+int main()
+{
+	int nSize;
+	//用学生信息映射分数
+	map<StudentInfo, int> mapStudent;
+	map<StudentInfo, int>::iterator iter;
+	StudentInfo studentInfo;
+	studentInfo.nID = 1001;
+	studentInfo.strName = "student_one";
+	mapStudent.insert(pair<StudentInfo, int>(studentInfo, 90));
+	studentInfo.nID = 1002;
+	studentInfo.strName = "student_two";
+	mapStudent.insert(pair<StudentInfo, int>(studentInfo, 80));
+	for (iter=mapStudent.begin(); iter!=mapStudent.end(); iter++)
+		cout<<iter->first.nID<<endl<<iter->first.strName<<endl<<iter->second<<endl;
+  
+	pause();
+	return 0;
+}
+/****以上程序是无法编译通过的******/
+```
+
+> **第二种：小于号重载**，程序举例
+```c++
+#include <iostream>
+#include <string>
+#include <map>
+ 
+using namespace std;
+ 
+typedef struct tagStudentInfo
+{
+	int nID;
+	string strName;
+	bool operator < (tagStudentInfo const& _A) const
+	{
+		//这个函数指定排序策略，按nID排序，如果nID相等的话，按strName排序
+		if(nID < _A.nID)  return true;
+		if(nID == _A.nID) return strName.compare(_A.strName) < 0;
+		return false;
+	}
+}StudentInfo, *PStudentInfo;  //学生信息
+
+int main()
+{
+	int nSize;
+	//用学生信息映射分数
+	map<StudentInfo, int> mapStudent;
+	//等价于map<StudentInfo, int, less<StudentInfo>> mapStudent;
+	map<StudentInfo, int>::iterator iter; 
+	//等价于map<StudentInfo, int, less<StudentInfo>>::iterator iter;
+	StudentInfo studentInfo;
+	studentInfo.nID = 1001;
+	studentInfo.strName = "student_one";
+	mapStudent.insert(pair<StudentInfo, int>(studentInfo, 90));
+	studentInfo.nID = 1002;
+	studentInfo.strName = "student_two";
+	mapStudent.insert(pair<StudentInfo, int>(studentInfo, 80));
+	for (iter=mapStudent.begin(); iter!=mapStudent.end(); iter++)
+		cout<<iter->first.nID<<endl<<iter->first.strName<<endl<<iter->second<<endl;
+  
+	pause();
+	return 0;
+}
+
+/****运行结果如下：******/
+1001
+student_one
+90
+1002
+student_two
+80
+```
+
+> **第三种：大于号重载**，程序举例
+```c++
+#include <iostream>
+#include <string>
+#include <map>
+ 
+using namespace std;
+ 
+typedef struct tagStudentInfo
+{
+	int nID;
+	string strName;
+	bool operator > (tagStudentInfo const& _A) const
+	{
+		//这个函数指定排序策略，按nID排序，如果nID相等的话，按strName排序
+		if(nID > _A.nID)  return true;
+		if(nID == _A.nID) return strName.compare(_A.strName) > 0;
+		return false;
+	}
+}StudentInfo, *PStudentInfo;  //学生信息
+
+int main()
+{
+	int nSize;
+	//用学生信息映射分数
+	map<StudentInfo, int, greater<StudentInfo>> mapStudent;
+	map<StudentInfo, int, greater<StudentInfo>>::iterator iter;
+	StudentInfo studentInfo;
+	studentInfo.nID = 1001;
+	studentInfo.strName = "student_one";
+	mapStudent.insert(pair<StudentInfo, int>(studentInfo, 90));
+	studentInfo.nID = 1002;
+	studentInfo.strName = "student_two";
+	mapStudent.insert(pair<StudentInfo, int>(studentInfo, 80));
+	for (iter=mapStudent.begin(); iter!=mapStudent.end(); iter++)
+		cout<<iter->first.nID<<endl<<iter->first.strName<<endl<<iter->second<<endl;
+  
+	pause();
+	return 0;
+}
+
+/****运行结果如下：******/
+1002
+student_two
+80
+1001
+student_one
+90
+```
 
 
 
+>
+> **第四种：仿函数的应用**，这个时候结构体中没有直接的小于号重载，定义一个比较函数，程序说明
+```c++
+#include <iostream>
+#include <string>
+#include <map>
+ 
+using namespace std;
+ 
+typedef struct tagStudentInfo
+{
+	int nID;
+    string strName;
+}StudentInfo, *PStudentInfo;  //学生信息
+ 
+class hash_function
+{
+public:
+	bool operator() (StudentInfo const &_A, StudentInfo const &_B) const
+	{
+		if(_A.nID < _B.nID) return true;
+		if(_A.nID == _B.nID) return _A.strName.compare(_B.strName) < 0;
+		return false;
+	}
+};
+ 
+int main()
+{
+	int nSize;
+	//用学生信息映射分数
+	map<StudentInfo, int, hash_function> mapStudent;
+	map<StudentInfo, int, hash_function>::iterator iter;
+	StudentInfo studentInfo;
+	studentInfo.nID = 1001;
+	studentInfo.strName = "student_one";
+	mapStudent.insert(pair<StudentInfo, int>(studentInfo, 90));
+	studentInfo.nID = 1002;
+	studentInfo.strName = "student_two";
+	mapStudent.insert(pair<StudentInfo, int>(studentInfo, 80));
+	for (iter=mapStudent.begin(); iter!=mapStudent.end(); iter++)
+		cout<<iter->first.nID<<endl<<iter->first.strName<<endl<<iter->second<<endl;
+ 
+	pause();
+	return 0;
+}
+
+/****运行结果如下：******/
+1001
+student_one
+90
+1002
+student_two
+80
+```
 
 
 
+##### 代码随想录 栈与队列 8. 前 K 个高频元素
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+> https://programmercarl.com/0347.%E5%89%8DK%E4%B8%AA%E9%AB%98%E9%A2%91%E5%85%83%E7%B4%A0.html
+> 
+>
+> <font color="yellow"> 题目：见`_2_3_Stack_and_Queue`中`_7_top_k_frequent_elements.md`我的解法优化</font>
+>
+> 
+> 可以把我的解法中“扫描每个数字的频次”，简化为用`std::unordered_map`统计频次，即代码随想录解法的大顶堆版本
+>
+> 
 
 
 
