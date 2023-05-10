@@ -82,6 +82,7 @@
 class Solution {
 public:
     vector<int> topKFrequent(vector<int>& nums, int k) {
+        // ===============================扫描每个数字的频次=================================
         // 存储value，值
         vector<int> v; 
         // 存储frequency，出现频次
@@ -93,7 +94,8 @@ public:
         // 开始遍历，从nums[1]开始，计算出现次数
         for(size_t i=1; i < nums.size(); i++) {
             // 查看是否之前已经出现该值
-            vector<int>::iterator it = find(v.begin(), v.end(), nums[i]);  // 返回[first，end）中第一个等于nums[i]的位置；若未找到，返回end。
+            // find()函数返回[first，end）中第一个等于nums[i]的位置；若未找到，返回end。
+            vector<int>::iterator it = find(v.begin(), v.end(), nums[i]);  
             if(it != v.end()) { // num[i] 在前面已经出现了，已经存储到v中
                 // 计算出数组v中的位置
                 int location = it - v.begin();
@@ -107,6 +109,7 @@ public:
         }
         // 截止目前，时间复杂度为O(n)
         
+        // ================================存入优先级队列，自动排序=============================       
         // 优先级队列pair<frequency, value>
         priority_queue<pair<int,int>> pri_que; 
         for(size_t i=0; i < v.size(); i++) {
@@ -116,6 +119,7 @@ public:
         } 
         // 截止目前，时间复杂度为O(n+k)，最坏是O(2n)
 
+        // ==============================取出优先级队列中的前k个top元素==========================
         // 存储结果
         vector<int> result; 
         for(size_t i=0; i < k; i++) {  //前k个
@@ -137,8 +141,8 @@ public:
     class top_max {
     public:
         bool operator()(const pair<int, int>& front, const pair<int, int>& back) {
-            return front.second < back.second; // top最大
-            // return front.second > back.second; // top最小
+            return front.second < back.second; // top的second最大
+            // return front.second > back.second; // top的second最小
 
             // 返回true时，交换位置，front排在back的后面
             // 这里是按照递增序列排序（top最小）
@@ -146,6 +150,7 @@ public:
     };
 
     vector<int> topKFrequent(vector<int>& nums, int k) {
+        // ===============================扫描每个数字的频次=================================
         // 存储value，值
         vector<int> v; 
         // 存储frequency，出现频次
@@ -170,7 +175,8 @@ public:
             }
         }
         // 截止目前，时间复杂度为O(n)
-        
+
+        // ================================存入优先级队列，自动排序=============================
         // 优先级队列pair<value, frequency>
         priority_queue<pair<int,int>, vector<pair<int,int>>, top_max> pri_que; 
         for(size_t i=0; i < v.size(); i++) {
@@ -179,6 +185,7 @@ public:
         } 
         // 截止目前，时间复杂度为O(n+k)，最坏是O(2n)
 
+        // ==============================取出优先级队列中的前k个top元素==========================
         // 存储结果
         vector<int> result; 
         for(size_t i=0; i < k; i++) {  //前k个
@@ -212,22 +219,31 @@ public:
     };
 
     vector<int> topKFrequent(vector<int>& nums, int k) {
+        // ===============================扫描每个数字的频次=================================
         // 要统计元素出现频率
-        unordered_map<int, int> map; // map<nums[i],对应出现的次数>
+        // 如果要用到映射map, 则优先使用std::unordered_set，因为它的查询和增删效率是最优的
+        unordered_map<int, int> map; // map<nums[i],对应出现的次数> , 
+        // 即pair<key, obj>中key为数值：num[i], obj元素对象为数值：num[i]出现的次数
+        // map[nums[i]] 即map(key)进行索引
         for (int i = 0; i < nums.size(); i++) {
             map[nums[i]]++;
         }
+        // map[nums[i]]不需要初始化的原因为：当map内元素值为int类型或常量时，默认值为0。
+        // 即当map<type_K, int>时，int对象的默认值为0，如果不想初始化为0，记得手动设置初始值
 
+        // ================================存入优先级队列，自动排序=============================      
         // 对频率排序
         // 定义一个大顶堆
-        //priority_queue<pair<int, int>, vector<pair<int, int>>, mycomparison> pri_que;
         priority_queue<pair<int, int>, vector<pair<int, int>>, top_max> pri_que;
-
         // 扫面所有频率的数值
         for (unordered_map<int, int>::iterator it = map.begin(); it != map.end(); it++) {
+            // 三种添加方式都行
             pri_que.push(*it);
+            // pri_que.emplace(it->first, it->second); 
+            // pri_que.emplace((*it).first, (*it).second);             
         }
 
+        // ==============================取出优先级队列中的前k个top元素==========================
         // 找出前K个高频元素，大顶堆先弹出的是最大的
         vector<int> result(k);
         for (int i = k - 1; i >= 0; i--) {
@@ -239,9 +255,70 @@ public:
     }
 };
 ```
+> <font color="yellow">
+> 
+> 注意，当`map`内元素值为`int`类型或`常量`时，默认值为`0`。
+>
+> 如果不知道这一点，可以先手动置`0`
+> 
+> </font>
+> 
+```c++
+class Solution {
+public:
+    class top_max {
+    public:
+        bool operator()(const pair<int, int>& front, const pair<int, int>& back) {
+            return front.second < back.second; // top最大
+            // return front.second > back.second; // top最小
 
+            // 返回true时，交换位置，front排在back的后面
+            // 这里是按照递增序列排序（top最小）
+        }
+    };
 
+    vector<int> topKFrequent(vector<int>& nums, int k) {
+        // ===============================扫描每个数字的频次=================================
+        // 要统计元素出现频率
+        // 如果要用到映射map, 则优先使用std::unordered_set，因为它的查询和增删效率是最优的
+        unordered_map<int, int> map; // map<nums[i],对应出现的次数> 
+        // 即pair<key, obj>中key为数值：num[i], obj元素对象为数值：num[i]出现的次数
+        // map[nums[i]] 即map(key)进行索引
+        for (int i = 0; i < nums.size(); i++) {
+            map[nums[i]] = 0; // map[nums[i]]初始化为0
+        } // 其实这里初始化为0，是多余的，因为当map内元素值为int类型或常量时，默认值为0。
 
+        for (int i = 0; i < nums.size(); i++) {
+            map[nums[i]] = map[nums[i]] + 1;
+        }
+        // 其实map[nums[i]]不需要初始化
+        // map[nums[i]]不需要初始化的原因为：当map内元素值为int类型或常量时，默认值为0。
+        // 即当map<type_K, int>时，int对象的默认值为0，如果不想初始化为0，记得手动设置初始值
+
+        // ================================存入优先级队列，自动排序=============================      
+        // 对频率排序
+        // 定义一个大顶堆
+        priority_queue<pair<int, int>, vector<pair<int, int>>, top_max> pri_que;
+        // 扫面所有频率的数值
+        for (unordered_map<int, int>::iterator it = map.begin(); it != map.end(); it++) {
+            // 三种添加方式都行
+            pri_que.push(*it);
+            // pri_que.emplace(it->first, it->second); 
+            // pri_que.emplace((*it).first, (*it).second);             
+        }
+
+        // ==============================取出优先级队列中的前k个top元素==========================
+        // 找出前K个高频元素，大顶堆先弹出的是最大的
+        vector<int> result(k);
+        for (int i = k - 1; i >= 0; i--) {
+            result[i] = pri_que.top().first;
+            pri_que.pop();
+        }
+        return result;
+
+    }
+};
+```
 
 
 

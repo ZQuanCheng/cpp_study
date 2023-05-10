@@ -34,13 +34,14 @@
 
 --------------------------------------------------------------------------------
 
-## std::unordered_map  和  std::unordered_set 
+## 映射std::unordered_map 
+## 集合std::unordered_set 
 
 ## _7_STL_map_set.md
 
 --------------------------------------------------------------------------------
 
-#### 代码随想录
+### 代码随想录的内容
 
 > 
 > <font color="yellow">当我们想使用哈希法来解决问题的时候，我们一般会选择如下三种数据结构。</font>
@@ -145,6 +146,13 @@
 > 结合了`unordered`和`multimap`的两个前缀修饰词特点
 >
 > 
+
+
+--------------------------------------------------------------------------------
+
+### 别的博客的内容
+
+
 
 #### 最全的关联容器总结
 
@@ -446,6 +454,89 @@
 >
 > <font color="gree">但是需要注意的是：初始化列表的方式是C++11的新特性，对版本比较早的编译器不支持这一特性</font>。
 >
+>
+> <font color="yellow">
+> 
+> 注意，当`map`内元素值为`int`类型或`常量`时，默认值为`0`。
+>
+> 即当`map<type_K, int>`时，`int`对象的默认值为`0`，如果不想初始化为`0`，记得手动设置初始值
+> 
+> </font>
+>
+> 1. `map`内元素值为`int`类型, 默认值为`0`
+> 
+> ```c++
+> map<int,int> table;
+> table[1]=1;
+> 
+> cout<<table[0]<<endl;
+> cout<<table[1]<<endl;
+> ```
+> 编译并运行，结果如下：
+>
+> ```c++
+> 0
+> 1
+> ```
+>
+> 2. `map`内元素值为`常量`类型, 默认值为`0`
+>
+> ```c++
+> enum Symbols { //第一个枚举元素默认值为0，后续元素递增+1。
+>     // 终结符号 Terminal symbols：TS
+>     TS_I,           // i
+>     TS_PLUS,        // +
+>     TS_MULTIPLY,    // *
+>     TS_L_PARENS,    // (
+>     TS_R_PARENS,    // )
+>     TS_EOS,         // #
+>     TS_INVALID,     // 非法字符
+>  
+>     // 非终结符号 Non-terminal symbols：NS
+>     NS_E,           // E
+>     NS_T,           // T
+>     NS_F            // F
+> };
+> 
+> int main(){
+>     ...
+>     map<int, enum Symbols> table;
+>  
+>     table[1]=TS_PLUS;
+>  
+>     cout<<table[0]<<endl;
+>     cout<<table[1]<<endl;
+>     ...
+> }
+> ```
+> 编译并运行，结果如下：
+>
+> ```c++
+> 0
+> 1
+> ```
+>
+> 3. `map`内元素值为`string`类型, 默认值不明，不显示
+>
+> ```c++
+> map<int,string> table;
+> table[0]="abc";
+> 
+> table[2]="ghi";
+> 
+> cout<<table[0]<<endl;
+> cout<<table[1]<<endl;
+> cout<<table[2]<<endl;
+> ```
+> 编译并运行，结果如下：
+>
+> ```c++
+> abc
+> 
+> ghi
+> ```
+>
+
 
 
 2. `map`的一般常用属性（方法）
@@ -565,7 +656,7 @@
 > ====================================================================
 > ```
 > 
-> 1. 使用前向迭代器遍历`map`
+> **1. 使用前向迭代器遍历`map`**
 >
 > ```c++
 > //使用前向迭代器遍历map
@@ -612,7 +703,7 @@
 > <font color="yellow">如果改用`const_iterator`，则两种方式都不能进行写访问。</font>
 > 
 > 
-> 2. 使用反向迭代器遍历`map`
+> **2. 使用反向迭代器遍历`map`**
 >
 > ```c++
 > map<string, int>::reverse_iterator iter;
@@ -624,7 +715,7 @@
 > 反向迭代器，顾名思义，就是倒着访问容器中元素的。
 >
 > 
-> 3. 使用`auto`关键字
+> **3. 使用`auto`关键字**
 >
 > `C++`中`auto`关键字具有自动进行类型检查的功能，可以少些不少代码。比如可以将`1.`中的代码直接改为：
 > 
@@ -645,12 +736,45 @@
 >
 > <font color="yellow">在`范围for语句`中，预存了`end()`的值，一旦在序列中添加（删除）元素，end函数的值就可能变的无效了, 所以如果要增删，就不要用`范围for语句`</font> 
 > 
-> 4. 使用数组的方式遍历数组，略~
->
+> **4. 使用数组的方式遍历（不具有普适性，key必须为int类型）**
 > 
+> <font color="yellow">
+> 
+> 用数字访问`vector`时，下标是从`0-（size-1）`，而用数字访问`map`，却是从`1~size`,这是有所不同的。
+> 
+> 而且`map`使用`[i]`遍历有一个非常重要的前提: `key`的类型为`int`，所以本质上还是根据`key`进行访问
+> 
+> </font> 
+> 
+> ```c++
+> map<int,string> mapStudent;
+> mapStudent[1] =  "student_one";
+> mapStudent[2] =  "student_two";
+> mapStudent[3] =  "student_three";
+> //数组方式遍历，前提是key的类型为int
+> for(size_t i = 1; i <= mapStudent.size(); i++){
+>     cout << i << " " << mapStudent[i] << endl;
+> } 
+> 
+> cout << endl;
+> // 迭代器方式遍历，不用限定key的类型
+> map<int,string>::iterator iter;
+> for (iter = mapStudent.begin(); iter != mapStudent.end(); iter++)
+> 	cout << iter->first << " " << iter->second << endl; //遍历
+> ```
+> 编译并运行，结果如下
+> ```c++
+> 1 student_one
+> 2 student_two
+> 3 student_three
+> 
+> 1 student_one
+> 2 student_two
+> 3 student_three
+> ``` 
 
 
-5. `map`数据的删除
+1. `map`数据的删除
 >
 > `map`容器中删除一个元素要使用`erase`函数，只要有以下几种用法。
 > 
@@ -895,7 +1019,7 @@ student_two
 
 
 
-##### 代码随想录 栈与队列 8. 前 K 个高频元素
+##### 看懂 代码随想录 栈与队列 8. 前 K 个高频元素 中 `我的解法`和`代码随想录给的解法`中`std::unordered_map`的使用
 
 > https://programmercarl.com/0347.%E5%89%8DK%E4%B8%AA%E9%AB%98%E9%A2%91%E5%85%83%E7%B4%A0.html
 > 
@@ -905,10 +1029,189 @@ student_two
 > 
 > 可以把我的解法中“扫描每个数字的频次”，简化为用`std::unordered_map`统计频次，即代码随想录解法的大顶堆版本
 >
+
+> **我的解法如下**
+```c++
+class Solution {
+public:
+    class top_max {
+    public:
+        bool operator()(const pair<int, int>& front, const pair<int, int>& back) {
+            return front.second < back.second; // top的second最大
+            // return front.second > back.second; // top的second最小
+
+            // 返回true时，交换位置，front排在back的后面
+            // 这里是按照递增序列排序（top最小）
+        }
+    };
+
+    vector<int> topKFrequent(vector<int>& nums, int k) {
+        // ===============================扫描每个数字的频次=================================
+        // 存储value，值
+        vector<int> v; 
+        // 存储frequency，出现频次
+        vector<int> f; 
+
+        v.push_back(nums[0]); // 先放进去第一个
+        f.push_back(1);       // 第一个数的目前出现次数为1
+
+        // 开始遍历，从nums[1]开始，计算出现次数
+        for(size_t i=1; i < nums.size(); i++) {
+            // 查看是否之前已经出现该值
+            vector<int>::iterator it = find(v.begin(), v.end(), nums[i]);  // 返回[first，end）中第一个等于nums[i]的位置；若未找到，返回end。
+            if(it != v.end()) { // num[i] 在前面已经出现了，已经存储到v中
+                // 计算出数组v中的位置
+                int location = it - v.begin();
+                // 修改数组f中的对应位置的频次值，+1
+                f[location] = f[location] + 1;
+            }
+            else { // it == v.end() num[i] 之前未出现
+                v.push_back(nums[i]); // 第一次出现这个数，先放进去
+                f.push_back(1);       // 对应的前出现次数为1            
+            }
+        }
+        // 截止目前，时间复杂度为O(n)
+
+        // ================================存入优先级队列，自动排序=============================
+        // 优先级队列pair<value, frequency>
+        priority_queue<pair<int,int>, vector<pair<int,int>>, top_max> pri_que; 
+        for(size_t i=0; i < v.size(); i++) {
+            pri_que.emplace(v[i], f[i]); 
+            // priority_queue<pair<>>的比较规则：比较第二个元素，top.second最大
+        } 
+        // 截止目前，时间复杂度为O(n+k)，最坏是O(2n)
+
+        // ==============================取出优先级队列中的前k个top元素==========================
+        // 存储结果
+        vector<int> result; 
+        for(size_t i=0; i < k; i++) {  //前k个
+           result.push_back(pri_que.top().first); 
+           pri_que.pop();
+        }
+        // 截止目前，时间复杂度为O(n+2k)，最坏是O(3n)        
+
+        return result;
+    }
+};
+```
+
+> **把我的解法中“扫描每个数字的频次”，简化为用`std::unordered_map`统计频次，即代码随想录解法的大顶堆版本**
+
+```c++
+class Solution {
+public:
+    class top_max {
+    public:
+        bool operator()(const pair<int, int>& front, const pair<int, int>& back) {
+            return front.second < back.second; // top最大
+            // return front.second > back.second; // top最小
+
+            // 返回true时，交换位置，front排在back的后面
+            // 这里是按照递增序列排序（top最小）
+        }
+    };
+
+    vector<int> topKFrequent(vector<int>& nums, int k) {
+        // ===============================扫描每个数字的频次=================================
+        // 要统计元素出现频率
+        // 如果要用到映射map, 则优先使用std::unordered_set，因为它的查询和增删效率是最优的
+        unordered_map<int, int> map; // map<nums[i],对应出现的次数> , 
+        // 即pair<key, obj>中key为数值：num[i], obj元素对象为数值：num[i]出现的次数
+        // map[nums[i]] 即map(key)进行索引
+        for (int i = 0; i < nums.size(); i++) {
+            map[nums[i]]++;
+        }
+        // map[nums[i]]不需要初始化的原因为：当map内元素值为int类型或常量时，默认值为0。
+        // 即当map<type_K, int>时，int对象的默认值为0，如果不想初始化为0，记得手动设置初始值
+
+        // ================================存入优先级队列，自动排序=============================      
+        // 对频率排序
+        // 定义一个大顶堆
+        priority_queue<pair<int, int>, vector<pair<int, int>>, top_max> pri_que;
+        // 扫面所有频率的数值
+        for (unordered_map<int, int>::iterator it = map.begin(); it != map.end(); it++) {
+            // 三种添加方式都行
+            pri_que.push(*it);
+            // pri_que.emplace(it->first, it->second); 
+            // pri_que.emplace((*it).first, (*it).second);             
+        }
+
+        // ==============================取出优先级队列中的前k个top元素==========================
+        // 找出前K个高频元素，大顶堆先弹出的是最大的
+        vector<int> result(k);
+        for (int i = k - 1; i >= 0; i--) {
+            result[i] = pri_que.top().first;
+            pri_que.pop();
+        }
+        return result;
+
+    }
+};
+```
+> <font color="yellow">
 > 
+> 注意，当`map`内元素值为`int`类型或`常量`时，默认值为`0`。
+>
+> 如果不知道这一点，可以先手动置`0`
+> 
+> </font>
+>
+```c++
+class Solution {
+public:
+    class top_max {
+    public:
+        bool operator()(const pair<int, int>& front, const pair<int, int>& back) {
+            return front.second < back.second; // top最大
+            // return front.second > back.second; // top最小
 
+            // 返回true时，交换位置，front排在back的后面
+            // 这里是按照递增序列排序（top最小）
+        }
+    };
 
+    vector<int> topKFrequent(vector<int>& nums, int k) {
+        // ===============================扫描每个数字的频次=================================
+        // 要统计元素出现频率
+        // 如果要用到映射map, 则优先使用std::unordered_set，因为它的查询和增删效率是最优的
+        unordered_map<int, int> map; // map<nums[i],对应出现的次数> 
+        // 即pair<key, obj>中key为数值：num[i], obj元素对象为数值：num[i]出现的次数
+        // map[nums[i]] 即map(key)进行索引
+        for (int i = 0; i < nums.size(); i++) {
+            map[nums[i]] = 0; // map[nums[i]]初始化为0
+        } // 其实这里初始化为0，是多余的，因为当map内元素值为int类型或常量时，默认值为0。
 
+        for (int i = 0; i < nums.size(); i++) {
+            map[nums[i]] = map[nums[i]] + 1;
+        }
+        // 其实map[nums[i]]不需要初始化
+        // map[nums[i]]不需要初始化的原因为：当map内元素值为int类型或常量时，默认值为0。
+        // 即当map<type_K, int>时，int对象的默认值为0，如果不想初始化为0，记得手动设置初始值
+
+        // ================================存入优先级队列，自动排序=============================      
+        // 对频率排序
+        // 定义一个大顶堆
+        priority_queue<pair<int, int>, vector<pair<int, int>>, top_max> pri_que;
+        // 扫面所有频率的数值
+        for (unordered_map<int, int>::iterator it = map.begin(); it != map.end(); it++) {
+            // 三种添加方式都行
+            pri_que.push(*it);
+            // pri_que.emplace(it->first, it->second); 
+            // pri_que.emplace((*it).first, (*it).second);             
+        }
+
+        // ==============================取出优先级队列中的前k个top元素==========================
+        // 找出前K个高频元素，大顶堆先弹出的是最大的
+        vector<int> result(k);
+        for (int i = k - 1; i >= 0; i--) {
+            result[i] = pri_que.top().first;
+            pri_que.pop();
+        }
+        return result;
+
+    }
+};
+```
 
 
 
