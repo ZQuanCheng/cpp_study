@@ -1213,12 +1213,20 @@ public:
 };
 ```
 
+> 
+> <font color="yellow">
+> 
+> 我们用`std::unorder_maped<key, obj>`，很多时候都是为了判断每个`key`的个数
+>
+> 即，我们的`key`为一个值，`obj`为这个值出现的次数
+>
+> 如果只需要判断有没有这个值，不需要判断个数，那么`std::unorder_set`足够了
+>
+> </font>
+> 
 
 
-
-
-
-
+#### std::unordered_set
 
 
 
