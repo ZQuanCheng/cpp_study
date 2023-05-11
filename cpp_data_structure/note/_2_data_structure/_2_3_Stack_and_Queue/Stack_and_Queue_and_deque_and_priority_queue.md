@@ -623,6 +623,162 @@ https://blog.csdn.net/qq_50533529/article/details/124673008
 > </font>
 >
 
+
+
+
+> <font color="yellow"> 
+> 
+> 先看内置类型`int`的默认`less<int>`的具体效果
+> 
+> </font>
+>
+> ```c++
+> #include<queue>
+> 
+> int main()
+> {
+>     priority_queue<int> priorityQueue;
+>     // 等价于priority_queue<int, vector<int>, less<int>> priorityQueue;
+>     for (int i = 0; i < 5; i++) {
+>         priorityQueue.push(i);
+>     }
+>     while (!priorityQueue.empty()) {
+>         int top = priorityQueue.top();
+>         cout << "top:" << top << endl;
+>         priorityQueue.pop();
+>     }
+> 
+>     cout << endl;
+>     pause();
+> 
+>     return 0;
+> }        
+> ```
+> 编译并运行，结果如下
+> ```c++
+> top:4
+> top:3
+> top:2
+> top:1
+> top:0
+> ```
+>
+> 
+> <font color="yellow"> 
+> 
+> 同理，再看内置类型`int`的`greater<int>`的具体效果
+> 
+> </font>
+> 
+> ```c++
+> #include<queue>
+> 
+> int main()
+> {
+>     priority_queue<int, vector<int>, greater<int>> priorityQueue;
+>     for (int i = 0; i < 5; i++) {
+>         priorityQueue.push(i);
+>     }
+>     while (!priorityQueue.empty()) {
+>         int top = priorityQueue.top();
+>         cout << "top:" << top << endl;
+>         priorityQueue.pop();
+>     }
+> 
+>     cout << endl;
+>     pause();
+> 
+>     return 0;
+> }        
+> ```
+> 编译并运行，结果如下
+> ```c++
+> top:0
+> top:1
+> top:2
+> top:3
+> top:4
+> ```
+>
+> <font color="yellow"> 
+> 
+> 
+> * 为什么`less<int>`时，这`std::priority_queue<int>`的`top`是最大`max`?
+> 
+> * 为什么`greater<int>`时，这`std::priority_queue<int>`的`top`是最小`min`?
+>
+> </font>
+>
+> 入队时，排序调整后，优先级最大的元素排在最前面，也就是队首指向的位置，这时候队尾指向的位置(`top`)是优先级最小的元素
+>
+> 如何用代码体会？
+>
+> ```c++
+> // class int
+> 
+> struct int_num {
+>     int num;
+>     // 重载<运算符
+>     bool operator<(const int &b) const {
+>         return this->num < b.num ? true : false;
+>     }
+> };
+>  
+> // 当this->num 小于 b.num时
+> // 返回true，交换位置； 返回false， 不交换位置
+> // less的意思是越低，优先级越高
+> // 即为后入队元素<先入队的元素时，后入队的元素优先级更高，交换位置; 
+> // 即为后入队元素>=先入队的元素时，后入队的元素优先级更低，不交换位置; 
+> // 最终，队头的元素最小，队尾的元素最大，
+> ```
+> 
+> 对于`less<int>`, 对应`<`重载运算符。
+> 
+> 哪个小，哪个优先级高，哪个放在最前面，这样看`top`指向的队尾元素是最大的
+>
+> 虽然按道理使用`less`比较应该默认是小根堆（即堆顶元素最小），但是`priority_queue<>`默认是大根堆的。每次入队元素进去经排序调整后，优先级最大的元素排在最前面，也就是队头指向的位置，这时候队尾指向优先级最小的元素！我们重载运算符的时候比较函数里面写`<`就相当于`>`排序方式，这点需要花点时间想想
+>
+> <font color="yellow"> 
+> 
+> 总结：
+>
+> `集合std::set`(`key`就是`value`)
+>
+> * `less`: `key`越小，优先级越高，越靠近队头（`begin()`）
+>
+> * `greater`: `key`越大，优先级越高，越靠近队头（`begin()`）
+>
+> `映射std::map`(`pair<key, value>`)
+>
+> * `less`: `key`越小，优先级越高，越靠近队头（`begin()`）
+>
+> * `greater`: `key`越大，优先级越高，越靠近队头（`begin()`）
+>
+> 
+> `优先级队列std::priority_queue`
+>
+> * `less`: `key`越小，优先级越高，越靠近队头。对应大根堆(`top`指向的队尾元素最大`max`),
+> * `greater`: `key`越大，优先级越高，越靠近队头。对应小根堆(`top`指向的队尾元素最小`min`)
+>
+> 
+> 以上的`std::less`和`std::sort()函数`的`std::less`功能正好相反
+> 以上的`std::greater`和`std::sort()函数`的`std::greater`功能正好相反
+> </font>
+>
+> 
+
+
+
+
+
+
+
+
+
+
+
+
+
 >
 > **第一种：小于号重载**
 > <font color="yellow"> 例子如下</font>

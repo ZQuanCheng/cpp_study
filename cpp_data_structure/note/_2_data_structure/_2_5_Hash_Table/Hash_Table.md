@@ -22,6 +22,24 @@
 
 --------------------------------------------------------------------------------
 
+> 
+> <font color="yellow">
+> 
+> 我们用`std::unorder_maped<key, obj>`，很多时候都是为了判断每个`key`的个数
+>
+> 即，我们的`key`为一个元素，`obj`为这个值出现的次数
+>
+> 如果只需要判断有没有这个值，不需要判断个数，那么`std::unorder_set`足够了
+>
+> 因为`set`的元素不像`map`那样可以同时拥有实值(`value`)和键值(`key`), `set`元素的键值就是实值(`key = value`), 而且系统能根据元素的值自动进行排序，
+> 
+> </font>
+>
+> 
+
+--------------------------------------------------------------------------------
+
+
 ### 代码随想录的内容
 
 #### 哈希表(`hash table`)
@@ -324,6 +342,8 @@
 > <font color="yellow">如果需要有序，那不如用`std::vector`了，或者`std::queue<pair<type1, type2>>`</font>
 >
 > 
+> <font color="gree">注意：`value`是可以重复的，`key`却不是可以重复的，除非有前缀`multi`</font>
+>
 
 > 头文件
 > 
@@ -335,11 +355,27 @@
 > ```
 
 
+--------------------------------------------------------------------------------
+
+> 
+> <font color="yellow">
+> 
+> 我们用`std::unorder_maped<key, obj>`，很多时候都是为了判断每个`key`的个数
+>
+> 即，我们的`key`为一个元素，`obj`为这个值出现的次数
+>
+> 如果只需要判断有没有这个值，不需要判断个数，那么`std::unorder_set`足够了
+>
+> 因为`set`的元素不像`map`那样可以同时拥有实值(`value`)和键值(`key`), `set`元素的键值就是实值(`key = value`), 而且系统能根据元素的值自动进行排序，
+> 
+> </font>
+>
+> 
+--------------------------------------------------------------------------------
 
 
 
-
-####  map  
+####  map（集合）  
 
 > 
 > `CppReference`参考资料
@@ -427,6 +463,7 @@
 > </div>
 > 
 > 
+
 
 #####  std::unordered_map 概述
 
@@ -552,6 +589,19 @@
 >
 > ```
 > 
+> `[自定义排序方式]`
+> 
+> <font color="yellow">
+>
+> `std::unordered_map`不能自定义排序方式
+> 
+> 如果要自定义排序方式，肯定是`std::map`或`std::multimap`，
+> 
+> 因为`std::unordered_map`和`std::unordered_multimap`, 本意就是无序的`map`，所以没有排序的说法，更不要说自定义排序方式
+> 
+> </font>
+>
+
 
 ##### std::map 讲解 + 例子
 
@@ -922,6 +972,17 @@
 
 
 6. `map`中关键词的排序
+
+> 
+> <font color="yellow">
+> 
+> 如果要自定义排序方式，肯定是`std::map`或`std::multimap`，
+> 
+> 因为`std::unordered_map`和`std::unordered_multimap`, 本意就是无序的`map`，所以没有排序的说法
+> 
+> </font>
+>
+
 > 
 > `STL map`中重载`operator()<`的运算符，默认是采用小于号来排序的，以上代码在排序上是不存在任何问题的，因为上面的关键字是`string`类型，它本身支持小于号运算。`string`类型的关键字排序是按照字符串中的字符的顺序，如果第一个字符相同就比较第二个，如果前两个都相同就比较第三个，以此类推..... 如果关键词是`int`型的话，就直接按照大小排序了。
 >
@@ -946,6 +1007,162 @@
 >
 > </font>
 >
+
+
+
+> <font color="yellow"> 
+> 
+> 先看内置类型`int`的默认`less<int>`的具体效果
+> 
+> </font>
+>
+> ```c++
+> #include<map>
+> 
+> int main()
+> {
+> 	map<int, string> mapNum;
+> 	//等价于map<int, string, less<int>> mapNum;
+> 	map<int, string>::iterator iter;
+> 	//等价于map<int, string, less<int>>::iterator iter;
+> 	int num;
+> 	num = 1002;
+> 	mapNum.insert(pair<int, string>(num, "number_one"));
+> 	num = 1001;
+> 	mapNum.insert(pair<int, string>(num, "number_two"));
+> 	for (iter = mapNum.begin(); iter != mapNum.end(); iter++)
+> 		cout << iter->first << ", " << iter->second << endl;
+> 
+> 
+>     cout << endl;
+>     pause();
+> 
+>     return 0;
+> }        
+> ```
+> 编译并运行，结果如下
+> ```c++
+> 1001, number_two
+> 1002, number_one
+> ```
+>
+> 
+> <font color="yellow"> 
+> 
+> 同理，再看内置类型`int`的`greater<int>`的具体效果
+> 
+> </font>
+> 
+> ```c++
+> #include<queue>
+> 
+> int main()
+> {
+> 	map<int, string, greater<int>> mapNum;
+> 	map<int, string, greater<int>>::iterator iter;
+> 	int num;
+> 	num = 1002;
+> 	mapNum.insert(pair<int, string>(num, "number_one"));
+> 	num = 1001;
+> 	mapNum.insert(pair<int, string>(num, "number_two"));
+> 	for (iter = mapNum.begin(); iter != mapNum.end(); iter++)
+> 		cout << iter->first << ", " << iter->second << endl;
+> 
+>     cout << endl;
+>     pause();
+> 
+>     return 0;
+> }        
+> ```
+> 编译并运行，结果如下
+> ```c++
+> 1002, number_one
+> 1001, number_two
+> ```
+>
+> <font color="yellow"> 
+> 
+> 很奇怪
+> 
+> * 为什么`less<int>`时，`std::map<int, string>`的`begin()`的`key`是最小`min`?
+> 
+> * 为什么`greater<int>`时，`std::map<int, string, greater<int>>`的`begin()`的`key`是最大`max`?
+>
+> </font>
+>
+> 入队时，排序调整后，`key`的优先级最大的元素排在最前面，也就是队首指向的位置(`begin()`)，这时候队尾指向的位置(`end()-1`)是优先级最小的元素
+>
+>
+> 如何用代码体会？
+>
+> ```c++
+> // class int
+> 
+> struct int_num {
+>     int num;
+>     // 重载<运算符
+>     bool operator<(const int &b) const {
+>         return this->num < b.num ? true : false;
+>     }
+> };
+>  
+> // 当this->num 小于 b.num时
+> // 返回true，交换位置； 返回false， 不交换位置
+> // less的意思是越低，优先级越高
+> // 即为后入队元素<先入队的元素时，后入队的元素优先级更高，交换位置; 
+> // 即为后入队元素>=先入队的元素时，后入队的元素优先级更低，不交换位置; 
+> // 最终，队头的元素最小，队尾的元素最大，
+> ```
+> 
+> 对于`less<int>`, 对应`<`重载运算符。
+> 
+> 哪个小，哪个优先级高，哪个放在最前面，这样看`begin()`指向的队头元素是最小的， `end()-1`指向的队尾元素最大
+>
+>
+> <font color="yellow"> 
+> 
+> 总结：
+>
+> `集合std::set`(`key`就是`value`)
+>
+> * `less`: `key`越小，优先级越高，越靠近队头（`begin()`）
+>
+> * `greater`: `key`越大，优先级越高，越靠近队头（`begin()`）
+>
+> `映射std::map`(`pair<key, value>`)
+>
+> * `less`: `key`越小，优先级越高，越靠近队头（`begin()`）
+>
+> * `greater`: `key`越大，优先级越高，越靠近队头（`begin()`）
+>
+> 
+> `优先级队列std::priority_queue`
+>
+> * `less`: `key`越小，优先级越高，越靠近队头。对应大根堆(`top`指向的队尾元素最大`max`),
+> * `greater`: `key`越大，优先级越高，越靠近队头。对应小根堆(`top`指向的队尾元素最小`min`)
+>
+> 
+> 以上的`std::less`和`std::sort()函数`的`std::less`功能正好相反
+> 以上的`std::greater`和`std::sort()函数`的`std::greater`功能正好相反
+> </font>
+>
+> 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 > **第一种：无重载，无仿函数，无法编译通过**，程序举例
 ```c++
@@ -1337,6 +1554,642 @@ public:
     }
 };
 ```
+
+> 
+> <font color="yellow">
+> 
+> 我们用`std::unorder_maped<key, obj>`，很多时候都是为了判断每个`key`的个数
+>
+> 即，我们的`key`为一个元素，`obj`为这个值出现的次数
+>
+> 如果只需要判断有没有这个值，不需要判断个数，那么`std::unorder_set`足够了
+>
+> 因为`set`的元素不像`map`那样可以同时拥有实值(`value`)和键值(`key`), `set`元素的键值就是实值(`key = value`), 而且系统能根据元素的值自动进行排序，
+> 
+> </font>
+> 
+
+--------------------------------------------------------------------------------
+
+
+####  set（集合）
+
+> `std::set`与`std::map`的区别：
+> * 对于`std::set`，它的`key`就是`value`，`value`就`key`, `key`不能重复，所以不能通过`std::set`的迭代器来改变`std::set`中元素的值。
+> 
+> * 对于`std::map`，它的`key`和`value`是一一对应的，`pair<key, value>`不能重复
+>
+
+> 
+> <font color="yellow">
+> 
+> 如果`set`的`key`就是`value`，那么我们不如就用`std::vector`好了，为什么要用到`std::set`呢？
+> 
+> * 一般存储对象时，我们用`std::vector`就可以，但是要**查询**一个值在不在`std::vector`中，就需要遍历，时间复杂度为`O(n)`；
+> * 这时候，如果我们用`std::set`的，那么查询效率就是`O(logn)`; 
+> * 更好的方式，如果我们用`std::unordered_set`的，那么查询效率就是`O(1)`
+>
+> </font>
+>
+> 所以
+> 
+> <font color="gree">当频繁查询时，优先用`std::set`或`std::map`</font>
+>
+> <font color="gree">当频繁增删时，优先用`std::vector`或`std::stack`或`std::queue`</font>
+>
+
+> 
+> `CppReference`参考资料
+> https://en.cppreference.com/w/cpp/container/set
+> https://en.cppreference.com/w/cpp/container/multiset
+> https://en.cppreference.com/w/cpp/container/unordered_set
+> https://en.cppreference.com/w/cpp/container/unordered_multiset
+>
+
+
+
+> 
+> <font color="yellow">注意：</font>
+> 
+> 1. <font color="yellow">"有序"也是有不同的排序方法的，一般`set`和`multiset`都有四个参数</font>
+>
+> ```c++
+> template<
+>     class Key,
+>     class Compare = std::less<Key>,
+>     class Allocator = std::allocator<Key>
+> > class set;
+> 
+> template<
+>     class Key,
+>     class Compare = std::less<Key>,
+>     class Allocator = std::allocator<Key>
+> > class multiset;
+> ```
+> <font color="green">"`有序`"的排序方式默认为`std::less<Key>`，即根据`key`来排序，显得"`有序`"</font>
+> 
+> 2. <font color="yellow">由于"无序"不是真正的无序，而是按照`hashCode(key)`进行排序，那么参数就有所不同</font>
+> 
+> ```c++
+> template<
+>     class Key,
+>     class Hash = std::hash<Key>,
+>     class KeyEqual = std::equal_to<Key>,
+>     class Allocator = std::allocator<Key>
+> > class unordered_set;
+> 
+> template<
+>     class Key,
+>     class Hash = std::hash<Key>,
+>     class KeyEqual = std::equal_to<Key>,
+>     class Allocator = std::allocator<Key>
+> > class unordered_multiset;
+> ```
+> <font color="green">"`无序`"的排序方式默认为`std::hash<Key>`，即根据`hashCode(key)`或`hashCode(key) % tableSize`排序，显得"`无序`"</font>
+> 
+> 
+
+> **关于自定义排序方式**
+> 
+> <font color="yellow">
+> 
+> 如果要自定义排序方式，肯定是`std::map`或`std::multimap`，
+> 
+> 因为`std::unordered_map`和`std::unordered_multimap`, 本意就是无序的`map`，所以没有排序的说法，更不要说自定义排序方式
+> 
+> </font>
+>
+
+#####  std::set 
+
+> 
+> <font color="gree">我们构造`set`集合的目的是为了快速的检索，不可直接去修改键值。可以先删后插</font>
+> 
+
+> 
+> 从一个例子开始
+>
+> ```c++
+> #include <iostream>
+> #include <set> 
+> using namespace std;
+>
+> class Person
+> {
+> public:
+>     Person(const std::string& name, const std::size_t nld){
+>         Name = name;
+>         Nid = nld;
+>     }
+>     const std::string& GetName() const{
+>         return Name;
+>     }
+>     const std::size_t GetId() const{
+>         return Nid;
+>     }
+>     const void SetId(){
+>         Nid++;
+>     }    
+> private:
+>     std::string Name;
+>     std::size_t Nid;
+> };
+> //仿函数
+> struct PersonIdComparer: public std::binary_function<Person, Person, bool>
+> {
+>     bool operator()(const Person& p1, const Person& p2) const{
+>         return (p1.GetId() < p2.GetId()) ? true : false;       // top的Nid最大
+>     } 
+> };
+> struct PersonNameComparer: public std::binary_function<Person, Person, bool>
+> {
+>     bool operator()(const Person& p1, const Person& p2) const{
+>         return (p1.GetName() < p2.GetName()) ? true : false;   // top的Name最大
+>     }
+> };
+> 
+>  
+> int main() {
+> 
+>     // 定义数组，存放Person类对象
+>     const std::size_t nSize = 3;
+>     const Person personArray[nSize] ={
+>         Person("Tom", 1),
+>         Person("Jason", 2),
+>         Person("Alice", 3)
+>     };
+>     
+>     // 取出数组中的一段，放到set中
+>     std::set<Person,PersonIdComparer> ps1(personArray, personArray + nSize);
+>     
+>     // 设置迭代器
+>     std::set<Person, PersonIdComparer>::iterator it = ps1.begin();
+>     // 遍历
+>     for(it = ps1.begin(); it != ps1.end(); ++it){
+>         std::cout<<"Id:"<<(*it).GetId()<<"; Name:"<<(*it).GetName()<<std::endl;
+>     }
+>     cout << std::endl;
+> 
+>     // 插入元素
+>     ps1.insert(Person("Bill",4));
+>     // 遍历
+>     for(it = ps1.begin(); it != ps1.end(); ++it){
+>         std::cout<<"Id:"<<(*it).GetId()<<"; Name:"<<(*it).GetName()<<std::endl;
+>     }
+>     cout << std::endl;
+> 
+> 
+>     // 删除元素
+>     it = ps1.begin();
+>     std::advance(it, 1);  // 增加迭代器`it` `1`个元素的步长, 新it指向 ps1的第2个key
+>     ps1.erase(it);        // 删除当前it指向 ps1的第2个key
+>     for(it = ps1.begin(); it != ps1.end(); ++it){
+>         std::cout<<"Id:"<<(*it).GetId()<<"; Name:"<<(*it).GetName()<<std::endl;
+>     }
+>     cout << std::endl;
+> 
+>  
+>     for(it = ps1.begin(); it != ps1.end(); ++it){
+>         const_cast<Person&>(*it).SetId();  // Nid++;
+>         std::cout<<"Id:"<<(*it).GetId()<<"; Name:"<<(*it).GetName()<<std::endl;
+>     }
+>     cout << std::endl;
+> 
+> 
+>     cout << endl;
+>     pause();
+>     return 0;
+> }
+> ```
+> 
+> 编译并运行，结果如下
+> ```c++
+> Id:1; Name:Tom
+> Id:2; Name:Jason
+> Id:3; Name:Alice
+> 
+> Id:1; Name:Tom
+> Id:2; Name:Jason
+> Id:3; Name:Alice
+> Id:4; Name:Bill
+> 
+> Id:1; Name:Tom
+> Id:3; Name:Alice
+> Id:4; Name:Bill
+> 
+> Id:2; Name:Tom
+> Id:4; Name:Alice
+> Id:5; Name:Bill
+> 
+> ```
+> 
+
+
+
+
+
+#### `set`中元素（即关键词）的排序
+
+> 
+> <font color="yellow">
+> 
+> 如果要自定义排序方式，肯定是`std::set`或`std::multiset`，
+> 
+> 因为`std::unordered_set`和`std::unordered_multiset`, 本意就是无序的`set`，所以没有排序的说法
+> 
+> </font>
+>
+
+> 
+> `STL set`中重载`operator() < `的运算符，默认是采用小于号来排序的，一般代码在排序上是不存在任何问题的。例如，如果是关键字`key`是`string`类型，它本身支持小于号运算。`string`类型的关键字排序是按照字符串中的字符的顺序，如果第一个字符相同就比较第二个，如果前两个都相同就比较第三个，以此类推..... 如果关键词`key`是`int`型的话，就直接按照大小排序了。
+>
+> 在一些特殊情况，比如关键字是一个结构体，涉及到排序就会出现问题，因为它没有小于号操作，`insert`等函数在编译的时候过不去，下面给出两个方法解决这个问题。
+>
+>
+> <font color="gree"> 
+> 
+> 两种情况：
+> 
+> * 如果对象是结构体或类，可以在结构体或类的定义中重载 `<` 和 `>` 运算符，也可以定义仿函数
+> > 并不是一定要同时定义 `<` 和 `>` 运算符
+> > `priority_queue`中
+> > * 默认使用`less<T>`判断式比较元素大小，因此可以只定义 `<` 符号的重载以满足使用
+> > 
+> > * 如果使用`greater<T>`判断式比较元素大小，因此可以可以只定义 `>` 符号的重载以满足使用
+> > 
+>
+> * 如果没有结构体或类，只能用仿函数
+>
+> 为了更具有普适性，一般我用仿函数
+>
+> </font>
+>
+
+> 
+> <font color="yellow"> 
+> 
+> 注意： `std::priority_queue优先级队列`中也有`std::less`和`std::greater`
+> 
+> `std::priority_queue优先级队列`的`std::less`和`std::sort()函数`的`std::less`功能正好相反
+>
+> `less`对应大根堆(`top`最大`max`), `greater`对应小根堆(`top`最小`min`)
+>
+> </font>
+>
+> 
+
+
+
+
+> <font color="yellow"> 
+> 
+> 先看内置类型`int`的默认`less<int>`的具体效果
+> 
+> </font>
+>
+> ```c++
+> #include<set>
+> 
+> int main()
+> {
+> 	set<int> setNum;
+> 	//等价于set<int, less<int>> setNum;
+> 	set<int>::iterator iter;
+> 	//等价于set<int, less<int>>::iterator iter;
+> 	int num;
+> 	num = 1002;
+> 	setNum.insert(num);
+> 	num = 1001;
+> 	setNum.insert(num);
+> 	for (iter = setNum.begin(); iter != setNum.end(); iter++)
+> 		cout << *iter << endl;
+> 
+> 
+>     cout << endl;
+>     pause();
+> 
+>     return 0;
+> }        
+> ```
+> 编译并运行，结果如下
+> ```c++
+> 1001
+> 1002
+> ```
+>
+> 
+> <font color="yellow"> 
+> 
+> 同理，再看内置类型`int`的`greater<int>`的具体效果
+> 
+> </font>
+> 
+> ```c++
+> #include<set>
+> 
+> int main()
+> {
+> 	set<int, greater<int>> setNum;
+> 	set<int, greater<int>>::iterator iter;
+> 	int num;
+> 	num = 1002;
+> 	setNum.insert(num);
+> 	num = 1001;
+> 	setNum.insert(num);
+> 	for (iter = setNum.begin(); iter != setNum.end(); iter++)
+> 		cout << *iter << endl;
+> 
+>     cout << endl;
+>     pause();
+> 
+>     return 0;
+> }        
+> ```
+> 编译并运行，结果如下
+> ```c++
+> 1002
+> 1001
+> ```
+>
+> <font color="yellow"> 
+> 
+> 很奇怪
+> 
+> * 为什么`less<int>`时，这`std::set<int>`的`begin()`是最小`min`?
+> 
+> * 为什么`greater<int>`时，这`std::set<int>`的`begin()`是最大`max`?
+>
+> </font>
+>
+> 入队时，排序调整后，优先级最大的元素排在最前面，也就是队首指向的位置(`begin()`)，这时候队尾指向的位置(`end()-1`)是优先级最小的元素
+>
+>
+> 如何用代码体会？
+>
+> ```c++
+> // class int
+> 
+> struct int_num {
+>     int num;
+>     // 重载<运算符
+>     bool operator<(const int &b) const {
+>         return this->num < b.num ? true : false;
+>     }
+> };
+>  
+> // 当this->num 小于 b.num时
+> // 返回true，交换位置； 返回false， 不交换位置
+> // less的意思是越低，优先级越高
+> // 即为后入队元素<先入队的元素时，后入队的元素优先级更高，交换位置; 
+> // 即为后入队元素>=先入队的元素时，后入队的元素优先级更低，不交换位置; 
+> // 最终，队头的元素最小，队尾的元素最大，
+> ```
+> 
+> 对于`less<int>`, 对应`<`重载运算符。
+> 
+> 哪个小，哪个优先级高，哪个放在最前面，这样看`begin()`指向的队头元素是最小的， `end()-1`指向的队尾元素最大
+>
+>
+> <font color="yellow"> 
+> 
+> 总结：
+>
+> `集合std::set`(`key`就是`value`)
+>
+> * `less`: `key`越小，优先级越高，越靠近队头（`begin()`）
+>
+> * `greater`: `key`越大，优先级越高，越靠近队头（`begin()`）
+>
+> `映射std::map`(`pair<key, value>`)
+>
+> * `less`: `key`越小，优先级越高，越靠近队头（`begin()`）
+>
+> * `greater`: `key`越大，优先级越高，越靠近队头（`begin()`）
+>
+> 
+> `优先级队列std::priority_queue`
+>
+> * `less`: `key`越小，优先级越高，越靠近队头。对应大根堆(`top`指向的队尾元素最大`max`),
+> * `greater`: `key`越大，优先级越高，越靠近队头。对应小根堆(`top`指向的队尾元素最小`min`)
+>
+> 
+> 以上的`std::less`和`std::sort()函数`的`std::less`功能正好相反
+> 以上的`std::greater`和`std::sort()函数`的`std::greater`功能正好相反
+> </font>
+>
+> 
+
+
+
+
+
+
+
+
+
+
+
+
+> **第一种：无重载，无仿函数，无法编译通过**，程序举例
+```c++
+#include <iostream>
+#include <string>
+#include <set>
+ 
+using namespace std;
+ 
+typedef struct tagStudentInfo
+{
+	int nID;
+    string strName;
+}StudentInfo, *PStudentInfo;  //学生信息
+ 
+int main()
+{
+	int nSize;
+	//用学生信息映射分数
+	set<StudentInfo> setStudent;
+	set<StudentInfo>::iterator iter;
+	StudentInfo studentInfo;
+	studentInfo.nID = 1001;
+	studentInfo.strName = "student_one";
+	setStudent.insert(studentInfo);
+	studentInfo.nID = 1002;
+	studentInfo.strName = "student_two";
+	setStudent.insert(studentInfo);
+	for (iter = setStudent.begin(); iter != setStudent.end(); iter++)
+		cout << (*iter).nID << endl << (*iter).strName << endl;
+        // 或者 cout << iter->nID << endl << iter->strName << endl;  
+	pause();
+	return 0;
+}
+/****以上程序是无法编译通过的******/
+```
+
+> **第二种：小于号重载**，程序举例
+```c++
+#include <iostream>
+#include <string>
+#include <set>
+ 
+using namespace std;
+ 
+typedef struct tagStudentInfo
+{
+	int nID;
+	string strName;
+	bool operator < (tagStudentInfo const& _A) const
+	{
+		//这个函数指定排序策略，按nID排序，如果nID相等的话，按strName排序
+		if(nID < _A.nID)  return true;
+		if(nID == _A.nID) return strName.compare(_A.strName) < 0;
+		return false;
+	}
+}StudentInfo, *PStudentInfo;  //学生信息
+
+int main()
+{
+	int nSize;
+	//用学生信息映射分数
+	set<StudentInfo> setStudent;
+	//等价于set<StudentInfo, less<StudentInfo>> setStudent;
+	set<StudentInfo>::iterator iter;
+	//等价于set<StudentInfo, less<StudentInfo>>::iterator iter;
+	StudentInfo studentInfo;
+	studentInfo.nID = 1001;
+	studentInfo.strName = "student_one";
+	setStudent.insert(studentInfo);
+	studentInfo.nID = 1002;
+	studentInfo.strName = "student_two";
+	setStudent.insert(studentInfo);
+	for (iter = setStudent.begin(); iter != setStudent.end(); iter++)
+		cout << (*iter).nID << endl << (*iter).strName << endl;
+        // 或者 cout << iter->nID << endl << iter->strName << endl;  
+
+    
+	pause();
+	return 0;
+}
+
+/****运行结果如下：******/
+1001
+student_one
+1002
+student_two
+```
+
+> **第三种：大于号重载**，程序举例
+```c++
+#include <iostream>
+#include <string>
+#include <map>
+ 
+using namespace std;
+ 
+typedef struct tagStudentInfo
+{
+	int nID;
+	string strName;
+	bool operator > (tagStudentInfo const& _A) const
+	{
+		//这个函数指定排序策略，按nID排序，如果nID相等的话，按strName排序
+		if(nID > _A.nID)  return true;
+		if(nID == _A.nID) return strName.compare(_A.strName) > 0;
+		return false;
+	}
+}StudentInfo, *PStudentInfo;  //学生信息
+
+int main()
+{
+	int nSize;
+	//用学生信息映射分数
+	set<StudentInfo, greater<StudentInfo>> setStudent;
+	set<StudentInfo, greater<StudentInfo>>::iterator iter;
+	StudentInfo studentInfo;
+	studentInfo.nID = 1001;
+	studentInfo.strName = "student_one";
+	setStudent.insert(studentInfo);
+	studentInfo.nID = 1002;
+	studentInfo.strName = "student_two";
+	setStudent.insert(studentInfo);
+	for (iter = setStudent.begin(); iter != setStudent.end(); iter++)
+		cout << (*iter).nID << endl << (*iter).strName << endl;
+        // 或者 cout << iter->nID << endl << iter->strName << endl;
+
+
+	pause();
+	return 0;
+}
+
+/****运行结果如下：******/
+1002
+student_two
+1001
+student_one
+```
+
+
+
+>
+> **第四种：仿函数的应用**，这个时候结构体中没有直接的小于号重载，定义一个比较函数，程序说明
+```c++
+#include <iostream>
+#include <string>
+#include <map>
+ 
+using namespace std;
+ 
+typedef struct tagStudentInfo
+{
+	int nID;
+    string strName;
+}StudentInfo, *PStudentInfo;  //学生信息
+ 
+class hash_function
+{
+public:
+	bool operator() (StudentInfo const &_A, StudentInfo const &_B) const
+	{
+		if(_A.nID < _B.nID) return true;
+		if(_A.nID == _B.nID) return _A.strName.compare(_B.strName) < 0;
+		return false;
+	}
+};
+
+
+
+int main()
+{
+	int nSize;
+	//用学生信息映射分数
+	set<StudentInfo, hash_function> setStudent;
+	set<StudentInfo, hash_function>::iterator iter;
+	StudentInfo studentInfo;
+	studentInfo.nID = 1001;
+	studentInfo.strName = "student_one";
+	setStudent.insert(studentInfo);
+	studentInfo.nID = 1002;
+	studentInfo.strName = "student_two";
+	setStudent.insert(studentInfo);
+	for (iter = setStudent.begin(); iter != setStudent.end(); iter++)
+		cout << (*iter).nID << endl << (*iter).strName << endl;
+        // 或者 cout << iter->nID << endl << iter->strName << endl;
+  
+ 
+	pause();
+	return 0;
+}
+
+/****运行结果如下：******/
+1001
+student_one
+1002
+student_two
+```
+
+
+
+
 
 
 

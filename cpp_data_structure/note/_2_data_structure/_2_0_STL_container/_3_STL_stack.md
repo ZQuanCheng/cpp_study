@@ -26,6 +26,8 @@
 // <algorithm>是标准模版库（STL）中最重要的头文件之一，提供了大量基于迭代器的非成员模板函数。
 #include <algorithm>   // remove()、remove_if()、find_if()、sort、...
 // https://blog.csdn.net/szplzx1314/article/details/120644640
+
+#include <iterator> // next() prev() distance() advance()
 ```
 
 --------------------------------------------------------------------------------

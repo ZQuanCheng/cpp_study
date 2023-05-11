@@ -125,6 +125,25 @@ ___This is bold italic text___
 * 效果如下:
 
 <font color="green" size=3 face="宋体"> 这是3号绿色宋体 </font>
+
+
+<font color = red>输入不同颜色的字体</font>
+<font color = blue>输入不同颜色的字体</font>
+<font color = yellow>输入不同颜色的字体</font>
+<font color = gree>输入不同颜色的字体</font>
+<font color = green>输入不同颜色的字体</font>
+<font color = purple>输入不同颜色的字体</font>
+<font color = pink>输入不同颜色的字体</font>
+<font color = orange>输入不同颜色的字体</font>
+<font color = coral>输入不同颜色的字体</font>
+<font color = gilt>输入不同颜色的字体</font>
+<font color = rainbow>输入不颜红色的字体</font>
+<font color = beige>输入不同颜色的字体</font>
+<font color = pistac>输入不同颜色的字体</font>
+<font color = fuchsia>输入不同颜色的字体</font>
+<font color =pewter>输入不同颜色的字体</font>
+<font color = turq>输入不同颜色的字体</font>
+
 --------------------------------------------------------------------------------
 
 
