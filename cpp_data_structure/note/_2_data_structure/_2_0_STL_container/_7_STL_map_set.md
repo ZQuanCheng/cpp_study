@@ -1221,7 +1221,7 @@ typedef struct tagStudentInfo
     string strName;
 }StudentInfo, *PStudentInfo;  //学生信息
  
-class hash_function
+class compare_nID_strName
 {
 public:
 	bool operator() (StudentInfo const &_A, StudentInfo const &_B) const
@@ -1236,8 +1236,8 @@ int main()
 {
 	int nSize;
 	//用学生信息映射分数
-	map<StudentInfo, int, hash_function> mapStudent;
-	map<StudentInfo, int, hash_function>::iterator iter;
+	map<StudentInfo, int, compare_nID_strName> mapStudent;
+	map<StudentInfo, int, compare_nID_strName>::iterator iter;
 	StudentInfo studentInfo;
 	studentInfo.nID = 1001;
 	studentInfo.strName = "student_one";
@@ -2047,7 +2047,7 @@ typedef struct tagStudentInfo
     string strName;
 }StudentInfo, *PStudentInfo;  //学生信息
  
-class hash_function
+class compare_nID_strName
 {
 public:
 	bool operator() (StudentInfo const &_A, StudentInfo const &_B) const
@@ -2064,8 +2064,8 @@ int main()
 {
 	int nSize;
 	//用学生信息映射分数
-	set<StudentInfo, hash_function> setStudent;
-	set<StudentInfo, hash_function>::iterator iter;
+	set<StudentInfo, compare_nID_strName> setStudent;
+	set<StudentInfo, compare_nID_strName>::iterator iter;
 	StudentInfo studentInfo;
 	studentInfo.nID = 1001;
 	studentInfo.strName = "student_one";
