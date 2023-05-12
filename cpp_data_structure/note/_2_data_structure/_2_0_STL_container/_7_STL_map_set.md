@@ -162,7 +162,7 @@
 >
 > * `set`的值是唯一的可以做数组去重，`map`由于没有格式限制，可以做数据存储
 >
-> * 由于`std::map`是`key_value`的形式，所以`std::map`里的所有元素都是`std::pair`类型。`std::pair`里面的`std::pair::first`被称为`key`(键），`std::pair::second`被称为`value`(值）。它可以通过关键字`key`查找映射关联信息`value`，同时根据`key`值进行排序。
+> * <font color="yellow">由于`std::map`是`key_value`的形式，所以`std::map`里的所有元素都是`std::pair`类型。`std::pair`里面的`std::pair::first`被称为`key`(键），`std::pair::second`被称为`value`(值）。它可以通过关键字`key`查找映射关联信息`value`，同时根据`key`值进行排序。</font>
 > 
 >
 > 
@@ -1023,7 +1023,7 @@
 >
 > <font color="yellow"> 
 > 
-> 总结：
+> 比较方式总结：
 >
 > `集合std::set`(`key`就是`value`)
 >

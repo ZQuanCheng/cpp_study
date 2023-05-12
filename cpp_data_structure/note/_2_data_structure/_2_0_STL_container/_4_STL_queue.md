@@ -161,12 +161,31 @@
 > ```
 >
 
+> <font color="yellow">
+> 
+> 其实优先级队列`std::priority_queue`更像是`std::stack`，只有`top()`，没有`front()`，没有`back()`
+>
+> ``std::priority_queue``和`std::stack`都是可以看作 
+>  “ 只能从队尾访问元素的队列`std::queue` ”
+>
+> </font>
+
+
 --------------------------------------------------------------------------------
 
 
 
 
 #### 优先级队列   std::priority_queue
+
+> <font color="yellow">
+> 
+> 其实优先级队列`std::priority_queue`更像是`std::stack`，只有`top()`，没有`front()`，没有`back()`
+>
+> ``std::priority_queue``和`std::stack`都是可以看作 
+>  “ 只能从队尾访问元素的队列`std::queue` ”
+>
+> </font>
 
 > 
 > `_6_sliding_window_maximum.md`
@@ -1099,6 +1118,14 @@
 >
 
 
+> <font color="yellow">
+> 
+> 其实优先级队列`std::priority_queue`更像是`std::stack`，只有`top()`，没有`front()`，没有`back()`
+>
+> ``std::priority_queue``和`std::stack`都是可以看作 
+>  “ 只能从队尾访问元素的队列`std::queue` ”
+>
+> </font>
 
 
 

@@ -397,6 +397,16 @@ https://blog.csdn.net/qq_50533529/article/details/124673008
 > ```
 >
 
+> <font color="yellow">
+> 
+> 其实优先级队列`std::priority_queue`更像是`std::stack`，只有`top()`，没有`front()`，没有`back()`
+>
+> ``std::priority_queue``和`std::stack`都是可以看作 
+>  “ 只能从队尾访问元素的队列`std::queue` ”
+>
+> </font>
+
+
 ##### 1. 看看比较方式的具体显示
 
 > <font color="yellow"> 1. 看看比较方式的具体显示 </font>
@@ -1466,6 +1476,14 @@ https://blog.csdn.net/qq_50533529/article/details/124673008
 > ```
 >
 
+> <font color="yellow">
+> 
+> 其实优先级队列`std::priority_queue`更像是`std::stack`，只有`top()`，没有`front()`，没有`back()`
+>
+> ``std::priority_queue``和`std::stack`都是可以看作 
+>  “ 只能从队尾访问元素的队列`std::queue` ”
+>
+> </font>
 
 
 
