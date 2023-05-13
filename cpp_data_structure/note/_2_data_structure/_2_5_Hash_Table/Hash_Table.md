@@ -158,7 +158,7 @@
 > 例如冲突的位置，放了小李，那么就向下找一个空位放置小王的信息。所以要求`tableSize`一定要大于`dataSize` ，要不然哈希表上就没有空置的位置来存放 冲突的数据了。如图所示：
 > 
 > <div align=center>
-> <img src="./images/hash_table_5.jpg"  width="" height="" alt="no photo" title="" style="zoom:100%;"/>
+> <img src="./images/hash_table_5.jpg" style="zoom:100%;"/>
 > </div>
 > 
 >
@@ -182,7 +182,7 @@
 > 在C++中，`set` 和 `map` 分别提供以下三种数据结构，其底层实现以及优劣如下表所示：
 > 
 > <div align=center>
-> <img src="./images/hash_table_6.jpg"  width="" height="" alt="no photo" title="" style="zoom:100%;"/>
+> <img src="./images/hash_table_6.jpg" style="zoom:100%;"/>
 > </div>
 > 
 >
@@ -190,7 +190,7 @@
 > 
 > 
 > <div align=center>
-> <img src="./images/hash_table_7.jpg"  width="" height="" alt="no photo" title="" style="zoom:100%;"/>
+> <img src="./images/hash_table_7.jpg" style="zoom:100%;"/>
 > </div>
 > 
 >
@@ -224,7 +224,7 @@
 >
 > 
 > <div align=center>
-> <img src="./images/hash_table_8.jpg"  width="" height="" alt="no photo" title="" style="zoom:100%;"/>
+> <img src="./images/hash_table_8.jpg" style="zoom:100%;"/>
 > </div>
 > 
 
@@ -459,7 +459,7 @@
 > 
 > 
 > <div align=center>
-> <img src="./images/hash_table_10.jpg"  width="" height="" alt="no photo" title="" style="zoom:100%;"/>
+> <img src="./images/hash_table_10.jpg" style="zoom:100%;"/>
 > </div>
 > 
 > 

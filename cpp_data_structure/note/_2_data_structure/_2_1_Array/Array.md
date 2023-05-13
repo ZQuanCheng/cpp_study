@@ -22,6 +22,108 @@
 
 --------------------------------------------------------------------------------
 
+
+> <font color="yellow">
+> 
+> 讲一讲，相对于传统的C风格数组，`std::vector`、`std::string`这种容器有什么优势？
+>
+> 为什么不用`int num[size] = {0,0,...,0};` 而用`vector<int> num(size, 0);`
+>
+> 为什么不用`char ch[size] = {'c','c',...,'c'};` 而用`string s(size,'c');`
+> 
+> </font>
+
+
+> **对于C风格的数组，有一个经常要注意的**
+>
+> <font color="gree">在初始化时，`int`类型的数组在初始化时，必须赋值，不然会各种乱起八糟的值</font>
+>
+> <font color="gree">但是也不用给所有元素都赋值，只需要给第一个元素赋值，后面的元素会自动赋值为`0`</font>
+>
+> ```c++
+> int size = 10;
+> 
+> int num1[size] = {0};
+> for (int i = 0; i < size; i++) {
+>    cout << num1[i] << ", ";
+> }
+> cout << endl;
+> 
+> int num2[size] = {1};
+> for (int i = 0; i < size; i++) {
+>    cout << num2[i] << ", ";
+> }
+> cout << endl;
+> 
+> int num3[size] = {1, 2, 3};
+> for (int i = 0; i < size; i++) {
+>    cout << num3[i] << ", ";
+> }
+> cout << endl;
+> ```
+>
+> 编译并运行，结果如下
+>
+> ```c++
+> 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+> 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+> 1, 2, 3, 0, 0, 0, 0, 0, 0, 0,
+> ```
+>
+> <font color="gree">但是别的类型数组没有自动赋值的功能</font>
+>
+> <font color="gree">以字符数组为例</font>
+>
+> ```c++
+> char size = 10;
+> 
+> char ch1[size] = {'a'};
+> for (int i = 0; i < size; i++) {
+>    cout << ch1[i] << ", ";
+> }
+> cout << endl;
+> 
+> char ch2[size] = {'b'};
+> for (int i = 0; i < size; i++) {
+>    cout << ch2[i] << ", ";
+> }
+> cout << endl;
+> 
+> char ch3[size] = {'a', 'b', 'c'};
+> for (int i = 0; i < size; i++) {
+>    cout << ch3[i] << ", ";
+> }
+> cout << endl;
+> ```
+>
+> 编译并运行，结果如下
+>
+> ```c++
+> a, , , , , , , , , , 
+> b, , , , , , , , , , 
+> a, b, c, , , , , , , , 
+> ```
+>
+> <font color="yellow">所以，对于C风格的数组，没有统一的初始化的简单方式，总不能一个个赋初始值吧</font>
+>
+> <font color="yellow">如果我们用`std::vector`、`std::string`，都是有很方便的初始化函数</font>
+>
+> 例如
+> 
+> ```c++
+> vector<T> v(n,val); //v中包含n个重复元素，每个元素的值都是val  
+> 
+> string s(n,'c'); // 将 s 初始化为字符 ‘c’ 的 n 个副本
+> 
+> ```
+>
+> <font color="yellow">当然容器还有更多的好操作，都是很方便我们使用的</font>
+>
+> 
+
+
+--------------------------------------------------------------------------------
+
 ### （一维）数组
 
 * 什么是数组(array)？
