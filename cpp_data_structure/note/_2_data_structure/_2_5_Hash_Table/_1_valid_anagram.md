@@ -122,7 +122,6 @@ public:
 > 为了方便举例，判断一下字符串`s= "aee"`,` t = "eae"`。
 >
 > 操作动画如下：
->
 > 
 > <div align=center>
 > <img src="./images/valid_anagram_1.gif" style="zoom:100%;"/>

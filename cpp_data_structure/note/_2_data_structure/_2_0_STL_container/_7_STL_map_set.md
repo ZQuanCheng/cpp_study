@@ -1471,6 +1471,32 @@ public:
 > </font>
 > 
 
+
+--------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 --------------------------------------------------------------------------------
 
 
@@ -2091,12 +2117,52 @@ student_two
 
 
 
+--------------------------------------------------------------------------------
 
 
 
+#### set(集合) 与 vector(动态数组) 之前的转换
 
-
-
+> `std:set`和`std::vector`都可以在初始化时放入一整段
+>
+> 例如，如果想要数组去重，可以这样做
+>
+> ```c++
+> vector<int> nums = {9,4,9,8,4};
+> // 遍历
+> vector<int>::iterator it_vec;
+> for(it_vec= nums.begin(); it_vec != nums.end(); ++it_vec){
+>     std::cout << *it_vec << ", ";
+> }
+> cout << endl;
+> 
+> 
+> unordered_set<int> set_num(nums.begin(), nums.end());
+> // 遍历
+> unordered_set<int>::iterator it_set = set_num.begin();
+> for(it_set = set_num.begin(); it_set != set_num.end(); ++it_set){
+>     std::cout << *it_set << ", ";
+> }
+> cout << endl;
+> 
+> 
+> vector<int> result(set_num.begin(), set_num.end());
+> // 遍历
+> for(it_vec= result.begin(); it_vec != result.end(); ++it_vec){
+>     std::cout << *it_vec << ", ";
+> }
+> cout << endl;
+> ```
+> 
+> 编译并运行，结果如下
+>
+> ```c++
+> 9, 4, 9, 8, 4, 
+> 8, 4, 9, 
+> 8, 4, 9,
+> ```
+> 
+> 
 
 
 
