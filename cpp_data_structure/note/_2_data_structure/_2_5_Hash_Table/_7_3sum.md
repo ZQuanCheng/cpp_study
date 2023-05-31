@@ -433,11 +433,13 @@ int main()
 >         right--;
 >         // 去重 right
 >         while (left < right && nums[right] == nums[right + 1]) right--;
->     } else if (nums[i] + nums[left] + nums[right] < 0) {
+>     } 
+>     else if (nums[i] + nums[left] + nums[right] < 0) {
 >         left++;
 >         // 去重 left
 >         while (left < right && nums[left] == nums[left - 1]) left++;
->     } else {
+>     } 
+>     else {
 >     }
 > }
 > ```

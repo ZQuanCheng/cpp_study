@@ -49,7 +49,7 @@ std::distance
 
 */
 ```
-> std::find()
+> `std::find`
 > 用法：find(first, end, value);
 > 返回区间[first，end）中第一个值等于value的元素位置；若未找到，返回end。函数返回的是迭代器或指针，即位置信息。
 > 
@@ -65,7 +65,8 @@ std::distance
 > ```
 
 
-> std::remove, 配合erase才能实现删除
+> `std::remove`, 配合erase才能实现删除
+> 
 > ```c++
 > // 删除值为value的所有元素 remove
 > // 删除对应指定值的元素：我们要注意，有remove的地方，必须配合erase删除iter到end()的部分
@@ -77,7 +78,8 @@ std::distance
 > // 后续就相当于v.erase(v.end()-2, v.end())，即删除最后2个元素
 > ```
 
-> std::sort
+> `std::sort`
+> 
 > ```c++
 > vector<int> nums = {16,-4,0,-1,0,3,10};
 > // 显示每一个元素
@@ -98,3 +100,124 @@ std::distance
 > 16, -4, 0, -1, 0, 3, 10, 
 > -4, -1, 0, 0, 3, 10, 16, 
 > ```
+
+
+> `std::reverse`
+> 用法：reverse(first, end);
+> 反转区间[first，end）中的元素顺序；
+>
+> 1. 反转`vector`
+> 
+> ```c++
+> vector<char> s = {'h','e','l','l','o'}; // 
+> // 显示每一个元素
+> vector<char>::iterator it;
+> for (it = s.begin(); it != s.end(); it++) {
+>     cout << *it << ", ";
+> }
+> cout << endl;
+> reverse(s.begin(), s.end()); // 反转顺序
+> // 显示每一个元素
+> for (it = s.begin(); it != s.end(); it++) {
+>     cout << *it << ", ";
+> }
+> cout << endl;
+> ```
+> 显示结果
+> ```html
+> h, e, l, l, o, 
+> o, l, l, e, h, 
+> ```
+> 
+> 2. 反转`string`
+> 
+> ```c++
+> string s = "abcdefg";
+>  
+> cout << "翻转前: "<< s << endl;
+>    
+> reverse(s.begin(), s.end());
+>  
+> cout << "翻转后: "<< s << endl;
+> ```
+> 显示结果
+> ```html
+> 翻转前: abcdefg
+> 翻转后: gfedcba 
+> ```
+> 
+> 3. 翻转字符数组
+>
+> ```c++
+> char s[] = "abcdefg";
+>  
+> cout << "翻转前: "<< s << endl;
+>     
+> cout << "sizeof(s) / sizeof(s[0]): " << sizeof(s) / sizeof(s[0]) << endl;
+> int N = sizeof(s) / sizeof(s[0]);
+> reverse(s, s + N - 1);
+>  
+> cout << "翻转后: "<< s << endl;
+> ``` 
+> 显示结果
+> ```html
+> 翻转前: abcdefg
+> sizeof(s) / sizeof(s[0]): 8
+> 翻转后: gfedcba
+> ```
+> 
+> 4. 反转数组
+>
+> ```c++
+> int num[] = { 1,2,3,4,5,6,7,8,9 };
+> 
+> cout << "sizeof(num) / sizeof(num[0]): " << sizeof(num) / sizeof(num[0]) << endl;
+> cout << endl;
+> 
+> int length = sizeof(num) / sizeof(num[0]);
+> 
+> cout << "翻转前: " << "\n";
+> for (int i = 0; i < length; i++)
+>     cout << num[i] << " ";//输出9 8 7 6 5 4 3 2 1
+> 
+> cout << endl;
+> 
+> reverse(num, num + length);
+>  
+> cout << "\n" << "翻转后: " << "\n";
+> for (int i = 0; i < length; i++)
+>     cout << num[i] << " ";//输出9 8 7 6 5 4 3 2 1
+> 
+> cout << endl;
+> ``` 
+> 显示结果
+> ```html
+> sizeof(num) / sizeof(num[0]): 9
+> 
+> 翻转前: 
+> 1 2 3 4 5 6 7 8 9 
+> 
+> 翻转后: 
+> 9 8 7 6 5 4 3 2 1
+> ```
+> 
+> 
+> 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
