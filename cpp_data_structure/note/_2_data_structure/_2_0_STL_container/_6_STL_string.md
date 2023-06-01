@@ -168,6 +168,20 @@
 
 <https://blog.csdn.net/weixin_43744293/article/details/118299233>
 
+>
+> <font color="yellow"> 
+>
+> `vector<char>` 和 `string` 有什么区别呢？
+>
+> 其实在基本操作上没有区别，但是 `string`提供更多的字符串处理的相关接口，例如`string` 重载了`+`，而`vector`却没有。
+>
+> 所以想处理字符串，我们还是会定义一个`string`类型
+>
+> </font>
+>
+> 
+
+
 #### 简介
 
 > `C` 中需要`<cstring>`中的函数来操作的，在`C++`中都很简单
@@ -626,16 +640,47 @@
 > `sizeof()`运算符用来求对象所占内存空间的大小。
 > 
 
+##### string对象的resize()
+> `_4_reverse_words_in_a_string.md`
+> `_5_zuo_xuan_zhuan_zi_fu_chuan_lcof.md`
+> 
+> 考虑一个字符串对象 `str`。要调整字符串对象的大小，语法将是：
+>
+> `str.resize(k,c);` c为可选参数
+>
+> 该函数包含两个参数。
+>
+> **k**: k 是第一个参数中指定的字符数。它调整字符串的大小，使字符串包含 k 个字符。
+> > * 如果 k 小于字符串的长度，则将字符串长度缩短为 k 指定的长度，删除 k 之外的所有字符。
+> > * 如果 k 大于字符串的长度，则字符串长度扩展到 k 指定的长度。
+>
+> **c**: 如果 k 大于字符串的长度，则 c 是要添加到新空格中的新字符。这是**可选参数**。
+>
+> 
+
 ##### string对象的insert()
 
 
 ##### string对象的erase()
+> `_4_reverse_words_in_a_string.md`
+>
+> 删除指定位置的元素，语法是：
+> 
+> `str.erase( iterator );` 
+>
+> 时间复杂度为`O(n)`
+>
+> 
 
-##### string对象的append()和replace()
+
+##### string对象的appen
+
 
 ##### string对象的assign()
 
+
 ##### string对象的搜索操作 各种find
+
 
 ##### string对象的compare操作
 

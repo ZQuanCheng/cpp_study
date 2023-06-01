@@ -148,6 +148,19 @@
 
 <https://blog.csdn.net/weixin_43744293/article/details/118299233>
 
+>
+> <font color="yellow"> 
+>
+> `vector<char>` 和 `string` 有什么区别呢？
+>
+> 其实在基本操作上没有区别，但是 `string`提供更多的字符串处理的相关接口，例如`string` 重载了`+`，而`vector`却没有。
+>
+> 所以想处理字符串，我们还是会定义一个`string`类型
+>
+> </font>
+>
+> 
+
 #### 简介
 
 > `C` 中需要`<cstring>`中的函数来操作的，在`C++`中都很简单
