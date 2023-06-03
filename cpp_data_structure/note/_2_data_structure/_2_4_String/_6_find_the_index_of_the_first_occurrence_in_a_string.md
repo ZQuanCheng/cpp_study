@@ -63,7 +63,7 @@
 >  
 
 
-#### 我的解法   66 / 79 通过 --- 78 / 79通过 --- 全部通过
+#### 我的解法1   66 / 79 通过 --- 78 / 79通过 --- 全部通过
 
 ```c++
 class Solution {
@@ -358,11 +358,80 @@ public:
 
 
 
+#### 我的解法2 暴力匹配
+
+> 
+> <font color="yellow">
+> 
+> 上面的代码逻辑不够清晰，太过复杂
+>
+> 我们应该这样暴力匹配
+>
+> </font>
+>
+> 
+
+```c++
+class Solution {
+public:
+    int strStr(string haystack, string needle) {
+        // 外循环
+        // k=0, 1, 2, ..., haystack.size()-1`的作为开头的所有遍历结果
+        for(int k=0; k < haystack.size(); k++) {
+            bool is_doing_match = false;      // 标识当前是否正在匹配
+            // 内循环
+            // 从k开头的，haystack[k] - [k+needle.size()-1] 子文本串
+            // 长度为haystack.size()的子文本串与模式串needle逐位比较
+            for(int i=k; i < k+needle.size(); i++) {
+               if(haystack[i] == needle[i-k]) {
+                   is_doing_match = true;
+               }
+               else {
+                   is_doing_match = false; 
+                   break; // 只要有一项不对，就跳出内循环                   
+               }
+            }
+            // 内循环遍历到最后，需要判断匹配是否完成
+            if(is_doing_match) { // 如果模式串匹配到最后都保持true
+                return k; // 返回匹配项首字符的下标
+            }       
+        }
+        
+        // 如果遍历结束都没有匹配项
+        return -1;
+    }
+};
+```
+
+
+
+
+
+
+
 
 #### 代码随想录
 
+##### 思路
+
+> 
+> 本题是 `KMP` 经典题目。
+>
+> 以下文字如果看不进去，可以看我的B站视频：
+>
+> * 帮你把`KMP`算法学个通透！B站（理论篇）(`https://www.bilibili.com/video/BV1PD4y1o7nd/`)
+> * 帮你把`KMP`算法学个通透！（`https://www.bilibili.com/video/BV1M5411j7Xx/`）
+>
+> `KMP`的经典思想就是:**当出现字符串不匹配时，可以记录一部分之前已经匹配的文本内容，利用这些信息避免从头再去做匹配**。
+> 
+> 具体看`./KMP.md`
+> 
+> 读完`./KMP.md`可以顺便把leetcode上28.实现strStr()题目做了。
 >
 > 
+> 
+
+
 
 
 
