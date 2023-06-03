@@ -18,7 +18,11 @@
 
 ## KMP 字符串匹配
 
-## _6_KMP.md
+## KMP.md
+
+## _6_find_the_index_of_the_first_occurrence_in_a_string.md
+
+## _7_repeated_substring_pattern.md
 
 --------------------------------------------------------------------------------
 
