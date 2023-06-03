@@ -681,6 +681,15 @@
 
 ##### string对象的搜索操作 各种find
 
+> 
+> `_7_repeated_substring_pattern.md`
+>
+> 移动匹配中用到了
+>
+> `if (t.find(s) != std::string::npos) return true;`
+>
+> 
+
 
 ##### string对象的compare操作
 

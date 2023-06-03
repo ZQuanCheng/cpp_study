@@ -184,6 +184,9 @@ public:
 >     }
 > };
 > ```
+>
+> 注意：`std::string::npos`是一个常数，它等于`size_type`类型可以表示的最大值，用来表示一个不存在的位置,类型一般是`std::container_type::size_type`。
+> 
 > 
 > * 时间复杂度: `O(n)`
 > * 空间复杂度: `O(1)`
