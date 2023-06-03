@@ -688,6 +688,7 @@
 >
 > `if (t.find(s) != std::string::npos) return true;`
 >
+> https://blog.csdn.net/lmb1612977696/article/details/81455708
 > 
 
 
