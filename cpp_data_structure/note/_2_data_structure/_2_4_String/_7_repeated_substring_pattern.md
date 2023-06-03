@@ -150,16 +150,49 @@ public:
 > 
 
 
-#### 移动匹配
+#### 移动匹配 
 
 > 
 > 当一个字符串`s：abcabc`，内部由重复的子串组成，那么这个字符串的结构一定是这样的：
 >
+> <div align=center>
+> <img src="./images/repeated_substring_pattern_1.png" style="zoom:100%;"/>
+> </div>
+>
+> 也就是由前后相同的子串组成。
 > 
-
-
-
-
+> 那么既然前面有相同的子串，后面有相同的子串，用 `s + s`，这样组成的字符串中，后面的子串做前串，前后的子串做后串，就一定还能组成一个`s`，如图：
+>
+> <div align=center>
+> <img src="./images/repeated_substring_pattern_2.png" style="zoom:100%;"/>
+> </div>
+> 
+> 所以判断字符串`s`是否由重复子串组成，只要两个`s`拼接在一起，里面还出现一个`s`的话，就说明是由重复子串组成。
+> 
+> 当然，我们在判断 `s + s` 拼接的字符串里是否出现一个`s`的的时候，要刨除 `s + s` 的首字符和尾字符，这样避免在`s+s`中搜索出原来的`s`，我们要搜索的是中间拼接出来的`s`。
+>
+> 代码如下：
+>
+> ```c++
+> class Solution {
+> public:
+>     bool repeatedSubstringPattern(string s) {
+>         string t = s + s;
+>         t.erase(t.begin()); t.erase(t.end() - 1); // 掐头去尾
+>         if (t.find(s) != std::string::npos) return true; // r
+>         return false;
+>     }
+> };
+> ```
+> 
+> * 时间复杂度: `O(n)`
+> * 空间复杂度: `O(1)`
+> 
+> 不过这种解法还有一个问题，就是 我们最终还是要判断 一个字符串（`s + s`）是否出现过 `s` 的过程，大家可能直接用`contains`，`find` 之类的库函数。 却忽略了实现这些函数的时间复杂度（暴力解法是`m * n`，一般库函数实现为` O(m + n)`）。
+> 
+> 如果我们做过 28.实现strStr (`_6_find_the_index_of_the_first_occurrence_in_a_string.md`)题目的话，其实就知道，**实现一个 高效的算法来判断 一个字符串中是否出现另一个字符串是很复杂的**，这里就涉及到了`KMP`算法。
+>
+> 
 
 
 
