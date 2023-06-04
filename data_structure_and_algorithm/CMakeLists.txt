@@ -2,7 +2,7 @@
 cmake_minimum_required(VERSION 3.5.1)
  
 # 项目名称，建议大写
-project(cpp_data_structure)
+project(data_structure_and_algorithm)
  
 
 # -------------------------------------------编译选项------------------------------------------------

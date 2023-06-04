@@ -1,4 +1,4 @@
-# cpp_data_structure
+# data_structure_and_algorithm
 
 代码随想录
 https://programmercarl.com/
