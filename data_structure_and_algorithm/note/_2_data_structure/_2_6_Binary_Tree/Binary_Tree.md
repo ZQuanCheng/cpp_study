@@ -16,7 +16,7 @@
 
 --------------------------------------------------------------------------------
 
-### 二叉树理论基础
+## 二叉树理论基础
 
 ## Binary_Tree.md
 
@@ -25,7 +25,9 @@
 <font color="yellow">当我们想保证查找效率时，可以用顺序表(数组)存储，当我们想保证插入和删除效率时，我们可以用链式表存储，有没有一种存储方法可以同时兼顾顺序表和链式表的优点？ 
 使用二叉树 ，便可兼顾查找效率和插入删除效率~</font>
 
+--------------------------------------------------------------------------------
 
+### 各种博客总结
 
 #### 树的基础知识概述
 > 树状图是一种数据结构，它是由$n（n>=1$个有限结点组成一个具有层次关系的集合。把它叫做“树”是因为它看起来像一棵倒挂的树，也就是说它是根朝上，而叶朝下的。
@@ -33,7 +35,7 @@
 每个结点有零个或多个子结点；没有父结点的结点称为根结点；每一个非根结点有且只有一个父结点；除了根结点外，每个子结点可以分为多个不相交的子树；
 > <br>  
 > <div align=center>
-> <img src="./images/tree_1.jpg"  width="" height="" alt="no photo" title="栈" style="zoom:100%;"/>
+> <img src="./images/tree_1.jpg" style="zoom:100%;"/>
 > </div>
 > <br>
 >
@@ -41,8 +43,8 @@
 > 如图所示：
 > <br>  
 > <div align=center>
-> <img src="./images/tree_2.jpg"  width="" height="" alt="no photo" title="栈" style="zoom:50%;"/>
-> <img src="./images/tree_3.jpg"  width="" height="" alt="no photo" title="栈" style="zoom:50%;"/>
+> <img src="./images/tree_2.jpg" style="zoom:50%;"/>
+> <img src="./images/tree_3.jpg" style="zoom:50%;"/>
 > </div>
 > <br>
 > 
@@ -58,7 +60,7 @@
 > 简单来说，二叉树是一个每个结点最多只能有两个分支的树，左边的分支称之为左子树，右边的分支称之为右子树~
 > <br>  
 > <div align=center>
-> <img src="./images/tree_4.jpg"  width="" height="" alt="no photo" title="栈" style="zoom:60%;"/>
+> <img src="./images/tree_4.jpg" style="zoom:60%;"/>
 > </div>
 > <br>
 > 
@@ -78,7 +80,7 @@
 > > 定义2：只有度为0的结点和度为2的结点，并且度为0的结点在同一层上。
 > >   
 > > <div align=center>
-> > <img src="./images/tree_5.jpg"  width="" height="" alt="no photo" title="栈" style="zoom:30%;"/>
+> > <img src="./images/tree_5.jpg" style="zoom:30%;"/>
 > > </div>
 > > 
 > > 这棵二叉树为满二叉树，也可以说深度为$k$，有 $2^{k-1}$ 个节点的二叉树。
@@ -90,7 +92,7 @@
 > > 
 > > <br>  
 > > <div align=center>
-> > <img src="./images/tree_6.jpg"  width="" height="" alt="no photo" title="栈" style="zoom:60%;"/>
+> > <img src="./images/tree_6.jpg" style="zoom:60%;"/>
 > > </div>
 > > <br>
 >
@@ -114,7 +116,7 @@
 > > 
 > > <br>  
 > > <div align=center>
-> > <img src="./images/tree_7.jpg"  width="" height="" alt="no photo" title="栈" style="zoom:60%;"/>
+> > <img src="./images/tree_7.jpg" style="zoom:60%;"/>
 > > </div>
 > > <br>
 >
@@ -123,7 +125,7 @@
 > > 它是一颗空树或左右两个子树的高度差的绝对值不超过 1，并且左右两个子树都是一棵平衡二叉树。
 > > <br>  
 > > <div align=center>
-> > <img src="./images/tree_8.jpg"  width="" height="" alt="no photo" title="栈" style="zoom:60%;"/>
+> > <img src="./images/tree_8.jpg" style="zoom:60%;"/>
 > > </div>
 > > <br>
 > > 最后一棵 不是平衡二叉树，因为它的左右两个子树的高度差的绝对值超过了1。<br>
@@ -139,7 +141,7 @@
 > > 以上规则可以保证左右子树结点数差距不超过两倍~
 > > <br>  
 > > <div align=center>
-> > <img src="./images/tree_9.jpg"  width="" height="" alt="no photo" title="栈" style="zoom:60%;"/>
+> > <img src="./images/tree_9.jpg" style="zoom:60%;"/>
 > > </div>
 > > <br>
 > > <font color="yellow">红黑树很难，我们不需要掌握</font>
@@ -147,8 +149,8 @@
 > > C++中map、set、multimap，multiset的底层实现都是红黑树，所以map、set的增删操作时间时间复杂度是logn.注意我这里没有说unordered_map、unordered_set.因为unordered_map、unordered_set底层实现是哈希表。<br> C++ STL中的set, map底层实现是红黑树，而不是AVL，否则需要频繁旋转操作
 > > <br>  
 > > <div align=center>
-> > <img src="./images/hash_table_6.jpg"  width="" height="" alt="no photo" title="栈" style="zoom:60%;"/>
-> > > <img src="./images/hash_table_7.jpg"  width="" height="" alt="no photo" title="栈" style="zoom:60%;"/>
+> > <img src="./images/hash_table_6.jpg" style="zoom:60%;"/>
+> > > <img src="./images/hash_table_7.jpg" style="zoom:60%;"/>
 > > </div>
 > > 注：红黑树是自平衡的二叉查找树，并不一定是完美的二叉查找树。
 > >
@@ -161,7 +163,7 @@
 > > 链式存储如图：
 > >  
 > > <div align=center>
-> > <img src="./images/tree_10.jpg"  width="" height="" alt="no photo" title="栈" style="zoom:60%;"/>
+> > <img src="./images/tree_10.jpg" style="zoom:60%;"/>
 > > </div>
 > > 
 > 
@@ -169,7 +171,7 @@
 > > 其实就是用数组来存储二叉树，顺序存储的方式如图：
 > > 
 > > <div align=center>
-> > <img src="./images/tree_11.jpg"  width="" height="" alt="no photo" title="栈" style="zoom:60%;"/>
+> > <img src="./images/tree_11.jpg" style="zoom:60%;"/>
 > > </div>
 > > 
 > > 用数组来存储二叉树如何遍历的呢？
@@ -207,7 +209,7 @@
 > > * 后序遍历：左右中
 > > 
 > > <div align=center>
-> > <img src="./images/tree_12.jpg"  width="" height="" alt="no photo" title="栈" style="zoom:60%;"/>
+> > <img src="./images/tree_12.jpg" style="zoom:60%;"/>
 > > </div>
 > > <br>
 > >
@@ -215,14 +217,14 @@
 > > 再举一个例子
 > > <br>
 > > <div align=center>
-> > <img src="./images/tree_13.jpg"  width="" height="" alt="no photo" title="栈" style="zoom:60%;"/>
+> > <img src="./images/tree_13.jpg" style="zoom:60%;"/>
 > > </div>
 > > <br>
 > > 先序：ABDEHCFIG<br>
 > > 中序：DBHEAFICG<br>
 > > 后序：DHEBIFGCA<br>
 > > <div align=center>
-> > <img src="./images/tree_14.jpg"  width="" height="" alt="no photo" title="栈" style="zoom:60%;"/>
+> > <img src="./images/tree_14.jpg" style="zoom:60%;"/>
 > > </div>
 >
 > 
@@ -253,6 +255,43 @@
 
 #### 二叉搜索树的实现，各种操作
 <https://blog.csdn.net/qq_54169998/article/details/121108627>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--------------------------------------------------------------------------------
+
+### 代码随想录
+
+
+
+
+
+
+
 
 
 
