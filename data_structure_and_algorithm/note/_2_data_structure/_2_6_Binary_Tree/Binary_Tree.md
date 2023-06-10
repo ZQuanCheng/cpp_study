@@ -53,12 +53,17 @@
 > 
 > **疑问**：
 > 
-> `Level`层级和`Depth`深度有区别吗？？？
->
-> 一般来说，层级从`1`开始，深度从`0`开始，第`1`层的根节点深度为`0`，第`2`层的节点深度为`1`，第`3`层的节点深度`2`，...
->
+> <font color="yellow">
 > 
+> `Level`层级和`Depth`深度有区别吗？？？层级是针对整个二叉树而言的，深度只是针对当前一个节点而言的。
+>
+> 一般来说，层级从`1`开始：第`1`层的根节点深度为`1`，第`2`层的节点深度为`2`，第`3`层的节点深度`3`，...
+>
+> 二叉树的最大深度：根节点到最远叶子节点的最长路径上的节点数量。
+> 二叉树的最小深度：根节点到最近叶子节点的最短路径上的节点数量。
+> 叶子节点：没有子节点的节点。
 > 
+> </font>
 >
 > **补充定义：**
 > 
@@ -102,19 +107,28 @@
 ##### 2. 二叉树的性质
 
 > 
-> * 第$i$层的结点总数不超过$2^{i-1},i≥0$
+> * 第$i$层的结点总数不超过$2^{i-1},i≥1$
 > 
-> * 深度为$d$的二叉树最多有$2^{d+1}-1$个结点，最少有$d+1$个结点, $d≥1$。
+> * 深度为$d$的二叉树最多有$2^d-1$个结点，最少有$d$个结点, $d≥1$。
 >
 > 性质一是针对一层节点，性质二是整个二叉树的结点总数
 > 
 
 > 
-> 疑问：
+> **疑问**：
 > 
-> `Level`层级和`Depth`深度有区别吗？？？
+> <font color="yellow">
+> 
+> `Level`层级和`Depth`深度有区别吗？？？层级是针对整个二叉树而言的，深度只是针对当前一个节点而言的。
 >
-> 一般来说，层级从`1`开始，深度从`0`开始，第`1`层的根节点深度为`0`，第`2`层的节点深度为`1`，第`3`层的节点深度`2`，...
+> 一般来说，层级从`1`开始：第`1`层的根节点深度为`1`，第`2`层的节点深度为`2`，第`3`层的节点深度`3`，...
+>
+> 二叉树的最大深度：根节点到最远叶子节点的最长路径上的节点数量。
+> 二叉树的最小深度：根节点到最近叶子节点的最短路径上的节点数量。
+> 叶子节点：没有子节点的节点。
+> 
+> </font>
+>
 >
 > 
 > 
@@ -123,7 +137,7 @@
 
 **在我们解题过程中二叉树有两种主要的形式：满二叉树和完全二叉树。**
 
-> 1. 满二叉树 
+> 1. 满二叉树（完美二叉树）
 > 
 > > 定义1：除了叶结点外每一个结点都有左右子节点且叶子结点都处在最底层。
 > > 
@@ -1708,6 +1722,8 @@
 > > 最后所有的下一层的节点都在`que2`中, 且`que1`为空
 >
 > * 检查`que2`，若为空，说明已经是上一次循环已经到达最后一层，全部节点检测左右都未发现子节点，需要停止`while(floor)`外循环，`break`
+>
+> * `floor++` 更新层数标志
 > 
 > * 内嵌`while(!que2.empty())`循环, 存储`que2`这一层节点的值, 并将`que2`的节点放入`que1`
 >
@@ -1720,7 +1736,6 @@
 > > 最后`result.push_back(vec)`;
 > > 
 > 
-> * `floor++` 更新层数标志
 >
 > **我的代码如下：**
 > 
@@ -1741,7 +1756,7 @@
 >         result.push_back(vector<int>{root->val});
 > 
 >         // 设置层数标志floor
->         int floor = 2; // 因为root已经处理过了，所以从第2层开始
+>         int floor = 1; // 因为root已经处理过了，所以从第2层开始
 >         
 >         // 开始循环
 >         while(floor) {
@@ -1756,6 +1771,9 @@
 >             // 若que2为空，则说明已经到达最后一层，停止循环
 >             if(que2.empty()) break;
 > 
+>             // 更新层数标志
+>             floor++;
+> 
 >             // 存储que2这一层节点的值, 并将que2的节点放入que1
 >             vector<int> vec;
 >             while(!que2.empty()) { // 不能for(int i=0; i < que2.size(); i++) 因为size()会变化
@@ -1766,8 +1784,6 @@
 >             } 
 >             result.push_back(vec);
 > 
->             // 更新层数标志
->             floor++;
 >         }
 > 
 >         return result;
@@ -1815,7 +1831,7 @@
 >     result.push_back(vector<int>{root->val});
 > 
 >     // 设置层数标志floor
->     int floor = 2;
+>     int floor = 1;
 >     
 >     // 开始循环
 >     while(floor) {
@@ -1829,6 +1845,9 @@
 > 
 >         // 若que2为空，则说明已经到达最后一层，停止循环
 >         if(que2.empty()) break;
+> 
+>         // 更新层数标志
+>         floor++;
 > 
 >         // 显示当前层数，以及节点数
 >         cout << "floor: " << floor << ", que2.size(): " << que2.size() << endl;
@@ -1848,8 +1867,6 @@
 > 
 >         result.push_back(vec);
 > 
->         // 更新层数标志
->         floor++;
 >     }
 > 
 > 
@@ -1917,7 +1934,7 @@
 >         result.push_back(vector<int>{root->val});
 > 
 >         // 设置层数标志floor
->         int floor = 2; 
+>         int floor = 1; 
 > 
 >         // 将que中存储的单层节点的子节点全部存入que队尾, 同时记得存储节点值
 >         while(!que.empty()) { 
@@ -1962,20 +1979,25 @@
 > 
 > 设置一个队列`que`，设置结果集`result`
 >
+> 如果`root`为空，直接返回空集
+> 
 > 设置层数标志`floor`
 >
 > 开始`while(!que.empty())`循环，将`que`中存储的单层节点值放入vector<int>,然后将左右子节点全部存入`que`队尾
 > > 
-> > 具体做法如下：
+> > `while`循环体如下：
+> > 
+> > * 层数标志增加`floor++`
 > > 
 > > * 暂存当前层的节点数量`int floor_size = que.size()`
 > > 
-> > * 内嵌`for(int i=0; i < floor_size; i++)`循环，将当前层的节点一一取出，将当前层的节点值存入result； 找到左右子节点，将子节点入队列`que`
+> > * 内嵌`for(int i=0; i < floor_size; i++)`循环
 > > 
+> > > `for`循环体如下： 
+> > > * 将当前层的节点一一取出
+> > > * 将当前层的节点值存入`result`
+> > > * 找到左右子节点，将子节点入队列`que`
 > > 
-> > 层数标志增加`floor++`
-> > 
-> >  
 >
 > 返回结果集`result`
 >
@@ -1996,10 +2018,12 @@
 >         que.push(root);
 > 
 >         // 设置层数标志floor
->         int floor = 1; 
+>         int floor = 0; 
 > 
 >         // 将que中存储的单层节点值放入vector<int>,然后将左右子节点全部存入que队尾
 >         while(!que.empty()) { 
+>             // 更新层数标志
+>             floor++;    
 >             // 暂存当前层的节点数量
 >             int floor_size = que.size();
 >             // 将当前层的节点取出，节点值存入vector<int>，找到左右子节点，将下一层的子节点入队que
@@ -2015,8 +2039,6 @@
 >             // 将当前层的节点值存储result
 >             result.push_back(vec);
 > 
->             // 更新层数标志
->             floor++;
 >         }
 > 
 >         return result;
@@ -2127,20 +2149,25 @@
 > 
 > 设置一个队列`que`，设置结果集`result`
 >
+> 如果`root`为空，直接返回空集
+> 
 > 设置层数标志`floor`
 >
 > 开始`while(!que.empty())`循环，将`que`中存储的单层节点值放入vector<int>,然后将左右子节点全部存入`que`队尾
 > > 
-> > 具体做法如下：
+> > `while`循环体如下：
+> > 
+> > * 层数标志增加`floor++`
 > > 
 > > * 暂存当前层的节点数量`int floor_size = que.size()`
 > > 
-> > * 内嵌`for(int i=0; i < floor_size; i++)`循环，将当前层的节点一一取出，将当前层的节点值存入result； 找到左右子节点，将子节点入队列`que`
+> > * 内嵌`for(int i=0; i < floor_size; i++)`循环
 > > 
+> > > `for`循环体如下：
+> > > * 将当前层的节点一一取出
+> > > * 将当前层的节点值存入result
+> > > * 找到左右子节点，将子节点入队列`que`
 > > 
-> > 层数标志增加`floor++`
-> > 
-> >  
 >
 > 翻转结果集外层顺序`reverse(result.begin(), result.end())`
 > 
@@ -2163,10 +2190,12 @@
 >         que.push(root);
 > 
 >         // 设置层数标志floor
->         int floor = 1; 
+>         int floor = 0; 
 > 
 >         // 将que中存储的单层节点值放入vector<int>,然后将左右子节点全部存入que队尾
 >         while(!que.empty()) { 
+>             // 更新层数标志
+>             floor++;    
 >             // 暂存当前层的节点数量
 >             int floor_size = que.size();
 >             // 将当前层的节点取出，节点值存入vector<int>，找到左右子节点，将下一层的子节点入队que
@@ -2182,8 +2211,6 @@
 >             // 将当前层的节点值存储result
 >             result.push_back(vec);
 > 
->             // 更新层数标志
->             floor++;
 >         }
 > 
 >         // 翻转结果集外层顺序, 变成自底向上的层序遍历
@@ -2252,20 +2279,25 @@
 > 
 > 设置一个队列`que`，设置结果集`result`
 >
+> 如果`root`为空，直接返回空集
+> 
 > 设置层数标志`floor`
 >
 > 开始`while(!que.empty())`循环，将`que`中存储的单层节点,然后将左右子节点全部存入`que`队尾， 最后一个节点的值放入`result`
 > > 
-> > 具体做法如下：
+> > `while`循环体如下：
+> > 
+> > * 层数标志增加`floor++`
 > > 
 > > * 暂存当前层的节点数量`int floor_size = que.size()`
 > > 
-> > * 内嵌`for(int i=0; i < floor_size; i++)`循环，将当前层的节点一一取出； 找到左右子节点，将子节点入队列`que`; 将当前层的最右侧节点值存入`result`
+> > * 内嵌`for(int i=0; i < floor_size; i++)`循环
 > > 
+> > > `for`循环体如下：
+> > > * 将当前层的节点一一取出； 
+> > > * 找到左右子节点，将子节点入队列`que`; 
+> > > * 将当前层的最右侧节点值存入`result`
 > > 
-> > 层数标志增加`floor++`
-> > 
-> >  
 >
 > 
 > 返回结果集`result`
@@ -2289,10 +2321,12 @@
 >         que.push(root);
 > 
 >         // 设置层数标志floor
->         int floor = 1; 
+>         int floor = 0; 
 > 
 >         // 将que中存储的单层节点取出，然后将左右子节点全部存入que队尾, 将最后一个节点的值（最右侧）放入result
 >         while(!que.empty()) { 
+>             // 更新层数标志
+>             floor++;    
 >             // 暂存当前层的节点数量
 >             int floor_size = que.size();
 >             // 将当前层的节点取出，找到左右子节点，将下一层的子节点入队que， 最后一个节点值（最右侧）存入vector<int>，
@@ -2305,8 +2339,6 @@
 >                 if(i == floor_size - 1) result.push_back(node->val);
 >             }
 >                 
->             // 更新层数标志
->             floor++;
 >         }
 > 
 >         return result;
@@ -2363,21 +2395,28 @@
 > 
 > 设置一个队列`que`，设置结果集`result`
 >
+> 如果`root`为空，直接返回空集
+> 
 > 设置层数标志`floor`
 >
 > 开始`while(!que.empty())`循环，将`que`中存储的单层节点值求和，然后平均,然后将左右子节点全部存入`que`队尾
 > > 
-> > 具体做法如下：
+> > `while`循环体如下：
 > > 
+> > * 层数标志增加`floor++`
+> >
 > > * 暂存当前层的节点数量`int floor_size = que.size()`
 > > 
 > > * 设置`double sum = 0;`
 > > 
-> > * 内嵌`for(int i=0; i < floor_size; i++)`循环，将当前层的节点一一取出，将当前层的节点值加入`sum`； 找到左右子节点，将子节点入队列`que`
+> > * 内嵌`for(int i=0; i < floor_size; i++)`循环
+> > 
+> > > `for`循环体如下：
+> > > * 将当前层的节点一一取出，
+> > > * 将当前层的节点值加入`sum`； 
+> > > * 找到左右子节点，将子节点入队列`que`
 > > 
 > > * 将`sum / floor_size`存入`result`
-> > 
-> > 层数标志增加`floor++`
 > > 
 > >  
 >
@@ -2402,10 +2441,12 @@
 >         que.push(root);
 > 
 >         // 设置层数标志floor
->         int floor = 1; 
+>         int floor = 0; 
 > 
 >         // 将que中存储的单层节点取出，值求和, 然后将左右子节点全部存入que队尾, 最后求平均值放入result
 >         while(!que.empty()) { 
+>             // 更新层数标志
+>             floor++;    
 >             // 暂存当前层的节点数量
 >             int floor_size = que.size();
 >             // 新建double sum = 0;
@@ -2422,8 +2463,6 @@
 >             double average = sum / (double)floor_size;
 >             result.push_back(average);            
 >                 
->             // 更新层数标志
->             floor++;
 >         }
 > 
 >         return result;
@@ -2484,18 +2523,25 @@
 > 
 > 设置一个队列`que`，设置结果集`result`
 >
+> 如果`root`为空，直接返回空集
+> 
 > 设置层数标志`floor`
 >
 > 开始`while(!que.empty())`循环，将`que`中存储的单层节点值放入vector<int>,然后将左右子节点全部存入`que`队尾
 > > 
-> > 具体做法如下：
+> > `while`循环体如下：
+> > 
+> > * 层数标志增加`floor++`
 > > 
 > > * 暂存当前层的节点数量`int floor_size = que.size()`
 > > 
-> > * 内嵌`for(int i=0; i < floor_size; i++)`循环，将当前层的节点一一取出，将当前层的节点值存入`result`； 找到所有子节点，将子节点入队列`que`
+> > * 内嵌`for(int i=0; i < floor_size; i++)`循环
 > > 
+> > > `for`循环体如下：
+> > > * 将当前层的节点一一取出，
+> > > * 将当前层的节点值存入`result`； 
+> > > * 找到所有子节点，将子节点入队列`que`
 > > 
-> > 层数标志增加`floor++`
 > > 
 > >  
 >
@@ -2518,10 +2564,12 @@
 >         que.push(root);
 > 
 >         // 设置层数标志floor
->         int floor = 1; 
+>         int floor = 0; 
 > 
 >         // 将que中存储的单层节点值放入vector<int>,然后将所有子节点全部存入que队尾
 >         while(!que.empty()) { 
+>             // 更新层数标志
+>             floor++;
 >             // 暂存当前层的节点数量
 >             int floor_size = que.size();
 >             // 将当前层的节点取出，节点值存入vector<int>，找到所有子节点，将下一层的子节点入队que
@@ -2539,8 +2587,6 @@
 >             // 将当前层的节点值存储result
 >             result.push_back(vec);
 > 
->             // 更新层数标志
->             floor++;
 >         }
 > 
 >         return result;        
@@ -2603,21 +2649,28 @@
 > 
 > 设置一个队列`que`，设置结果集`result`
 >
+> 如果`root`为空，直接返回空集
+> 
 > 设置层数标志`floor`
 >
 > 开始`while(!que.empty())`循环，将`que`中存储的单层节点值放入vector<int>,然后将左右子节点全部存入`que`队尾
 > > 
-> > 具体做法如下：
+> > `while`循环体如下：
+> > 
+> > * 层数标志增加`floor++`
 > > 
 > > * 暂存当前层的节点数量`int floor_size = que.size()`
 > > 
 > > * 设置`int maxValue = INT_MIN;`
 > > 
-> > * 内嵌`for(int i=0; i < floor_size; i++)`循环，将当前层的节点一一取出，将当前层的节点值与`maxValue`比较，判断是否需要更新； 找到左右子节点，将子节点入队列`que`；
+> > * 内嵌`for(int i=0; i < floor_size; i++)`循环，
+> > 
+> > > `for`循环体如下：
+> > > * 将当前层的节点一一取出，
+> > > * 将当前层的节点值与`maxValue`比较，判断是否需要更新； 
+> > > * 找到左右子节点，将子节点入队列`que`；
 > > 
 > > * 将当前层的最大节点值存储`result`
-> > 
-> > 层数标志增加`floor++`
 > > 
 > >  
 >
@@ -2640,10 +2693,12 @@
 >         que.push(root);
 > 
 >         // 设置层数标志floor
->         int floor = 1; 
+>         int floor = 0; 
 > 
 >         // 将que中存储的单层节点值放入vector<int>,然后将左右子节点全部存入que队尾
 >         while(!que.empty()) { 
+>             // 更新层数标志
+>             floor++;
 >             // 暂存当前层的节点数量
 >             int floor_size = que.size();
 >             // 初始化max为int类型的最小值INT_MIN，只要进行循环就能
@@ -2660,8 +2715,6 @@
 >             // 将当前层的最大节点值存储result
 >             result.push_back(maxValue);
 > 
->             // 更新层数标志
->             floor++;
 >         }
 > 
 >         return result;
@@ -2712,16 +2765,533 @@
 >
 > https://leetcode.cn/problems/populating-next-right-pointers-in-each-node/
 >
+>
+> <font color="gree">
+> 
+> 思路如下：
+>
+> 如果`root`为空，直接返回空指针`nullptr`
+> 
+> 设置一个队列`que`
+>
+> 设置层数标志`floor`
+>
+> 开始`while(!que.empty())`循环，将`que`中存储的单层节点出队列, 将左右子节点全部存入`que`队尾， 如果不是当前层的最后一个节点，将节点的`next`指向同层右侧节点
+> > 
+> > `while`循环体如下：
+> > 
+> > * 层数标志增加`floor++`
+> > 
+> > * 暂存当前层的节点数量`int floor_size = que.size()`
+> > 
+> > * 内嵌`for(int i=0; i < floor_size; i++)`循环，
+> > 
+> > > `for`循环体如下：
+> > > * 将当前层的节点一一取出； 
+> > > * 找到左右子节点，将子节点入队列`que`； 
+> > > * 如果不是当前层的最后一个节点，将next指向同层右侧节点que.front()
+> > 
+> > 
+> >  
+>
+> 返回根节点`root`
+>
+> </font>
+>
+> **写代码前先写思路**
+>
+> ```c++
+> class Solution {
+> public:
+>     Node* connect(Node* root) {
+> 
+>         // 如果root为空，直接返回空指针nullptr
+>     
+>         // 设置队列que
+> 
+>         // 将root入队列que
+> 
+>         // 设置层数标志
+> 
+>         // while循环 
+>             // 层数标志更新
+>             // 暂存当前层节点数量
+>             // for循环遍历当前层的所有节点
+>                // 暂存出栈的节点
+>                // 左右子节点入队列
+>                // 如果不是当前层的最后一个节点，将next指向同层右侧节点que.front()
+>         
+> 
+>         // 返回root节点
+> 
+>     }
+> };
+> ```
+> **实际代码如下**
+> ```c++
+> class Solution {
+> public:
+>     Node* connect(Node* root) {
+>         // 如果root为空，直接返回空指针nullptr
+>         if(root == nullptr) return nullptr;    
+>         // 设置队列que
+>         queue<Node*> que;
+>         // 将root入队列que
+>         que.push(root);
+>         // 设置层数标志
+>         int floor = 0;
+> 
+>         // while循环
+>         while(!que.empty()) {
+>             // 层数标志更新
+>             floor++;    
+>             // 暂存当前层节点数量
+>             int floor_size = que.size();
+>             
+>             // for循环遍历当前层的所有节点
+>             for(int i=0; i < floor_size; i++) {
+>                // 暂存出栈的节点
+>                Node* node = que.front();
+>                que.pop();
+>                // 左右子节点入队列
+>                if(node->left != nullptr) que.push(node->left);
+>                if(node->right != nullptr) que.push(node->right);
+>                // 如果不是当前层的最后一个节点，将next指向同层右侧节点que.front()
+>                if(i != floor_size - 1) node->next = que.front();
+>             }
+> 
+>         }
+> 
+>         // 返回root节点
+>         return root;
+>     }
+> };
+> ```
+> 
+> 
+
+
+> <font color="gree"> 代码随想录 </font>
+>
+> 本题依然是层序遍历，只不过在单层遍历的时候记录一下本层的头部节点，然后在遍历的时候让前一个节点指向本节点就可以了
+>
+> C++代码：
+>
+> ```c++
+> class Solution {
+> public:
+>     Node* connect(Node* root) {
+>         queue<Node*> que;
+>         if (root != NULL) que.push(root);
+>         while (!que.empty()) {
+>             int size = que.size();
+>             // vector<int> vec;
+>             Node* nodePre;
+>             Node* node;
+>             for (int i = 0; i < size; i++) {
+>                 if (i == 0) {
+>                     nodePre = que.front(); // 取出一层的头结点
+>                     que.pop();
+>                     node = nodePre;
+>                 } else {
+>                     node = que.front();
+>                     que.pop();
+>                     nodePre->next = node; // 本层前一个节点next指向本节点
+>                     nodePre = nodePre->next;
+>                 }
+>                 if (node->left) que.push(node->left);
+>                 if (node->right) que.push(node->right);
+>             }
+>             nodePre->next = NULL; // 本层最后一个节点指向NULL
+>         }
+>         return root;
+> 
+>     }
+> };
+> ```
+> 
 > 
 
 
 
 
+#### 117.填充每个节点的下一个右侧节点指针II
+
+> 
+> **我们掌握了二叉树的层序遍历，那么如下九道力扣上的题目，只需要修改模板的两三行代码（不能再多了），便可打倒！**
+>
+
+>
+> https://leetcode.cn/problems/populating-next-right-pointers-in-each-node-ii/
+>
+> 与`116.填充每个节点的下一个右侧节点指针`没有任何区别
+>
+>
+> <font color="gree">
+> 
+> 思路如下：
+>
+> 如果`root`为空，直接返回空指针`nullptr`
+> 
+> 设置一个队列`que`
+>
+> 设置层数标志`floor`
+>
+> 开始`while(!que.empty())`循环，将`que`中存储的单层节点出队列, 将左右子节点全部存入`que`队尾， 如果不是当前层的最后一个节点，将节点的`next`指向同层右侧节点
+> > 
+> > `while`循环体如下：
+> > 
+> > * 层数标志增加`floor++`
+> > 
+> > * 暂存当前层的节点数量`int floor_size = que.size()`
+> > 
+> > * 内嵌`for(int i=0; i < floor_size; i++)`循环，
+> > 
+> > > `for`循环体如下：
+> > > * 将当前层的节点一一取出； 
+> > > * 找到左右子节点，将子节点入队列`que`； 
+> > > * 如果不是当前层的最后一个节点，将next指向同层右侧节点que.front()
+> > 
+> > 
+> >  
+>
+> 返回根节点`root`
+>
+> </font>
+>
+> ```c++
+> class Solution {
+> public:
+>     Node* connect(Node* root) {
+>         // 如果root为空，直接返回空指针nullptr
+>         if(root == nullptr) return nullptr;    
+>         // 设置队列que
+>         queue<Node*> que;
+>         // 将root入队列que
+>         que.push(root);
+>         // 设置层数标志
+>         int floor = 0;
+> 
+>         // while循环
+>         while(!que.empty()) {
+>             // 层数标志更新
+>             floor++;    
+>             // 暂存当前层节点数量
+>             int floor_size = que.size();
+>             
+>             // for循环遍历当前层的所有节点
+>             for(int i=0; i < floor_size; i++) {
+>                // 暂存出栈的节点
+>                Node* node = que.front();
+>                que.pop();
+>                // 左右子节点入队列
+>                if(node->left != nullptr) que.push(node->left);
+>                if(node->right != nullptr) que.push(node->right);
+>                // 如果不是当前层的最后一个节点，将next指向同层右侧节点que.front()
+>                if(i != floor_size - 1) node->next = que.front();
+>             }
+> 
+>         }
+> 
+>         // 返回root节点
+>         return root;
+>     }
+> };
+> ```
+> 
+> 
+
+
+> <font color="gree"> 代码随想录 </font>
+>
+> 这道题目说是二叉树，但116题目说是完整二叉树，其实没有任何差别，一样的代码一样的逻辑一样的味道
+>
+> C++代码：
+>
+> ```c++
+> class Solution {
+> public:
+>     Node* connect(Node* root) {
+>         queue<Node*> que;
+>         if (root != NULL) que.push(root);
+>         while (!que.empty()) {
+>             int size = que.size();
+>             // vector<int> vec;
+>             Node* nodePre;
+>             Node* node;
+>             for (int i = 0; i < size; i++) {
+>                 if (i == 0) {
+>                     nodePre = que.front(); // 取出一层的头结点
+>                     que.pop();
+>                     node = nodePre;
+>                 } else {
+>                     node = que.front();
+>                     que.pop();
+>                     nodePre->next = node; // 本层前一个节点next指向本节点
+>                     nodePre = nodePre->next;
+>                 }
+>                 if (node->left) que.push(node->left);
+>                 if (node->right) que.push(node->right);
+>             }
+>             nodePre->next = NULL; // 本层最后一个节点指向NULL
+>         }
+>         return root;
+> 
+>     }
+> };
+> ```
+> 
+> 
+
+
+#### 104.二叉树的最大深度
+
+> 
+> **我们掌握了二叉树的层序遍历，那么如下九道力扣上的题目，只需要修改模板的两三行代码（不能再多了），便可打倒！**
+>
+
+>
+> https://leetcode.cn/problems/populating-next-right-pointers-in-each-node-ii/
+>
+> 
+> <font color="gree">
+>
+> 思路如下：
+> 
+> 设置一个队列`que`
+>
+> 如果`root`为空，直接返回空集
+> 
+> 设置层数标志`floor`
+>
+> 开始`while(!que.empty())`循环，将`que`中存储的单层节点取出,然后将左右子节点全部存入`que`队尾
+> > 
+> > `while`循环体如下：
+> > 
+> > * 层数标志增加`floor++`
+> > 
+> > * 暂存当前层的节点数量`int floor_size = que.size()`
+> > 
+> > * 内嵌`for(int i=0; i < floor_size; i++)`循环
+> > 
+> > > `for`循环体如下：
+> > > * 将当前层的节点一一取出
+> > > * 找到左右子节点，将子节点入队列`que`
+> > 
+> > 
+> >  
+>
+> 返回层数`floor`
+>
+> </font>
+>
+> ```c++
+> class Solution {
+> public:
+>     int maxDepth(TreeNode* root) {
+>         // 设置队列que
+>         queue<TreeNode*> que;
+>         // 如果root 为空，直接返回0
+>         if(root == nullptr) return 0;
+>         // 将第1层的root节点入队列que
+>         que.push(root);
+>         // 设置层数标志floor
+>         int floor = 0; 
+> 
+>         // 将que中存储的单层节点取出,然后将左右子节点全部存入que队尾
+>         while(!que.empty()) {
+>             // 更新层数标志
+>             floor++;     
+>             // 暂存当前层的节点数量
+>             int floor_size = que.size();
+>             // 将当前层的节点取出，找到左右子节点，将下一层的子节点入队que
+>             for(int i=0; i < floor_size; i++) {
+>                 TreeNode* node = que.front();
+>                 que.pop();
+>                 if(node->left != nullptr) que.push(node->left);
+>                 if(node->right != nullptr) que.push(node->right);
+>             }
+>         }
+>         
+>         // 返回层数floor, 即最大深度
+>         return floor;
+>     }
+> };
+> ```
+> 
+> 
+
+
+> <font color="gree"> 代码随想录 </font>
+>
+> 使用迭代法的话，使用层序遍历是最为合适的，因为最大的深度就是二叉树的层数，和层序遍历的方式极其吻合。
+> 
+> 在二叉树中，一层一层的来遍历二叉树，记录一下遍历的层数就是二叉树的深度，如图所示：
+> 
+> <div align=center>
+> <img src="./images/tree_21.png" style="zoom:100%"/>
+> </div>
+>
+> 所以这道题的迭代法就是一道模板题，可以使用二叉树层序遍历的模板来解决的。
+> 
+> C++代码：
+>
+> ```c++
+> class Solution {
+> public:
+>     int maxDepth(TreeNode* root) {
+>         if (root == NULL) return 0;
+>         int depth = 0;
+>         queue<TreeNode*> que;
+>         que.push(root);
+>         while(!que.empty()) {
+>             int size = que.size();
+>             depth++; // 记录深度
+>             for (int i = 0; i < size; i++) {
+>                 TreeNode* node = que.front();
+>                 que.pop();
+>                 if (node->left) que.push(node->left);
+>                 if (node->right) que.push(node->right);
+>             }
+>         }
+>         return depth;
+>     }
+> };
+> ```
+> 
+> 
 
 
 
+#### 111.二叉树的最小深度
+
+> 
+> **我们掌握了二叉树的层序遍历，那么如下九道力扣上的题目，只需要修改模板的两三行代码（不能再多了），便可打倒！**
+>
+
+>
+> https://leetcode.cn/problems/minimum-depth-of-binary-tree/
+>
+> 
+> <font color="gree">
+>
+> 思路如下：
+>
+> 如果`root`为空，直接返回0
+> 
+> 设置一个队列`que`
+> 
+> 设置层数标志`floor`
+> 
+>
+> 开始`while(!que.empty())`循环，将`que`中存储的单层节点取出,然后将左右子节点全部存入`que`队尾
+> > 
+> > `while`循环体如下：
+> > 
+> > * 层数标志增加`floor++`
+> > 
+> > * 暂存当前层的节点数量`int floor_size = que.size()`
+> > 
+> > * 内嵌`for(int i=0; i < floor_size; i++)`循环
+> > 
+> > > `for`循环体如下：
+> > > * 将当前层的节点一一取出
+> > > * 找到左右子节点，将子节点入队列`que`
+> > > * 判断是否为叶子节点，只要出现一次叶子节点，则就可以得到最小深度, 直接返回当前层数`floor`即可
+> > 
+> > 
+> >  
+>
+> 返回层数`floor`
+>
+> </font>
+>
+> 
+> ```c++
+> class Solution {
+> public:
+>     int minDepth(TreeNode* root) {
+>         // 如果root 为空，直接返回0
+>         if(root == nullptr) return 0;             
+>         // 设置队列que
+>         queue<TreeNode*> que;
+>         // 将第1层的root节点入队列que
+>         que.push(root);
+>         // 设置层数标志floor
+>         int floor = 0; 
+> 
+>         // 将que中存储的单层节点取出,然后将左右子节点全部存入que队尾
+>         while(!que.empty()) { 
+>             // 更新层数标志
+>             floor++;    
+>             // 暂存当前层的节点数量
+>             int floor_size = que.size();
+> 
+>             // 将当前层的节点取出，找到左右子节点，将下一层的子节点入队que
+>             for(int i=0; i < floor_size; i++) {
+>                 TreeNode* node = que.front();
+>                 que.pop();
+>                 if(node->left != nullptr) que.push(node->left);
+>                 if(node->right != nullptr) que.push(node->right);
+>                 // 判断是否为叶子节点，只要出现一次叶子节点，则就可以得到最小深度, 直接返回当前层数即可
+>                 if(node->left == nullptr && node->right == nullptr) return floor;
+>             }
+>         }
+> 
+>         // 其实这里没必要加return，但是不加的话，编译又不通过
+>         return floor;
+>     }
+> };
+> ```
+> 
+> 
 
 
+> <font color="gree"> 代码随想录 </font>
+>
+> **需要注意的是，只有当左右孩子都为空的时候，才说明遍历的最低点了。如果其中一个孩子为空则不是最低点**
+>
+> 代码如下：（详细注释）
+>
+> ```c++
+> class Solution {
+> public:
+>     int minDepth(TreeNode* root) {
+>         if (root == NULL) return 0;
+>         int depth = 0;
+>         queue<TreeNode*> que;
+>         que.push(root);
+>         while(!que.empty()) {
+>             int size = que.size();
+>             depth++; // 记录最小深度
+>             for (int i = 0; i < size; i++) {
+>                 TreeNode* node = que.front();
+>                 que.pop();
+>                 if (node->left) que.push(node->left);
+>                 if (node->right) que.push(node->right);
+>                 if (!node->left && !node->right) { // 当左右孩子都为空的时候，说明是最低点的一层了，退出
+>                     return depth;
+>                 }
+>             }
+>         }
+>         return depth;
+>     }
+> };
+> ```
+> 
+> 
+
+
+#### 总结 层序遍历法
+
+>
+> 二叉树的层序遍历，**就是图论中的广度优先搜索在二叉树中的应用**，需要借助队列来实现（此时又发现队列的一个应用了）。
+>
+> 来吧，一口气打十个
+>
+> **致敬叶师傅！**
+> 
+> 
 
 
 
