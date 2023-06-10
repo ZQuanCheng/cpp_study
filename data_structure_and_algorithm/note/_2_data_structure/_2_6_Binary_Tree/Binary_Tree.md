@@ -1905,7 +1905,7 @@
 > class Solution {
 > public:
 >     vector<vector<int>> levelOrder(TreeNode* root) {
->         // 设置两个队列que； 设置结果集result; 
+>         // 设置队列que； 设置结果集result; 
 >         queue<TreeNode*> que;
 >         vector<vector<int>> result;
 > 
@@ -1956,7 +1956,10 @@
 >
 > **更进一步优化：代码更简洁**
 >
->
+> <font color="gree">
+> 
+> 思路如下：
+> 
 > 设置一个队列`que`，设置结果集`result`
 >
 > 设置层数标志`floor`
@@ -1974,15 +1977,19 @@
 > > 
 > >  
 >
+> 返回结果集`result`
+>
+> </font>
+>
 > ```c++
 > class Solution {
 > public:
 >     vector<vector<int>> levelOrder(TreeNode* root) {
->         // 设置两个队列que； 设置结果集result; 
+>         // 设置队列que； 设置结果集result; 
 >         queue<TreeNode*> que;
 >         vector<vector<int>> result;
 > 
->         // 如果root 为空，直接返回
+>         // 如果root 为空，直接返回空集
 >         if(root == nullptr) return result;
 > 
 >         // 将第1层的root节点入队列que
@@ -2089,7 +2096,7 @@
 > };
 > ```
 > 
-> <font color="gree"> 层序遍历的递归法很难懂，我们掌握迭代法就可以了 </font>
+> <font color="yellow"> 层序遍历的递归法很难懂，我们掌握迭代法就可以了 </font>
 > 
 > **此时我们就掌握了二叉树的层序遍历了，那么如下九道力扣上的题目，只需要修改模板的两三行代码（不能再多了），便可打倒！**
 >
@@ -2100,19 +2107,754 @@
 
 #### 107.二叉树的层次遍历 II
 
+> 
+> **我们掌握了二叉树的层序遍历，那么如下九道力扣上的题目，只需要修改模板的两三行代码（不能再多了），便可打倒！**
 >
 > 
 
 
+>
+> https://leetcode.cn/problems/binary-tree-level-order-traversal-ii/
+>
+> <font color="yellow"> 与`102.二叉树的层序遍历`的区别是，每一层保持从左到右，但是层数是自底向上的</font>
+>
+> <font color="yellow"> 那么只需要`reverse(result.begin(), result.end())`翻转外层顺序就可以了</font>
+> 
+>
+> <font color="gree">
+>
+> 思路如下：
+> 
+> 设置一个队列`que`，设置结果集`result`
+>
+> 设置层数标志`floor`
+>
+> 开始`while(!que.empty())`循环，将`que`中存储的单层节点值放入vector<int>,然后将左右子节点全部存入`que`队尾
+> > 
+> > 具体做法如下：
+> > 
+> > * 暂存当前层的节点数量`int floor_size = que.size()`
+> > 
+> > * 内嵌`for(int i=0; i < floor_size; i++)`循环，将当前层的节点一一取出，将当前层的节点值存入result； 找到左右子节点，将子节点入队列`que`
+> > 
+> > 
+> > 层数标志增加`floor++`
+> > 
+> >  
+>
+> 翻转结果集外层顺序`reverse(result.begin(), result.end())`
+> 
+> 返回结果集`result`
+>
+> </font>
+>
+> ```c++
+> class Solution {
+> public:
+>     vector<vector<int>> levelOrderBottom(TreeNode* root) {
+>         // 设置队列que； 设置结果集result; 
+>         queue<TreeNode*> que;
+>         vector<vector<int>> result;
+> 
+>         // 如果root 为空，直接返回空集
+>         if(root == nullptr) return result;
+> 
+>         // 将第1层的root节点入队列que
+>         que.push(root);
+> 
+>         // 设置层数标志floor
+>         int floor = 1; 
+> 
+>         // 将que中存储的单层节点值放入vector<int>,然后将左右子节点全部存入que队尾
+>         while(!que.empty()) { 
+>             // 暂存当前层的节点数量
+>             int floor_size = que.size();
+>             // 将当前层的节点取出，节点值存入vector<int>，找到左右子节点，将下一层的子节点入队que
+>             vector<int> vec; 
+>             for(int i=0; i < floor_size; i++) {
+>                 TreeNode* node = que.front();
+>                 que.pop();
+>                 vec.push_back(node->val);
+>                 if(node->left != nullptr) que.push(node->left);
+>                 if(node->right != nullptr) que.push(node->right);
+>             }
+>                 
+>             // 将当前层的节点值存储result
+>             result.push_back(vec);
+> 
+>             // 更新层数标志
+>             floor++;
+>         }
+> 
+>         // 翻转结果集外层顺序, 变成自底向上的层序遍历
+>         reverse(result.begin(), result.end());
+> 
+>         return result;
+>     }
+> };
+> ```
+> 
+> 
+
+
+> <font color="gree"> 代码随想录 </font>
+>
+> 相对于102.二叉树的层序遍历，就是最后把result数组反转一下就可以了。
+>
+> C++代码：
+>
+> ```c++
+> class Solution {
+> public:
+>     vector<vector<int>> levelOrderBottom(TreeNode* root) {
+>         queue<TreeNode*> que;
+>         if (root != NULL) que.push(root);
+>         vector<vector<int>> result;
+>         while (!que.empty()) {
+>             int size = que.size();
+>             vector<int> vec;
+>             for (int i = 0; i < size; i++) {
+>                 TreeNode* node = que.front();
+>                 que.pop();
+>                 vec.push_back(node->val);
+>                 if (node->left) que.push(node->left);
+>                 if (node->right) que.push(node->right);
+>             }
+>             result.push_back(vec);
+>         }
+>         reverse(result.begin(), result.end()); // 在这里反转一下数组即可
+>         return result;
+> 
+>     }
+> };
+> ```
+> 
+> 
+> 
+
+
+#### 199.二叉树的右视图
+
+> 
+> **我们掌握了二叉树的层序遍历，那么如下九道力扣上的题目，只需要修改模板的两三行代码（不能再多了），便可打倒！**
+>
+
+
+>
+> https://leetcode.cn/problems/binary-tree-right-side-view/
+>
+> **本质上是统计每一层最右侧的节点, 在层序遍历的基础上修改**
+> 
+>
+> <font color="gree">
+>
+> 思路如下：
+> 
+> 设置一个队列`que`，设置结果集`result`
+>
+> 设置层数标志`floor`
+>
+> 开始`while(!que.empty())`循环，将`que`中存储的单层节点,然后将左右子节点全部存入`que`队尾， 最后一个节点的值放入`result`
+> > 
+> > 具体做法如下：
+> > 
+> > * 暂存当前层的节点数量`int floor_size = que.size()`
+> > 
+> > * 内嵌`for(int i=0; i < floor_size; i++)`循环，将当前层的节点一一取出； 找到左右子节点，将子节点入队列`que`; 将当前层的最右侧节点值存入`result`
+> > 
+> > 
+> > 层数标志增加`floor++`
+> > 
+> >  
+>
+> 
+> 返回结果集`result`
+>
+> </font>
+>
+> ```c++
+> class Solution {
+> public:
+>     vector<int> rightSideView(TreeNode* root) {
+>         // 本质上是统计每一层最右侧的节点, 在层序遍历的基础上修改
+> 
+>         // 设置队列que； 设置结果集result; 
+>         queue<TreeNode*> que;
+>         vector<int> result;
+> 
+>         // 如果root 为空，直接返回空集
+>         if(root == nullptr) return result;
+> 
+>         // 将第1层的root节点入队列que
+>         que.push(root);
+> 
+>         // 设置层数标志floor
+>         int floor = 1; 
+> 
+>         // 将que中存储的单层节点取出，然后将左右子节点全部存入que队尾, 将最后一个节点的值（最右侧）放入result
+>         while(!que.empty()) { 
+>             // 暂存当前层的节点数量
+>             int floor_size = que.size();
+>             // 将当前层的节点取出，找到左右子节点，将下一层的子节点入队que， 最后一个节点值（最右侧）存入vector<int>，
+>             for(int i=0; i < floor_size; i++) {
+>                 TreeNode* node = que.front();
+>                 que.pop();
+>                 if(node->left != nullptr) que.push(node->left);
+>                 if(node->right != nullptr) que.push(node->right);
+>                 // 存储最右侧节点的值
+>                 if(i == floor_size - 1) result.push_back(node->val);
+>             }
+>                 
+>             // 更新层数标志
+>             floor++;
+>         }
+> 
+>         return result;
+>     }
+> };
+> ```
+> 
+> 
+
+
+> <font color="gree"> 代码随想录 </font>
+>
+> 层序遍历的时候，判断是否遍历到单层的最后面的元素，如果是，就放进result数组中，随后返回result就可以了。
+>
+> C++代码：
+>
+> ```c++
+> class Solution {
+> public:
+>     vector<int> rightSideView(TreeNode* root) {
+>         queue<TreeNode*> que;
+>         if (root != NULL) que.push(root);
+>         vector<int> result;
+>         while (!que.empty()) {
+>             int size = que.size();
+>             for (int i = 0; i < size; i++) {
+>                 TreeNode* node = que.front();
+>                 que.pop();
+>                 if (i == (size - 1)) result.push_back(node->val); // 将每一层的最后元素放入result数组中
+>                 if (node->left) que.push(node->left);
+>                 if (node->right) que.push(node->right);
+>             }
+>         }
+>         return result;
+>     }
+> };
+> ```
+> 
+> 
+
+
+#### 637.二叉树的层平均值
+
+> 
+> **我们掌握了二叉树的层序遍历，那么如下九道力扣上的题目，只需要修改模板的两三行代码（不能再多了），便可打倒！**
+>
+
+>
+> https://leetcode.cn/problems/average-of-levels-in-binary-tree/
+>
+> <font color="gree">
+> 
+> 思路如下：
+> 
+> 设置一个队列`que`，设置结果集`result`
+>
+> 设置层数标志`floor`
+>
+> 开始`while(!que.empty())`循环，将`que`中存储的单层节点值求和，然后平均,然后将左右子节点全部存入`que`队尾
+> > 
+> > 具体做法如下：
+> > 
+> > * 暂存当前层的节点数量`int floor_size = que.size()`
+> > 
+> > * 设置`double sum = 0;`
+> > 
+> > * 内嵌`for(int i=0; i < floor_size; i++)`循环，将当前层的节点一一取出，将当前层的节点值加入`sum`； 找到左右子节点，将子节点入队列`que`
+> > 
+> > * 将`sum / floor_size`存入`result`
+> > 
+> > 层数标志增加`floor++`
+> > 
+> >  
+>
+> 返回结果集`result`
+>
+> </font>
+>
+> ```c++
+> class Solution {
+> public:
+>     vector<double> averageOfLevels(TreeNode* root) {
+>         // 本质上是统计每一层最右侧的节点, 在层序遍历的基础上修改
+> 
+>         // 设置队列que； 设置结果集result; 
+>         queue<TreeNode*> que;
+>         vector<double> result;
+> 
+>         // 如果root 为空，直接返回空集
+>         if(root == nullptr) return result;
+> 
+>         // 将第1层的root节点入队列que
+>         que.push(root);
+> 
+>         // 设置层数标志floor
+>         int floor = 1; 
+> 
+>         // 将que中存储的单层节点取出，值求和, 然后将左右子节点全部存入que队尾, 最后求平均值放入result
+>         while(!que.empty()) { 
+>             // 暂存当前层的节点数量
+>             int floor_size = que.size();
+>             // 新建double sum = 0;
+>             double sum = 0;
+>             // 将当前层的节点取出，找到左右子节点，将下一层的子节点入队que，所有节点值求和
+>             for(int i=0; i < floor_size; i++) {
+>                 TreeNode* node = que.front();
+>                 que.pop();
+>                 sum += (double)node->val; // 类型转换
+>                 if(node->left != nullptr) que.push(node->left);
+>                 if(node->right != nullptr) que.push(node->right);
+>             }
+>             // 平均值
+>             double average = sum / (double)floor_size;
+>             result.push_back(average);            
+>                 
+>             // 更新层数标志
+>             floor++;
+>         }
+> 
+>         return result;
+>     }
+> };
+> ```
+> 
+> 
+> 
+
+> <font color="gree"> 代码随想录 </font>
+>
+> 本题就是层序遍历的时候把一层求个总和在取一个均值。
+>
+> C++代码：
+>
+> ```c++
+> class Solution {
+> public:
+>     vector<double> averageOfLevels(TreeNode* root) {
+>         queue<TreeNode*> que;
+>         if (root != NULL) que.push(root);
+>         vector<double> result;
+>         while (!que.empty()) {
+>             int size = que.size();
+>             double sum = 0; // 统计每一层的和
+>             for (int i = 0; i < size; i++) {
+>                 TreeNode* node = que.front();
+>                 que.pop();
+>                 sum += node->val;
+>                 if (node->left) que.push(node->left);
+>                 if (node->right) que.push(node->right);
+>             }
+>             result.push_back(sum / size); // 将每一层均值放进结果集
+>         }
+>         return result;
+>     }
+> };
+> ```
+> 
 
 
 
+#### 429.N叉树的层序遍历
+
+> 
+> **我们掌握了二叉树的层序遍历，那么如下九道力扣上的题目，只需要修改模板的两三行代码（不能再多了），便可打倒！**
+>
+
+>
+> https://leetcode.cn/problems/n-ary-tree-level-order-traversal/
+>
+> 这道题与二叉树的层序遍历本质没有差别，只不过是多了几个树杈
+>
+> <font color="gree">
+> 
+> 思路如下：
+> 
+> 设置一个队列`que`，设置结果集`result`
+>
+> 设置层数标志`floor`
+>
+> 开始`while(!que.empty())`循环，将`que`中存储的单层节点值放入vector<int>,然后将左右子节点全部存入`que`队尾
+> > 
+> > 具体做法如下：
+> > 
+> > * 暂存当前层的节点数量`int floor_size = que.size()`
+> > 
+> > * 内嵌`for(int i=0; i < floor_size; i++)`循环，将当前层的节点一一取出，将当前层的节点值存入`result`； 找到所有子节点，将子节点入队列`que`
+> > 
+> > 
+> > 层数标志增加`floor++`
+> > 
+> >  
+>
+> 返回结果集`result`
+>
+> </font>
+>
+> ```c++
+> class Solution {
+> public:
+>     vector<vector<int>> levelOrder(Node* root) {
+>         // 设置队列que； 设置结果集result; 
+>         queue<Node*> que;
+>         vector<vector<int>> result;
+> 
+>         // 如果root 为空，直接返回空集
+>         if(root == nullptr) return result;
+> 
+>         // 将第1层的root节点入队列que
+>         que.push(root);
+> 
+>         // 设置层数标志floor
+>         int floor = 1; 
+> 
+>         // 将que中存储的单层节点值放入vector<int>,然后将所有子节点全部存入que队尾
+>         while(!que.empty()) { 
+>             // 暂存当前层的节点数量
+>             int floor_size = que.size();
+>             // 将当前层的节点取出，节点值存入vector<int>，找到所有子节点，将下一层的子节点入队que
+>             vector<int> vec; 
+>             for(int i=0; i < floor_size; i++) {
+>                 Node* node = que.front();
+>                 que.pop();
+>                 vec.push_back(node->val);
+>                 // 对于每一个节点，遍历其children数组，将每一个子节点都放入
+>                 for(int k=0; k < node->children.size(); k++) {
+>                     if(node->children[k] != nullptr) que.push(node->children[k]);
+>                 }
+>             }
+>                 
+>             // 将当前层的节点值存储result
+>             result.push_back(vec);
+> 
+>             // 更新层数标志
+>             floor++;
+>         }
+> 
+>         return result;        
+>     }
+> };
+> ```
+> 
+> 
+
+
+> <font color="gree"> 代码随想录 </font>
+>
+> 这道题依旧是模板题，只不过一个节点有多个孩子了
+>
+> C++代码：
+>
+> ```c++
+> class Solution {
+> public:
+>     vector<vector<int>> levelOrder(Node* root) {
+>         queue<Node*> que;
+>         if (root != NULL) que.push(root);
+>         vector<vector<int>> result;
+>         while (!que.empty()) {
+>             int size = que.size();
+>             vector<int> vec;
+>             for (int i = 0; i < size; i++) {
+>                 Node* node = que.front();
+>                 que.pop();
+>                 vec.push_back(node->val);
+>                 for (int i = 0; i < node->children.size(); i++) { // 将节点孩子加入队列
+>                     if (node->children[i]) que.push(node->children[i]);
+>                 }
+>             }
+>             result.push_back(vec);
+>         }
+>         return result;
+> 
+>     }
+> };
+> ```
+> 
+> 
 
 
 
+#### 515.在每个树行中找最大值
+
+> 
+> **我们掌握了二叉树的层序遍历，那么如下九道力扣上的题目，只需要修改模板的两三行代码（不能再多了），便可打倒！**
+>
+
+>
+> https://leetcode.cn/problems/find-largest-value-in-each-tree-row/
+>
+> 
+> <font color="gree">
+> 
+> 思路如下：
+> 
+> 设置一个队列`que`，设置结果集`result`
+>
+> 设置层数标志`floor`
+>
+> 开始`while(!que.empty())`循环，将`que`中存储的单层节点值放入vector<int>,然后将左右子节点全部存入`que`队尾
+> > 
+> > 具体做法如下：
+> > 
+> > * 暂存当前层的节点数量`int floor_size = que.size()`
+> > 
+> > * 设置`int maxValue = INT_MIN;`
+> > 
+> > * 内嵌`for(int i=0; i < floor_size; i++)`循环，将当前层的节点一一取出，将当前层的节点值与`maxValue`比较，判断是否需要更新； 找到左右子节点，将子节点入队列`que`；
+> > 
+> > * 将当前层的最大节点值存储`result`
+> > 
+> > 层数标志增加`floor++`
+> > 
+> >  
+>
+> 返回结果集`result`
+>
+> </font>
+>
+> ```c++
+> class Solution {
+> public:
+>     vector<int> largestValues(TreeNode* root) {
+>         // 设置队列que； 设置结果集result; 
+>         queue<TreeNode*> que;
+>         vector<int> result;
+> 
+>         // 如果root 为空，直接返回空集
+>         if(root == nullptr) return result;
+> 
+>         // 将第1层的root节点入队列que
+>         que.push(root);
+> 
+>         // 设置层数标志floor
+>         int floor = 1; 
+> 
+>         // 将que中存储的单层节点值放入vector<int>,然后将左右子节点全部存入que队尾
+>         while(!que.empty()) { 
+>             // 暂存当前层的节点数量
+>             int floor_size = que.size();
+>             // 初始化max为int类型的最小值INT_MIN，只要进行循环就能
+>             int maxValue = INT_MIN; 
+>             // 将当前层的节点取出，比较节点值，找到左右子节点，将下一层的子节点入队que
+>             for(int i=0; i < floor_size; i++) {
+>                 TreeNode* node = que.front();
+>                 que.pop();
+>                 maxValue = (node->val > maxValue) ? node->val : maxValue; // 只要节点值大于max暂存值，就将max更新为节点值，否则不变
+>                 if(node->left != nullptr) que.push(node->left);
+>                 if(node->right != nullptr) que.push(node->right);
+>             }
+> 
+>             // 将当前层的最大节点值存储result
+>             result.push_back(maxValue);
+> 
+>             // 更新层数标志
+>             floor++;
+>         }
+> 
+>         return result;
+>     }
+> };
+> ```
 
 
+> 
+> <font color="gree"> 
+>
+> 
+> 注意：
+> 
+> https://blog.csdn.net/m0_56618741/article/details/121169946
+> 
+> 在`C++`中可以使用
+> 
+> `<limits.h>`中
+> * `INT_MIN`,  `INT_MAX`分别表示`int`的最小/最大值。
+> * `LONG_MIN`, `LONG_MAX`分别表示`long`的最小/最大值。
+> 
+> `<float.h>`中
+> * `FLT_MIN`,  `FLT_MAX`分别表示`float`的最小/最大值，但是其均为正数。想要表示负数时，需要加负号`-`
+> * `DBL_MIN`,  `DBL_MAX`分别表示`double`的最小/最大值，但是其均为正数。想要表示负数时，需要加负号`-`
+>
+> 
+> 除此之外
+> `<limits.h>`中还有一个通用方法
+>
+> * `numeric_limits<typename>::min()` 表示`typename`的最小值。
+> * `numeric_limits<typename>::max()` 表示`typename`的最大值。
+> 
+> </font>
+> 
+> ```c++
+> #include <iostream> 
+> #include <climits>  // #include <limits.h>   INT_MIN, INT_MAX: 分别表示int的最小最大值    LONG_MIN, LONG_MAX: 分别表示long的最小最大值
+> #include <cfloat>   // #include <float.h>    FLT_MIN, FLT_MAX: 分别表示float的最小最大值  DBL_MIN, DBL_MAX:   分别表示double的最小最大值
+> using namespace std; 
+> 
+> int main()
+> {
+> 
+>     int int_minValue = INT_MIN;
+>     cout << "INT_MIN = " <<  int_minValue << endl;
+> 
+>     int int_maxValue = INT_MAX;
+>     cout << "INT_MIN = " <<  int_maxValue << endl;
+> 
+>     long long_minValue = LONG_MIN;
+>     cout << "LONG_MIN = " <<  long_minValue << endl;
+> 
+>     long long_maxValue = LONG_MAX;
+>     cout << "LONG_MIN = " <<  long_maxValue << endl;
+> 
+>     float float_minValue = FLT_MIN;
+>     cout << "FLT_MIN = " <<  float_minValue << endl;
+> 
+>     float float_maxValue = FLT_MAX;
+>     cout << "FLT_MIN = " <<  float_maxValue << endl;
+> 
+>     double double_minValue = DBL_MIN;
+>     cout << "DBL_MIN = " <<  double_minValue << endl;
+> 
+>     double double_maxValue = DBL_MAX;
+>     cout << "DBL_MIN = " <<  double_maxValue << endl;
+> 
+>     cout << endl;
+>     pause(); // system("pause"); 
+> 
+>     return 0;
+> }
+> 
+> ```
+>
+> 运行结果如下： 
+>
+> ```c++
+> INT_MIN = -2147483648
+> INT_MIN = 2147483647
+> LONG_MIN = -9223372036854775808
+> LONG_MIN = 9223372036854775807
+> FLT_MIN = 1.17549e-38
+> FLT_MIN = 3.40282e+38
+> DBL_MIN = 2.22507e-308
+> DBL_MIN = 1.79769e+308
+> ```
+> 
+> 
+> **查看`climits`和`cfloat`**
+>
+> ```c++
+> /usr/include/c++/8/climits
+> 
+> #pragma GCC system_header
+> 
+> #include <bits/c++config.h>
+> #include <limits.h>
+> ```
+> 
+> ```c++
+> /usr/include/c++/8/cfloat
+> 
+> #pragma GCC system_header
+> 
+> #include <bits/c++config.h>
+> #include <float.h>
+> ```
+> 
+> **查看`limits.h`和`float.h`**
+>
+> ```c++
+> /usr/lib/gcc/x86_64-linux-gnu/8/include/limits.h
+> 
+> /* Minimum and maximum values a `signed int' can hold.  */
+> #undef INT_MIN
+> #define INT_MIN (-INT_MAX - 1)
+> #undef INT_MAX
+> #define INT_MAX __INT_MAX__
+> 
+> /* Maximum value an `unsigned int' can hold.  (Minimum is 0).  */
+> #undef UINT_MAX
+> #define UINT_MAX (INT_MAX * 2U + 1U)
+> 
+> /* Minimum and maximum values a `signed long int' can hold.
+>    (Same as `int').  */
+> #undef LONG_MIN
+> #define LONG_MIN (-LONG_MAX - 1L)
+> #undef LONG_MAX
+> #define LONG_MAX __LONG_MAX__
+> 
+> /* Maximum value an `unsigned long int' can hold.  (Minimum is 0).  */
+> #undef ULONG_MAX
+> #define ULONG_MAX (LONG_MAX * 2UL + 1UL)
+> ```
+>
+> ```c++
+> /usr/lib/gcc/x86_64-linux-gnu/8/include/float.h
+> 
+> /* Minimum normalized positive floating-point number, b**(emin - 1).  */
+> #undef FLT_MIN
+> #undef DBL_MIN
+> #undef LDBL_MIN
+> #define FLT_MIN		__FLT_MIN__
+> #define DBL_MIN		__DBL_MIN__
+> #define LDBL_MIN	__LDBL_MIN__
+> 
+> /* Maximum representable finite floating-point number,
+> 
+> 	(1 - b**-p) * b**emax
+> */
+> #undef FLT_MAX
+> #undef DBL_MAX
+> #undef LDBL_MAX
+> #define FLT_MAX		__FLT_MAX__
+> #define DBL_MAX		__DBL_MAX__
+> #define LDBL_MAX	__LDBL_MAX__
+> ```
+>
 
+
+> <font color="gree"> 代码随想录 </font>
+>
+> 层序遍历，取每一层的最大值
+>
+> C++代码：
+>
+> ```c++
+> class Solution {
+> public:
+>     vector<int> largestValues(TreeNode* root) {
+>         queue<TreeNode*> que;
+>         if (root != NULL) que.push(root);
+>         vector<int> result;
+>         while (!que.empty()) {
+>             int size = que.size();
+>             int maxValue = INT_MIN; // 取每一层的最大值
+>             for (int i = 0; i < size; i++) {
+>                 TreeNode* node = que.front();
+>                 que.pop();
+>                 maxValue = node->val > maxValue ? node->val : maxValue;
+>                 if (node->left) que.push(node->left);
+>                 if (node->right) que.push(node->right);
+>             }
+>             result.push_back(maxValue); // 把最大值放进数组
+>         }
+>         return result;
+>     }
+> };
+> ```
+> 
+> 
 
 
 
