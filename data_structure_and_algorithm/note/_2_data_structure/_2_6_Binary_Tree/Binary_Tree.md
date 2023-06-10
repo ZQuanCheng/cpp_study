@@ -1695,8 +1695,64 @@
 #### 102.二叉树的层序遍历
 
 > 
-> https://leetcode.cn/problems/binary-tree-level-order-traversal/
+> `Leetcode`链接: https://leetcode.cn/problems/binary-tree-level-order-traversal/
 >
+> **102. 二叉树的层序遍历**
+> 
+> 给你二叉树的根节点 `root` ，返回其节点值的 **层序遍历** 。 （即逐层地，从左到右访问所有节点）。
+>
+>
+> **示例1：**
+> > 
+> > <div align=center>
+> > <img src="./images/tree_21.jpg" style="zoom:100%;"/>
+> > </div>
+> >  
+> ```html
+> 输入：root = [3,9,20,null,null,15,7]
+> 输出：[[3],[9,20],[15,7]]
+> ```
+>
+> **示例2：**
+> 
+> ```html
+> 输入：root = [1]
+> 输出：[[1]]
+> ```
+>
+> **示例3：**
+> 
+> ```html
+> 输入：root = []
+> 输出：[]
+> ```
+>
+> **提示：**
+> * 树中节点数目在范围 `[0, 2000]` 内
+> * `-1000 <= Node.val <= 1000`
+>
+> ```c++
+> /**
+>  * Definition for a binary tree node.
+>  * struct TreeNode {
+>  *     int val;
+>  *     TreeNode *left;
+>  *     TreeNode *right;
+>  *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+>  *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+>  *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+>  * };
+>  */
+> class Solution {
+> public:
+>     vector<vector<int>> levelOrder(TreeNode* root) {
+> 
+>     }
+> };
+> ```
+> 
+
+> 
 > **我自己的第一次做的时候的思路**
 > 
 > 设置两个队列`que1`，`que2`
@@ -2132,11 +2188,68 @@
 > 
 > **我们掌握了二叉树的层序遍历，那么如下九道力扣上的题目，只需要修改模板的两三行代码（不能再多了），便可打倒！**
 >
-> 
 
 
 >
-> https://leetcode.cn/problems/binary-tree-level-order-traversal-ii/
+> `Leetcode`链接: https://leetcode.cn/problems/binary-tree-level-order-traversal-ii/
+>
+> **107. 二叉树的层序遍历 II**
+> 
+> 给你二叉树的根节点 `root` ，返回其节点值 **自底向上的层序遍历** 。 （即按从叶子节点所在层到根节点所在的层，逐层从左向右遍历）
+>
+>
+> **示例1：**
+> > 
+> > <div align=center>
+> > <img src="./images/tree_22.jpg" style="zoom:100%;"/>
+> > </div>
+> >  
+> ```html
+> 输入：root = [3,9,20,null,null,15,7]
+> 输出：[[15,7],[9,20],[3]]
+> ```
+>
+> **示例2：**
+> 
+> ```html
+> 输入：root = [1]
+> 输出：[[1]]
+> ```
+>
+> **示例3：**
+> 
+> ```html
+> 输入：root = []
+> 输出：[]
+> ```
+>
+> **提示：**
+> * 树中节点数目在范围 `[0, 2000]` 内
+> * `-1000 <= Node.val <= 1000`
+>
+> ```c++
+> /**
+>  * Definition for a binary tree node.
+>  * struct TreeNode {
+>  *     int val;
+>  *     TreeNode *left;
+>  *     TreeNode *right;
+>  *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+>  *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+>  *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+>  * };
+>  */
+> class Solution {
+> public:
+>     vector<vector<int>> levelOrderBottom(TreeNode* root) {
+> 
+>     }
+> };
+> ```
+> 
+
+
+
 >
 > <font color="yellow"> 与`102.二叉树的层序遍历`的区别是，每一层保持从左到右，但是层数是自底向上的</font>
 >
@@ -2267,8 +2380,66 @@
 >
 
 
+
 >
-> https://leetcode.cn/problems/binary-tree-right-side-view/
+> `Leetcode`链接: https://leetcode.cn/problems/binary-tree-right-side-view/
+>
+> **199. 二叉树的右视图**
+> 
+> 给定一个二叉树的 根节点 `root`，想象自己站在它的右侧，按照从顶部到底部的顺序，返回从右侧所能看到的节点值。
+>
+>
+> **示例1：**
+> > 
+> > <div align=center>
+> > <img src="./images/tree_23.jpg" style="zoom:100%;"/>
+> > </div>
+> >  
+> ```html
+> 输入: [1,2,3,null,5,null,4]
+> 输出: [1,3,4]
+> ```
+>
+> **示例2：**
+> 
+> ```html
+> 输入: [1,null,3]
+> 输出: [1,3]
+> ```
+>
+> **示例3：**
+> 
+> ```html
+> 输入: []
+> 输出: []
+> ```
+>
+> **提示：**
+> * 二叉树的节点个数的范围是 `[0,100]`
+> * `-100 <= Node.val <= 100 `
+>
+> ```c++
+> /**
+>  * Definition for a binary tree node.
+>  * struct TreeNode {
+>  *     int val;
+>  *     TreeNode *left;
+>  *     TreeNode *right;
+>  *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+>  *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+>  *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+>  * };
+>  */
+> class Solution {
+> public:
+>     vector<int> rightSideView(TreeNode* root) {
+> 
+>     }
+> };
+> ```
+> 
+
+
 >
 > **本质上是统计每一层最右侧的节点, 在层序遍历的基础上修改**
 > 
@@ -2386,9 +2557,67 @@
 > **我们掌握了二叉树的层序遍历，那么如下九道力扣上的题目，只需要修改模板的两三行代码（不能再多了），便可打倒！**
 >
 
+
 >
-> https://leetcode.cn/problems/average-of-levels-in-binary-tree/
+> `Leetcode`链接: https://leetcode.cn/problems/average-of-levels-in-binary-tree/
 >
+> **637. 二叉树的层平均值**
+> 
+> 给定一个非空二叉树的根节点 `root` , 以数组的形式返回每一层节点的平均值。与实际答案相差 `10^-5` 以内的答案可以被接受。
+>
+>
+> **示例1：**
+> > 
+> > <div align=center>
+> > <img src="./images/tree_24.jpg" style="zoom:100%;"/>
+> > </div>
+> >  
+> ```html
+> 输入：root = [3,9,20,null,null,15,7]
+> 输出：[3.00000,14.50000,11.00000]
+> 解释：第 0 层的平均值为 3,第 1 层的平均值为 14.5,第 2 层的平均值为 11 。
+> 因此返回 [3, 14.5, 11] 。
+> ```
+>
+> **示例2：**
+> > 
+> > <div align=center>
+> > <img src="./images/tree_25.jpg" style="zoom:100%;"/>
+> > </div>
+> >  
+> ```html
+> 输入：root = [3,9,20,15,7]
+> 输出：[3.00000,14.50000,11.00000]
+> ```
+>
+> **提示：**
+> * 树中节点数量在 `[1, 104]` 范围内
+> * `-231 <= Node.val <= 231 - 1`
+>
+> ```c++
+> /**
+>  * Definition for a binary tree node.
+>  * struct TreeNode {
+>  *     int val;
+>  *     TreeNode *left;
+>  *     TreeNode *right;
+>  *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+>  *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+>  *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+>  * };
+>  */
+> class Solution {
+> public:
+>     vector<double> averageOfLevels(TreeNode* root) {
+> 
+>     }
+> };
+> ```
+> 
+
+
+
+
 > <font color="gree">
 > 
 > 思路如下：
@@ -2513,8 +2742,77 @@
 >
 
 >
-> https://leetcode.cn/problems/n-ary-tree-level-order-traversal/
+> `Leetcode`链接: https://leetcode.cn/problems/n-ary-tree-level-order-traversal/
 >
+>
+> **429. N 叉树的层序遍历**
+> 
+> 给定一个 `N` 叉树，返回其节点值的层序遍历。（即从左到右，逐层遍历）。
+> 
+> 树的序列化输入是用层序遍历，每组子节点都由 `null` 值分隔（参见示例）。
+>
+>
+> **示例1：**
+> > 
+> > <div align=center>
+> > <img src="./images/tree_26.png" style="zoom:100%;"/>
+> > </div>
+> >  
+> ```html
+> 输入：root = [1,null,3,2,4,null,5,6]
+> 输出：[[1],[3,2,4],[5,6]]
+> ```
+>
+> **示例2：**
+> > 
+> > <div align=center>
+> > <img src="./images/tree_27.png" style="zoom:100%;"/>
+> > </div>
+> >  
+> ```html
+> 输入：root = [1,null,2,3,4,5,null,null,6,7,null,8,null,9,10,null,null,11,null,12,null,13,null,null,14]
+> 输出：[[1],[2,3,4,5],[6,7,8,9,10],[11,12,13],[14]]
+> ```
+>
+> **提示：**
+> * 树的高度不会超过 `1000`
+> * 树的节点总数在 `[0, 10^4]` 之间
+>
+> ```c++
+> /*
+> // Definition for a Node.
+> class Node {
+> public:
+>     int val;
+>     vector<Node*> children;
+> 
+>     Node() {}
+> 
+>     Node(int _val) {
+>         val = _val;
+>     }
+> 
+>     Node(int _val, vector<Node*> _children) {
+>         val = _val;
+>         children = _children;
+>     }
+> };
+> */
+> 
+> class Solution {
+> public:
+>     vector<vector<int>> levelOrder(Node* root) {
+>         
+>     }
+> };
+> ```
+> 
+> 
+
+
+
+
+
 > 这道题与二叉树的层序遍历本质没有差别，只不过是多了几个树杈
 >
 > <font color="gree">
@@ -2640,9 +2938,58 @@
 >
 
 >
-> https://leetcode.cn/problems/find-largest-value-in-each-tree-row/
+> `Leetcode`链接: https://leetcode.cn/problems/find-largest-value-in-each-tree-row/
 >
+> **515. 在每个树行中找最大值**
 > 
+> 给定一棵二叉树的根节点 `root` ，请找出该二叉树中每一层的最大值。
+>
+>
+> **示例1：**
+> > 
+> > <div align=center>
+> > <img src="./images/tree_28.jpg" style="zoom:100%;"/>
+> > </div>
+> >  
+> ```html
+> 输入: root = [1,3,2,5,3,null,9]
+> 输出: [1,3,9]
+> ```
+>
+> **示例2：**
+> 
+> ```html
+> 输入: root = [1,2,3]
+> 输出: [1,3]
+> ```
+>
+> **提示：**
+> * 二叉树的节点个数的范围是 `[0,104]`
+> * `-2^31 <= Node.val <= 2^31 - 1`
+>
+> ```c++
+> /**
+>  * Definition for a binary tree node.
+>  * struct TreeNode {
+>  *     int val;
+>  *     TreeNode *left;
+>  *     TreeNode *right;
+>  *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+>  *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+>  *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+>  * };
+>  */
+> class Solution {
+> public:
+>     vector<int> largestValues(TreeNode* root) {
+> 
+>     }
+> };
+> ```
+> 
+
+
+
 > <font color="gree">
 > 
 > 思路如下：
@@ -2763,9 +3110,82 @@
 >
 
 >
-> https://leetcode.cn/problems/populating-next-right-pointers-in-each-node/
+> `Leetcode`链接: https://leetcode.cn/problems/populating-next-right-pointers-in-each-node/
 >
+> **116. 填充每个节点的下一个右侧节点指针**
+> 
+> 给定一个 **完美二叉树** ，其所有叶子节点都在同一层，每个父节点都有两个子节点。二叉树定义如下：
+> ```c++
+> struct Node {
+>   int val;
+>   Node *left;
+>   Node *right;
+>   Node *next;
+> }
+> ```
 >
+> 填充它的每个 `next` 指针，让这个指针指向其下一个右侧节点。如果找不到下一个右侧节点，则将 `next` 指针设置为 `NULL`。
+>
+> 初始状态下，所有 `next` 指针都被设置为 `NULL`。
+> 
+>
+> **示例1：**
+> > 
+> > <div align=center>
+> > <img src="./images/tree_29.png" style="zoom:100%;"/>
+> > </div>
+> >  
+> ```html
+> 输入：root = [1,2,3,4,5,6,7]
+> 输出：[1,#,2,3,#,4,5,6,7,#]
+> 解释：给定二叉树如图 A 所示，你的函数应该填充它的每个 next 指针，以指向其下一个右侧节点，
+> 如图 B 所示。序列化的输出按层序遍历排列，同一层节点由 next 指针连接，
+> '#' 标志着每一层的结束。
+> ```
+>
+> **示例2：**
+> 
+> ```html
+> 输入：root = []
+> 输出：[]
+> ```
+>
+> **提示：**
+> * 树中节点的数量在 `[0, 212 - 1]` 范围内
+> * `-1000 <= node.val <= 1000`
+>
+> ```c++
+> /*
+> // Definition for a Node.
+> class Node {
+> public:
+>     int val;
+>     Node* left;
+>     Node* right;
+>     Node* next;
+> 
+>     Node() : val(0), left(NULL), right(NULL), next(NULL) {}
+> 
+>     Node(int _val) : val(_val), left(NULL), right(NULL), next(NULL) {}
+> 
+>     Node(int _val, Node* _left, Node* _right, Node* _next)
+>         : val(_val), left(_left), right(_right), next(_next) {}
+> };
+> */
+> 
+> class Solution {
+> public:
+>     Node* connect(Node* root) {
+>         
+>     }
+> };
+> ```
+> 
+
+
+
+
+
 > <font color="gree">
 > 
 > 思路如下：
@@ -2922,8 +3342,82 @@
 >
 
 >
-> https://leetcode.cn/problems/populating-next-right-pointers-in-each-node-ii/
+> `Leetcode`链接: https://leetcode.cn/problems/populating-next-right-pointers-in-each-node-ii/
 >
+> **117. 填充每个节点的下一个右侧节点指针 II**
+> 
+> 给定一个二叉树：
+> ```c++
+> struct Node {
+>   int val;
+>   Node *left;
+>   Node *right;
+>   Node *next;
+> }
+> ```
+>
+> 填充它的每个 `next` 指针，让这个指针指向其下一个右侧节点。如果找不到下一个右侧节点，则将 `next` 指针设置为 `NULL` 。
+>
+> 初始状态下，所有 `next` 指针都被设置为 `NULL`。
+> 
+>
+> **示例1：**
+> > 
+> > <div align=center>
+> > <img src="./images/tree_30.png" style="zoom:100%;"/>
+> > </div>
+> >  
+> ```html
+> 输入：root = [1,2,3,4,5,null,7]
+> 输出：[1,#,2,3,#,4,5,7,#]
+> 解释：给定二叉树如图 A 所示，你的函数应该填充它的每个 next 指针，以指向其下一个右侧节点，
+> 如图 B 所示。序列化输出按层序遍历顺序（由 next 指针连接），'#' 表示每层的末尾。
+> ```
+>
+> **示例2：**
+> 
+> ```html
+> 输入：root = []
+> 输出：[]
+> ```
+>
+> **提示：**
+> * 树中节点的数量在 `[0, 6000]` 内
+> * `-100 <= Node.val <= 100`
+>
+> ```c++
+> /*
+> // Definition for a Node.
+> class Node {
+> public:
+>     int val;
+>     Node* left;
+>     Node* right;
+>     Node* next;
+> 
+>     Node() : val(0), left(NULL), right(NULL), next(NULL) {}
+> 
+>     Node(int _val) : val(_val), left(NULL), right(NULL), next(NULL) {}
+> 
+>     Node(int _val, Node* _left, Node* _right, Node* _next)
+>         : val(_val), left(_left), right(_right), next(_next) {}
+> };
+> */
+> 
+> class Solution {
+> public:
+>     Node* connect(Node* root) {
+>         
+>     }
+> };
+> ```
+> 
+
+
+
+
+
+
 > 与`116.填充每个节点的下一个右侧节点指针`没有任何区别
 >
 >
@@ -3051,8 +3545,55 @@
 >
 
 >
-> https://leetcode.cn/problems/populating-next-right-pointers-in-each-node-ii/
+> `Leetcode`链接: https://leetcode.cn/problems/populating-next-right-pointers-in-each-node-ii/
 >
+> **104. 二叉树的最大深度**
+>
+> 给定一个二叉树，找出其最大深度。
+>
+> 二叉树的深度为根节点到最远叶子节点的最长路径上的节点数。
+>
+> **说明:** 叶子节点是指没有子节点的节点。
+>
+>
+> **示例：**
+> 
+> 给定二叉树 [3,9,20,null,null,15,7]，
+> 
+> ```html
+>     3
+>    / \
+>   9  20
+>     /  \
+>    15   7
+> ```
+> 
+> 返回它的最大深度 `3` 。
+>
+> ```c++
+> /**
+>  * Definition for a binary tree node.
+>  * struct TreeNode {
+>  *     int val;
+>  *     TreeNode *left;
+>  *     TreeNode *right;
+>  *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+>  *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+>  *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+>  * };
+>  */
+> class Solution {
+> public:
+>     int maxDepth(TreeNode* root) {
+> 
+>     }
+> };
+> ```
+> 
+
+
+
+
 > 
 > <font color="gree">
 >
@@ -3129,7 +3670,7 @@
 > 在二叉树中，一层一层的来遍历二叉树，记录一下遍历的层数就是二叉树的深度，如图所示：
 > 
 > <div align=center>
-> <img src="./images/tree_21.png" style="zoom:100%"/>
+> <img src="./images/tree_31.png" style="zoom:100%"/>
 > </div>
 >
 > 所以这道题的迭代法就是一道模板题，可以使用二叉树层序遍历的模板来解决的。
@@ -3170,8 +3711,62 @@
 >
 
 >
-> https://leetcode.cn/problems/minimum-depth-of-binary-tree/
+> `Leetcode`链接: https://leetcode.cn/problems/minimum-depth-of-binary-tree/
 >
+> **111. 二叉树的最小深度**
+>
+> 给定一个二叉树，找出其最小深度。
+>
+> 最小深度是从根节点到最近叶子节点的最短路径上的节点数量。
+>
+> **说明:** 叶子节点是指没有子节点的节点。
+>
+>
+> **示例1：**
+> > 
+> > <div align=center>
+> > <img src="./images/tree_32.jpg" style="zoom:100%;"/>
+> > </div>
+> >  
+> ```html
+> 输入：root = [3,9,20,null,null,15,7]
+> 输出：2
+> ```
+>
+> **示例2：**
+> 
+> ```html
+> 输入：root = [2,null,3,null,4,null,5,null,6]
+> 输出：5
+> ```
+>
+> **提示：**
+> * 树中节点数的范围在 `[0, 105]` 内
+> * `-1000 <= Node.val <= 1000`
+>
+> ```c++
+> /**
+>  * Definition for a binary tree node.
+>  * struct TreeNode {
+>  *     int val;
+>  *     TreeNode *left;
+>  *     TreeNode *right;
+>  *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+>  *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+>  *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+>  * };
+>  */
+> class Solution {
+> public:
+>     int minDepth(TreeNode* root) {
+> 
+>     }
+> };
+> ```
+> 
+
+
+
 > 
 > <font color="gree">
 >
@@ -3292,6 +3887,108 @@
 > **致敬叶师傅！**
 > 
 > 
+
+
+
+
+
+
+--------------------------------------------------------------------------------
+
+### 非常经典的题目 226.翻转二叉树
+
+
+### 226.翻转二叉树
+
+> 
+> Leetcode链接: https://leetcode.cn/problems/invert-binary-tree/
+> 
+>
+> 给你一棵二叉树的根节点 `root` ，翻转这棵二叉树，并返回其根节点。
+>
+>
+> **示例1：**
+> > 
+> > <div align=center>
+> > <img src="./images/tree_33.jpg" style="zoom:100%;"/>
+> > </div>
+> >  
+> ```html
+> 输入：root = [4,2,7,1,3,6,9]
+> 输出：[4,7,2,9,6,3,1]
+> ```
+>
+> **示例2：**
+> > 
+> > <div align=center>
+> > <img src="./images/tree_34.jpg" style="zoom:100%;"/>
+> > </div>
+> >  
+> ```html
+> 输入：root = [2,1,3]
+> 输出：[2,3,1]
+> ```
+>
+>
+> **示例3：**
+> 
+> ```html
+> 输入：root = []
+> 输出：[]
+> ```
+>
+>
+> **提示：**
+> * 树中节点数目范围在 `[0, 100]` 内
+> * `-100 <= Node.val <= 100`
+>
+>
+> ```c++
+> /**
+>  * Definition for a binary tree node.
+>  * struct TreeNode {
+>  *     int val;
+>  *     TreeNode *left;
+>  *     TreeNode *right;
+>  *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+>  *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+>  *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+>  * };
+>  */
+> class Solution {
+> public:
+>     TreeNode* invertTree(TreeNode* root) {
+> 
+>     }
+> };
+> ```
+> 
+
+
+
+> 
+> <font color="gree">
+>
+> 思路如下：
+>
+> 
+>
+> </font>
+>
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

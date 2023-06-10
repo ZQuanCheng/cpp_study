@@ -16,56 +16,50 @@
 
 --------------------------------------------------------------------------------
 
-## 翻转二叉树 invert binary tree
+## 对称二叉树 symmetric tree
 
-## _1_invert_binary_tree.md
+## _1_symmetric_tree.md
 
 --------------------------------------------------------------------------------
 
-### 226.翻转二叉树
+### 101. 对称二叉树
 
-> Leetcode链接: https://leetcode.cn/problems/invert-binary-tree/
-
+> 
+> Leetcode链接: https://leetcode.cn/problems/symmetric-tree/
+> 
 >
-> 给你一棵二叉树的根节点 `root` ，翻转这棵二叉树，并返回其根节点。
+> 给你一个二叉树的根节点 `root` ， 检查它是否轴对称。
 >
 >
 > **示例1：**
 > > 
 > > <div align=center>
-> > <img src="./images/invert_binary_tree_1.jpg" style="zoom:100%;"/>
+> > <img src="./images/symmetric_tree_1.jpg" style="zoom:100%;"/>
 > > </div>
 > >  
 > ```html
-> 输入：root = [4,2,7,1,3,6,9]
-> 输出：[4,7,2,9,6,3,1]
+> 输入：root = [1,2,2,3,4,4,3]
+> 输出：true
 > ```
 >
 > **示例2：**
 > > 
 > > <div align=center>
-> > <img src="./images/invert_binary_tree_2.jpg" style="zoom:100%;"/>
+> > <img src="./images/symmetric_tree_2.jpg" style="zoom:100%;"/>
 > > </div>
 > >  
 > ```html
-> 输入：root = [2,1,3]
-> 输出：[2,3,1]
+> 输入：root = [1,2,2,null,3,null,3]
+> 输出：false
 > ```
->
->
-> **示例2：**
 > 
-> ```html
-> 输入：root = []
-> 输出：[]
-> ```
->
 >
 > **提示：**
-> * 树中节点数目范围在 `[0, 100]` 内
+> * 树中节点数目范围在 `[0, 1000]` 内
 > * `-100 <= Node.val <= 100`
 >
->
+> **进阶：** 你可以运用递归和迭代两种方法解决这个问题吗？
+> 
 > ```c++
 > /**
 >  * Definition for a binary tree node.
@@ -80,7 +74,7 @@
 >  */
 > class Solution {
 > public:
->     TreeNode* invertTree(TreeNode* root) {
+>     bool isSymmetric(TreeNode* root) {
 > 
 >     }
 > };
