@@ -253,8 +253,8 @@
 > > C++ STL中的`set`,`map`底层实现是红黑树，而不是`AVL`，否则需要频繁旋转操作
 > > 
 > > <div align=center>
-> > <img src="./images/hash_table_6.jpg" style="zoom:60%;"/>
-> > <img src="./images/hash_table_7.jpg" style="zoom:60%;"/>
+> > <img src="./images/hash_table_6.jpg" style="zoom:100%;"/>
+> > <img src="./images/hash_table_7.jpg" style="zoom:100%;"/>
 > > </div>
 > > 
 > > 注：红黑树是自平衡的二叉查找树，并不一定是完美的二叉查找树。
@@ -273,7 +273,7 @@
 > > 链式存储如图：
 > >  
 > > <div align=center>
-> > <img src="./images/tree_10.jpg" style="zoom:60%;"/>
+> > <img src="./images/tree_10.jpg" style="zoom:100%;"/>
 > > </div>
 > > 
 > 
@@ -282,7 +282,7 @@
 > > 其实就是用数组来存储二叉树，顺序存储的方式如图：
 > > 
 > > <div align=center>
-> > <img src="./images/tree_11.jpg" style="zoom:60%;"/>
+> > <img src="./images/tree_11.jpg" style="zoom:100%;"/>
 > > </div>
 > > 
 > > 用数组来存储二叉树如何遍历的呢？
@@ -330,7 +330,7 @@
 > > * 后序遍历：左右中
 > > 
 > > <div align=center>
-> > <img src="./images/tree_12.jpg" style="zoom:60%;"/>
+> > <img src="./images/tree_12.jpg" style="zoom:100%;"/>
 > > </div>
 > > 
 > >
@@ -338,7 +338,7 @@
 > > 再举一个例子
 > > 
 > > <div align=center>
-> > <img src="./images/tree_13.jpg" style="zoom:60%;"/>
+> > <img src="./images/tree_13.jpg" style="zoom:100%;"/>
 > > </div>
 > > 
 > > 先序：ABDEHCFIG
@@ -346,7 +346,7 @@
 > > 后序：DHEBIFGCA
 > > 
 > > <div align=center>
-> > <img src="./images/tree_14.jpg" style="zoom:60%;"/>
+> > <img src="./images/tree_14.jpg" style="zoom:100%;"/>
 > > </div>
 >
 > 
@@ -421,7 +421,7 @@
 
 --------------------------------------------------------------------------------
 
-### 二叉树的递归遍历
+### 二叉树的深度优先遍历（递归法）
 
 > 
 > https://programmercarl.com/%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E9%80%92%E5%BD%92%E9%81%8D%E5%8E%86.html
@@ -825,7 +825,7 @@
 
 --------------------------------------------------------------------------------
 
-### 二叉树的迭代遍历
+### 二叉树的深度优先遍历（迭代法）
 
 > 
 > https://programmercarl.com/%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E8%BF%AD%E4%BB%A3%E9%81%8D%E5%8E%86.html
@@ -958,7 +958,7 @@
 > 
 > https://leetcode.cn/problems/binary-tree-postorder-traversal/
 > 
-> <font color="yellow">我的迭代解法为</font>
+> <font color="yellow">我的迭代解法为（看了代码随想录的思路才会的）</font>
 > 
 > ```c++
 > class Solution {
@@ -1086,7 +1086,7 @@
 > 
 > https://leetcode.cn/problems/binary-tree-postorder-traversal/
 > 
-> <font color="yellow">我的优化后的迭代解法为</font>
+> <font color="yellow">我的优化后的迭代解法为（看了代码随想录的思路才会的）</font>
 > 
 > ```c++
 > class Solution {
@@ -1118,6 +1118,329 @@
 > 
 > 
 > 
+
+> 
+> <font color="gree">接下来是代码随想录的解析</font>
+>
+
+> **前序遍历（迭代法）**
+>
+> 我们先看一下前序遍历。
+> 
+> 前序遍历是`中左右`，每次先处理的是中间节点，那么先将根节点放入栈中，然后将右孩子加入栈，再加入左孩子。
+> 
+> 为什么要先加入 右孩子，再加入左孩子呢？ 因为这样出栈的时候才是中左右的顺序。
+> 
+> 动画如下：
+> 
+> <div align=center>
+> <img src="./images/tree_15.gif" style="zoom:100%;"/>
+> </div>
+>
+> 不难写出如下代码: （**注意代码中空节点不入栈**）
+>
+> ```c++
+> class Solution {
+> public:
+>     vector<int> preorderTraversal(TreeNode* root) {
+>         stack<TreeNode*> st;
+>         vector<int> result;
+>         if (root == NULL) return result;
+>         st.push(root);
+>         while (!st.empty()) {
+>             TreeNode* node = st.top();                       // 中
+>             st.pop();
+>             result.push_back(node->val);
+>             if (node->right) st.push(node->right);           // 右（空节点不入栈）
+>             if (node->left) st.push(node->left);             // 左（空节点不入栈）
+>         }
+>         return result;
+>     }
+> };
+> ```
+> 
+> 此时会发现貌似使用迭代法写出前序遍历并不难，确实不难。
+> 
+> **此时是不是想改一点前序遍历代码顺序就把中序遍历搞出来了？**
+> 
+> 其实还真不行！
+> 
+> 但接下来，**再用迭代法写中序遍历的时候，会发现套路又不一样了，目前的前序遍历的逻辑无法直接应用到中序遍历上**。
+>
+
+> 
+> **中序遍历（迭代法）**
+>
+> 为了解释清楚，我说明一下 刚刚在迭代的过程中，其实我们有两个操作：
+>
+> * 处理：将元素放进`result`数组中
+> * 访问：遍历节点
+> 
+> 分析一下为什么刚刚写的前序遍历的代码，不能和中序遍历通用呢，因为前序遍历的顺序是中左右，先访问的元素是中间节点，要处理的元素也是中间节点，所以刚刚才能写出相对简洁的代码，**因为要访问的元素和要处理的元素顺序是一致的，都是中间节点**。
+>
+> 那么再看看中序遍历，中序遍历是左中右，先访问的是二叉树顶部的节点，然后一层一层向下访问，直到到达树左面的最底部，再开始处理节点（也就是在把节点的数值放进`result`数组中），这就造成了**处理顺序和访问顺序是不一致的**。
+>
+> 那么**在使用迭代法写中序遍历，就需要借用指针的遍历来帮助访问节点，栈则用来处理节点上的元素**。
+> 
+> 动画如下：
+> 
+> <div align=center>
+> <img src="./images/tree_16.gif" style="zoom:100%;"/>
+> </div>
+>
+> 中序遍历，可以写出如下代码：
+>
+> ```c++
+> class Solution {
+> public:
+>     vector<int> inorderTraversal(TreeNode* root) {
+>         vector<int> result;
+>         stack<TreeNode*> st;
+>         TreeNode* cur = root;
+>         while (cur != NULL || !st.empty()) {
+>             if (cur != NULL) { // 指针来访问节点，访问到最底层
+>                 st.push(cur); // 将访问的节点放进栈
+>                 cur = cur->left;                // 左
+>             } else {
+>                 cur = st.top(); // 从栈里弹出的数据，就是要处理的数据（放进result数组里的数据）
+>                 st.pop();
+>                 result.push_back(cur->val);     // 中
+>                 cur = cur->right;               // 右
+>             }
+>         }
+>         return result;
+>     }
+> };
+> ```
+> 
+> 
+> 
+
+>
+> **后序遍历（迭代法）**
+>
+> 再来看后序遍历，先序遍历是中左右，后续遍历是左右中，那么我们只需要调整一下先序遍历的代码顺序，就变成中右左的遍历顺序，然后在反转result数组，输出的结果顺序就是左右中了，如下图：
+> 
+> <div align=center>
+> <img src="./images/tree_17.png" style="zoom:100%;"/>
+> </div>
+>
+> **所以后序遍历只需要前序遍历的代码稍作修改就可以了，代码如下：**
+>
+> ```c++
+> class Solution {
+> public:
+>     vector<int> postorderTraversal(TreeNode* root) {
+>         stack<TreeNode*> st;
+>         vector<int> result;
+>         if (root == NULL) return result;
+>         st.push(root);
+>         while (!st.empty()) {
+>             TreeNode* node = st.top();
+>             st.pop();
+>             result.push_back(node->val);
+>             if (node->left) st.push(node->left); // 相对于前序遍历，这更改一下入栈顺序 （空节点不入栈）
+>             if (node->right) st.push(node->right); // 空节点不入栈
+>         }
+>         reverse(result.begin(), result.end()); // 将结果反转之后就是左右中的顺序了
+>         return result;
+>     }
+> };
+> ```
+> 
+> 
+> 
+
+
+> 
+> **总结**
+>
+> 此时我们用迭代法写出了二叉树的前后中序遍历，大家可以看出前序和中序是完全两种代码风格，并不像递归写法那样代码稍做调整，就可以实现前后中序。
+>
+> **这是因为前序遍历中访问节点（遍历节点）和处理节点（将元素放进`result`数组中）可以同步处理，但是中序就无法做到同步！**
+>
+> 上面这句话，可能一些同学不太理解，建议自己亲手用迭代法，先写出来前序，再试试能不能写出中序，就能理解了。
+>
+> **那么问题又来了，难道 二叉树前后中序遍历的迭代法实现，就不能风格统一么（即前序遍历 改变代码顺序就可以实现中序 和 后序）？**
+>
+> 当然可以，这种写法，还不是很好理解，我们将在下一篇文章里重点讲解，敬请期待！
+>
+> 
+
+
+
+--------------------------------------------------------------------------------
+
+### 二叉树的深度优先遍历（统一迭代法）
+
+>
+> https://programmercarl.com/%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E7%BB%9F%E4%B8%80%E8%BF%AD%E4%BB%A3%E6%B3%95.html#%E8%BF%AD%E4%BB%A3%E6%B3%95%E4%B8%AD%E5%BA%8F%E9%81%8D%E5%8E%86
+>
+
+>
+> 此时我们在[二叉树：一入递归深似海，从此offer是路人](https://programmercarl.com/%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E9%80%92%E5%BD%92%E9%81%8D%E5%8E%86.html) 中用递归的方式，实现了二叉树前中后序的遍历。
+> 
+> 在[二叉树：听说递归能做的，栈也能做！](https://programmercarl.com/%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E8%BF%AD%E4%BB%A3%E9%81%8D%E5%8E%86.html)中用栈实现了二叉树前后中序的迭代遍历（非递归）。
+>
+> 之后我们发现**迭代法实现的先中后序，其实风格也不是那么统一，除了先序和后序，有关联，中序完全就是另一个风格了，一会用栈遍历，一会又用指针来遍历**。
+>
+> 实践过的同学，也会发现使用迭代法实现先中后序遍历，很难写出统一的代码，不像是递归法，实现了其中的一种遍历方式，其他两种只要稍稍改一下节点顺序就可以了。
+>
+> 其实**针对三种遍历方式，使用迭代法是可以写出统一风格的代码！**
+> 
+> **重头戏来了，接下来介绍一下统一写法**。
+>
+> 我们以中序遍历为例，在[二叉树：听说递归能做的，栈也能做！](https://programmercarl.com/%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E8%BF%AD%E4%BB%A3%E9%81%8D%E5%8E%86.html)中提到说使用栈的话，**无法同时解决访问节点（遍历节点）和处理节点（将元素放进结果集）不一致的情况**。
+>
+> **那我们就将访问的节点放入栈中，把要处理的节点也放入栈中但是要做标记。**
+> 
+> 如何标记呢，**就是要处理的节点放入栈之后，紧接着放入一个空指针作为标记**。 这种方法也可以叫做标记法。
+>
+> 
+> 
+
+#### 迭代法中序遍历
+
+>
+> 中序遍历代码如下：（详细注释）
+>
+> ```c++
+> class Solution {
+> public:
+>     vector<int> inorderTraversal(TreeNode* root) {
+>         vector<int> result;
+>         stack<TreeNode*> st;
+>         if (root != NULL) st.push(root);
+>         while (!st.empty()) {
+>             TreeNode* node = st.top();
+>             if (node != NULL) {
+>                 st.pop(); // 将该节点弹出，避免重复操作，下面再将右中左节点添加到栈中
+>                 if (node->right) st.push(node->right);  // 添加右节点（空节点不入栈）
+> 
+>                 st.push(node);                          // 添加中节点
+>                 st.push(NULL); // 中节点访问过，但是还没有处理，加入空节点做为标记。
+> 
+>                 if (node->left) st.push(node->left);    // 添加左节点（空节点不入栈）
+>             } else { // 只有遇到空节点的时候，才将下一个节点放进结果集
+>                 st.pop();           // 将空节点弹出
+>                 node = st.top();    // 重新取出栈中元素
+>                 st.pop();
+>                 result.push_back(node->val); // 加入到结果集
+>             }
+>         }
+>         return result;
+>     }
+> };
+> ```
+> 
+> 看代码有点抽象我们来看一下动画(中序遍历)：
+> 
+> <div align=center>
+> <img src="./images/tree_18.gif" style="zoom:100%;"/>
+> </div>
+>
+> 动画中，`result`数组就是最终结果集。
+> 
+> 可以看出我们将访问的节点直接加入到栈中，但如果是处理的节点则后面放入一个空节点， 这样只有空节点弹出的时候，才将下一个节点放进结果集。
+> 
+> 此时我们再来看前序遍历代码。
+> 
+> 
+
+
+#### 迭代法前序遍历
+
+>
+> 迭代法前序遍历代码如下： (**注意此时我们和中序遍历相比仅仅改变了两行代码的顺序**)
+>
+> ```c++
+> class Solution {
+> public:
+>     vector<int> preorderTraversal(TreeNode* root) {
+>         vector<int> result;
+>         stack<TreeNode*> st;
+>         if (root != NULL) st.push(root);
+>         while (!st.empty()) {
+>             TreeNode* node = st.top();
+>             if (node != NULL) {
+>                 st.pop();
+>                 if (node->right) st.push(node->right);  // 右
+>                 if (node->left) st.push(node->left);    // 左
+>                 st.push(node);                          // 中
+>                 st.push(NULL);
+>             } else {
+>                 st.pop();
+>                 node = st.top();
+>                 st.pop();
+>                 result.push_back(node->val);
+>             }
+>         }
+>         return result;
+>     }
+> };
+> ```
+> 
+
+
+#### 迭代法后序遍历
+
+> 
+> 后续遍历代码如下： (**注意此时我们和中序遍历相比仅仅改变了两行代码的顺序**)
+>
+> ```c++
+> class Solution {
+> public:
+>     vector<int> postorderTraversal(TreeNode* root) {
+>         vector<int> result;
+>         stack<TreeNode*> st;
+>         if (root != NULL) st.push(root);
+>         while (!st.empty()) {
+>             TreeNode* node = st.top();
+>             if (node != NULL) {
+>                 st.pop();
+>                 st.push(node);                          // 中
+>                 st.push(NULL);
+> 
+>                 if (node->right) st.push(node->right);  // 右
+>                 if (node->left) st.push(node->left);    // 左
+> 
+>             } else {
+>                 st.pop();
+>                 node = st.top();
+>                 st.pop();
+>                 result.push_back(node->val);
+>             }
+>         }
+>         return result;
+>     }
+> };
+> ```
+> 
+
+#### 总结
+
+>
+> 此时我们写出了统一风格的迭代法，不用在纠结于前序写出来了，中序写不出来的情况了。
+> 
+> 但是**统一风格的迭代法并不好理解，而且想在面试直接写出来还有难度的**。
+> 
+> 所以**大家根据自己的个人喜好，对于二叉树的前中后序遍历，选择一种自己容易理解的递归和迭代法**。
+> 
+> 
+> 
+
+
+
+
+--------------------------------------------------------------------------------
+
+### 二叉树的广度优先遍历（层序遍历法）
+
+
+
+
+
+
 
 
 
