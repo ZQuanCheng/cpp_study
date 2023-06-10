@@ -1301,6 +1301,19 @@
 
 #### 迭代法中序遍历
 
+> 
+> 看代码有点抽象我们来看一下动画(中序遍历)：
+> 
+> <div align=center>
+> <img src="./images/tree_18.gif" style="zoom:100%;"/>
+> </div>
+>
+> 动画中，`result`数组就是最终结果集。
+> 
+> 可以看出我们将访问的节点直接加入到栈中，但如果是处理的节点则后面放入一个空节点， 这样只有空节点弹出的时候，才将下一个节点放进结果集。
+> 
+> 此时我们再来看前序遍历代码。
+> 
 >
 > 中序遍历代码如下：（详细注释）
 >
@@ -1333,19 +1346,99 @@
 > };
 > ```
 > 
-> 看代码有点抽象我们来看一下动画(中序遍历)：
 > 
-> <div align=center>
-> <img src="./images/tree_18.gif" style="zoom:100%;"/>
-> </div>
+> <font color="yellow">将`st.pop()`提出来</font>
 >
-> 动画中，`result`数组就是最终结果集。
+> ```c++
+> class Solution {
+> public:
+>     vector<int> inorderTraversal(TreeNode* root) {
+>         vector<int> result;
+>         stack<TreeNode*> st;
+>         if (root != NULL) st.push(root);
+>         while (!st.empty()) {
+>             TreeNode* node = st.top();
+>             st.pop();        
+>             if (node != NULL) {
+>                 if (node->right) st.push(node->right);  // 添加右节点（空节点不入栈）
 > 
-> 可以看出我们将访问的节点直接加入到栈中，但如果是处理的节点则后面放入一个空节点， 这样只有空节点弹出的时候，才将下一个节点放进结果集。
+>                 st.push(node);                          // 添加中节点
+>                 st.push(NULL); // 中节点访问过，但是还没有处理，加入空节点做为标记。
 > 
-> 此时我们再来看前序遍历代码。
+>                 if (node->left) st.push(node->left);    // 添加左节点（空节点不入栈）
+>             } else { // 只有遇到空节点的时候，才将下一个节点放进结果集
+>                 node = st.top();    // 重新取出栈中元素
+>                 st.pop();
+>                 result.push_back(node->val); // 加入到结果集
+>             }
+>         }
+>         return result;
+>     }
+> };
+> ```
+>
 > 
 > 
+> <font color="yellow">我的理解如下</font>
+>
+> <font color="yellow">从`root`节点开始，</font>
+> 
+> * <font color="yellow">如果`sta.top() != nullptr`</font>
+> > 
+> > 栈`sta`中按顺序存入`右中左`节点，`中`后添加`nullptr`作为标记, 即`右-中-nullptr-左`， 然后进入下一次循环。
+> > 
+> > 注意：只有如果`右`或`左`为空，就不放入。也就是说，`sta`不会有连续两个元素为`nullptr`。
+> > 
+> > 可能有各种情况, 例如
+> > `第1次循环-第二次循环-第三四循环-第四次循环的情况为`
+> > `（右中-null-左）-（中-null-左）-（中-null-左）-（右中-null）`
+> > 
+> > 疑问：上一次循环的`左`和这次循环的`中`不是同一个吗？
+> > 是的，所以每次进入循环，我们会先取出`sta.top()`，然后作为新的中节点开始检测左右，然后再放入，不会有重复的节点
+> > 
+> > 
+> > 只要没探索到最左侧，每次进入循环时，栈`sta`顶部`sta.top()`必定不为空`nullptr`(左侧的节点一直有)，当检测到最左侧时，存入`右中左`节点后，`sta.top() == nullptr`，因为最左侧节点的左侧已经没有了。这时候重新进入循环，转到了`sta.top() == nullptr`
+> > 
+> > 所以当最左侧探测完后，实际放入`result`的情况是这样
+> > `（右中-null）-（中-null）-（中-null）-（右中-null）`
+>
+> * <font color="yellow">如果`sta.top() == nullptr`</font>
+> > 
+> > 说明该进行处理了
+> > 
+> > 取出下一个`top()`，由于之前我们保证了`sta`不会有连续两个元素为`nullptr`。,此时取出的元素必然为`node`，所以不需要判定是否为空 ，直接放入结果集即可
+> > 
+> > 当把`中`放入后，下一次循环检测到的`sta.top()`可能为`右`，则会针对`右子树`进行与`root`同样的检测，直到处理完成，返回
+> > 
+> > 直到处理到`root`，然后处理`root`的右子树，同样的检测流程
+>
+> 
+> <font color="yellow">可以看出，统一风格的迭代法并不好理解，而且想在面试直接写出来还有难度的。</font>
+> 
+> 
+> 
+> <font color="gree">总结
+>
+> **将访问的节点放入栈中**: 中序遍历，每次循环结束时，下一次循环要访问的是左节点，所以最后把按照右中左的顺序放入栈中
+> 
+> **把要处理的节点也放入栈中，紧接着放入一个空指针作为标记**：无论哪种遍历，要处理的节点是每次循环进入时的节点（作为当前中节点）
+>
+> 
+> </font>
+> 
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 #### 迭代法前序遍历
@@ -1380,6 +1473,61 @@
 > };
 > ```
 > 
+> 
+> <font color="yellow">将`st.pop()`提出来</font>
+> 
+> ```c++
+> class Solution {
+> public:
+>     vector<int> preorderTraversal(TreeNode* root) {
+>         vector<int> result;
+>         stack<TreeNode*> st;
+>         if (root != NULL) st.push(root);
+>         while (!st.empty()) {
+>             TreeNode* node = st.top();
+>             st.pop();
+>             if (node != NULL) {
+>                 if (node->right) st.push(node->right);  // 右
+>                 if (node->left) st.push(node->left);    // 左
+>                 st.push(node);                          // 中
+>                 st.push(NULL);
+>             } else {
+>                 node = st.top();
+>                 st.pop();
+>                 result.push_back(node->val);
+>             }
+>         }
+>         return result;
+>     }
+> };
+> ```
+> 
+> 
+> <font color="yellow">我的理解如下</font>
+>
+> <font color="yellow">从`root`节点开始，</font>
+> 
+> * <font color="yellow">如果`sta.top() != nullptr`</font>
+> > 
+> > 栈`sta`中按顺序存入`右左中`节点，`中`后添加`nullptr`作为标记, 即`右-左-中-nullptr`， 然后进入下一次循环。
+> > 
+> > 下一次循环会检测到`sta.top() == nullptr`，从而需要再出栈紧跟后面的中节点，加入`result`集
+> > 
+> > 再下一次循环就会检测到`左`节点，进入`sta.top() != nullptr`，即开始处理左子树，与`root`一样的方式。等到处理完左子树，就会重新检测到`右`节点，进行处理。
+> > 
+> 
+> 
+> 
+> <font color="gree">总结
+>
+> **将访问的节点放入栈中**: 前序遍历，每次循环结束时，下一次循环要访问的是中节点（要存储），所以最后把按照右左中的顺序放入栈中
+> 
+> **把要处理的节点也放入栈中，紧接着放入一个空指针作为标记**：无论哪种遍历，要处理的节点是每次循环进入时的节点（作为当前中节点）
+>
+> 
+> </font>
+
+
 
 
 #### 迭代法后序遍历
@@ -1416,6 +1564,69 @@
 > };
 > ```
 > 
+> 
+> <font color="yellow">将`st.pop()`提出来</font>
+> 
+> ```c++
+> class Solution {
+> public:
+>     vector<int> postorderTraversal(TreeNode* root) {
+>         vector<int> result;
+>         stack<TreeNode*> st;
+>         if (root != NULL) st.push(root);
+>         while (!st.empty()) {
+>             TreeNode* node = st.top();
+>             st.pop();
+>             if (node != NULL) {
+>                 st.push(node);                          // 中
+>                 st.push(NULL);
+> 
+>                 if (node->right) st.push(node->right);  // 右
+>                 if (node->left) st.push(node->left);    // 左
+> 
+>             } else {
+>                 node = st.top();
+>                 st.pop();
+>                 result.push_back(node->val);
+>             }
+>         }
+>         return result;
+>     }
+> };
+> ```
+> 
+> 
+> 
+> <font color="yellow">我的理解如下</font>
+>
+> <font color="yellow">从`root`节点开始，</font>
+> 
+> * <font color="yellow">如果`sta.top() != nullptr`</font>
+> > 
+> > 栈`sta`中按顺序存入`中右左`节点，`中`后添加`nullptr`作为标记, 即`中-nullptr-右-左`， 然后进入下一次循环。
+> > 
+> > 下一次循环就会检测到`左`节点，进入`sta.top() != nullptr`，即开始处理左子树，与`root`一样的方式。等到处理完左子树，就会重新检测到`右`节点，进行处理。
+> > 
+> > 再之后，会检测到`sta.top() == nullptr`，从而需要再出栈紧跟后面的中节点，加入`result`集
+> > 
+> > 
+> 
+> 
+> 
+> <font color="gree">总结
+>
+> **将访问的节点放入栈中**: 后序遍历，每次循环结束时，下一次循环要访问的是左节点（要存储），所以最后把按照中右左的顺序放入栈中
+> 
+> **把要处理的节点也放入栈中，紧接着放入一个空指针作为标记**：无论哪种遍历，要处理的节点是每次循环进入时的节点（作为当前中节点）
+> 
+> 
+> </font>
+> 
+> 
+> 
+
+
+
 
 #### 总结
 
@@ -1434,7 +1645,482 @@
 
 --------------------------------------------------------------------------------
 
-### 二叉树的广度优先遍历（层序遍历法）
+### 二叉树的广度优先遍历（层序遍历法）(用`std::queue`实现)
+
+
+
+
+
+> 
+> 层序遍历：即逐层地，从左到右访问所有节点
+> 
+> **学会二叉树的层序遍历，可以一口气打完以下十题：**
+> 
+> * `102.`二叉树的层序遍历
+> * `107.`二叉树的层次遍历II
+> * `199.`二叉树的右视图
+> * `637.`二叉树的层平均值
+> * `429.`N叉树的层序遍历
+> * `515.`在每个树行中找最大值
+> * `116.`填充每个节点的下一个右侧节点指针
+> * `117.`填充每个节点的下一个右侧节点指针II
+> * `104.`二叉树的最大深度
+> * `111.`二叉树的最小深度
+> 
+> 
+> <div align=center>
+> <img src="./images/tree_19.gif" style="zoom:100%"/>
+> </div>
+>
+> 
+> 
+
+
+
+
+#### 102.二叉树的层序遍历
+
+> 
+> https://leetcode.cn/problems/binary-tree-level-order-traversal/
+>
+> **我自己的第一次做的时候的思路**
+> 
+> 设置两个队列`que1`，`que2`
+>
+> 设置结果集`vector<vector<int>> result`
+>
+> 将第`1`层的`root`节点入队列`que1`, 将`root->val`加入`result[0]`
+>
+> 设置层数标志`floor`
+>
+> 开始`while(floor)`循环
+> 
+> * 内嵌`while(!que1.empty())`循环， 将`que1`中存储的单层节点的子节点全部存入`que2`
+> 
+> > 注意不能用`for(int i=0; i < que1.size(); i++)`循环，因为当`que1.pop()`后，`que1.size()`会发生变化
+> > 
+> > 具体做法如下：
+> > 
+> > 出队列元素`node = que1.front(); que1.pop();`
+> > 
+> > 将`node`的左右子节点`node->left`和`node->right`都入队列`que2.push()`; 注意，空节点不入队列;
+> > 
+> > 最后所有的下一层的节点都在`que2`中, 且`que1`为空
+>
+> * 检查`que2`，若为空，说明已经是上一次循环已经到达最后一层，全部节点检测左右都未发现子节点，需要停止`while(floor)`外循环，`break`
+> 
+> * 内嵌`while(!que2.empty())`循环, 存储`que2`这一层节点的值, 并将`que2`的节点放入`que1`
+>
+> > 注意不能用`for(int i=0; i < que2.size(); i++)`循环，因为当`que2.pop()`后，`que2.size()`会发生变化
+> > 
+> > 具体做法如下：
+> > 
+> > 设置临时`vector<int> vec`,将`que2`中的节点`node`出队列，将这些节点的值加入`vec.push_back(node->val);`，最后将`node`放入`que1`; 
+> > 
+> > 最后`result.push_back(vec)`;
+> > 
+> 
+> * `floor++` 更新层数标志
+>
+> **我的代码如下：**
+> 
+> ```c++
+> class Solution {
+> public:
+>     vector<vector<int>> levelOrder(TreeNode* root) {
+>         // 设置两个队列que1，que2； 设置结果集result; 
+>         queue<TreeNode*> que1;
+>         queue<TreeNode*> que2;
+>         vector<vector<int>> result;
+> 
+>         // 如果root 为空，直接返回
+>         if(root == nullptr) return result;
+> 
+>         // 将第1层的root节点入队列que1, 将root->val加入result
+>         que1.push(root);
+>         result.push_back(vector<int>{root->val});
+> 
+>         // 设置层数标志floor
+>         int floor = 2; // 因为root已经处理过了，所以从第2层开始
+>         
+>         // 开始循环
+>         while(floor) {
+>             // 将que1中存储的单层节点的子节点全部存入que2
+>             while(!que1.empty()) { // 不能for(int i=0; i < que1.size(); i++) 因为size()会变化
+>                 TreeNode* node = que1.front();
+>                 que1.pop();
+>                 if(node->left != nullptr) que2.push(node->left);
+>                 if(node->right != nullptr) que2.push(node->right);
+>             } // 循环结束后que1为空
+> 
+>             // 若que2为空，则说明已经到达最后一层，停止循环
+>             if(que2.empty()) break;
+> 
+>             // 存储que2这一层节点的值, 并将que2的节点放入que1
+>             vector<int> vec;
+>             while(!que2.empty()) { // 不能for(int i=0; i < que2.size(); i++) 因为size()会变化
+>                 TreeNode* node = que2.front();
+>                 que2.pop();
+>                 vec.push_back(node->val);
+>                 que1.push(node);
+>             } 
+>             result.push_back(vec);
+> 
+>             // 更新层数标志
+>             floor++;
+>         }
+> 
+>         return result;
+>     }
+> };
+> ```
+> 
+>
+> **我的实机测试代码如下：**
+>
+> ```c++
+> #include <iostream> 
+> #include <vector>
+> #include <queue>
+> using namespace std;
+> 
+> struct TreeNode {
+>     int val;
+>     TreeNode *left;
+>     TreeNode *right;
+>     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+>     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+>     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+> };
+> 
+> int main()
+> {
+>     TreeNode* node_5 = new TreeNode(7);
+>     TreeNode* node_4 = new TreeNode(15);
+>     TreeNode* node_3 = new TreeNode(20, node_4, node_5);
+>     TreeNode* node_2 = new TreeNode(9);
+>     TreeNode* root = new TreeNode(3, node_2, node_3);
+> 
+> 
+>     // 设置两个队列que1，que2； 设置结果集result; 
+>     queue<TreeNode*> que1;
+>     queue<TreeNode*> que2;
+>     vector<vector<int>> result;
+> 
+>     // 如果root 为空，直接返回
+>     if(root == nullptr) return 0;
+> 
+>     // 将第1层的root节点入队列que1, 将root->val加入result
+>     que1.push(root);
+>     result.push_back(vector<int>{root->val});
+> 
+>     // 设置层数标志floor
+>     int floor = 2;
+>     
+>     // 开始循环
+>     while(floor) {
+>         // 将que1中存储的单层节点的子节点全部存入que2
+>         while(!que1.empty()) {
+>             TreeNode* node = que1.front();
+>             que1.pop();
+>             if(node->left != nullptr) que2.push(node->left);
+>             if(node->right != nullptr) que2.push(node->right);
+>         } // 循环结束后que1为空
+> 
+>         // 若que2为空，则说明已经到达最后一层，停止循环
+>         if(que2.empty()) break;
+> 
+>         // 显示当前层数，以及节点数
+>         cout << "floor: " << floor << ", que2.size(): " << que2.size() << endl;
+> 
+>         // 存储que2这一层节点的值, 并将que2的节点放入que1
+>         vector<int> vec;
+>         while(!que2.empty())  {            
+>             TreeNode* node = que2.front();
+>             que2.pop();
+>             vec.push_back(node->val);
+>             que1.push(node);
+> 
+>             // 显示当前层数，以及节点值
+>             cout << "floor: " << floor << ", node->val: " << node->val << endl;
+>         } 
+>         cout << endl;
+> 
+>         result.push_back(vec);
+> 
+>         // 更新层数标志
+>         floor++;
+>     }
+> 
+> 
+>     delete root;
+>     delete node_2; 
+>     delete node_3; 
+>     delete node_4; 
+>     delete node_5; 
+> 
+>     cout << endl;
+>     pause(); // system("pause"); 
+> 
+>     return 0;
+> }
+> ```
+> 
+>
+> **实机运行结果如下：**
+>
+> ```c++
+> floor: 2, que2.size(): 2
+> floor: 2, node->val: 9
+> floor: 2, node->val: 20
+> 
+> floor: 3, que2.size(): 2
+> floor: 3, node->val: 15
+> floor: 3, node->val: 7
+> ```
+>
+>
+> **优化思路：只用一个辅助队列**
+>
+> 设置一个队列`que`，设置结果集`result`
+>
+> 将第`1`层的`root`节点入队列`que1`, 将`root->val`加入`result`
+>
+> 设置层数标志`floor`
+>
+> 开始`while(!que.empty())`循环，将`que`中存储的单层节点的子节点全部存入`que`队尾, 同时记得存储左右子节点的节点值
+> > 
+> > 具体做法如下：
+> > 
+> > * 暂存当前层的节点数量`int floor_size = que.size()`
+> > 
+> > * 内嵌`for(int i=0; i < floor_size; i++)`循环，将当前层的节点一一取出，找到左右子节点，并将子节点的值存入result，将子节点入队列`que`
+> > 
+> > 
+> > 层数标志增加`floor++`
+> > 
+> >  
+>
+> ```c++
+> class Solution {
+> public:
+>     vector<vector<int>> levelOrder(TreeNode* root) {
+>         // 设置两个队列que； 设置结果集result; 
+>         queue<TreeNode*> que;
+>         vector<vector<int>> result;
+> 
+>         // 如果root 为空，直接返回
+>         if(root == nullptr) return result;
+> 
+>         // 将第1层的root节点入队列que, 将root->val加入result
+>         que.push(root);
+>         result.push_back(vector<int>{root->val});
+> 
+>         // 设置层数标志floor
+>         int floor = 2; 
+> 
+>         // 将que中存储的单层节点的子节点全部存入que队尾, 同时记得存储节点值
+>         while(!que.empty()) { 
+>             // 暂存当前层的节点数量
+>             int floor_size = que.size();
+>             // 将当前层的节点取出，找到左右子节点，并将子节点的值存入vector<int>，将子节点入队列que
+>             vector<int> vec; 
+>             for(int i=0; i < floor_size; i++) {
+>                 TreeNode* node = que.front();
+>                 que.pop();
+>                 if(node->left != nullptr) {
+>                     vec.push_back(node->left->val);
+>                     que.push(node->left);
+>                 }
+>                 if(node->right != nullptr) {
+>                     vec.push_back(node->right->val);
+>                     que.push(node->right);
+>                 }
+>             }
+> 
+>             // 若que为空，则说明已经到达最后一层，停止循环
+>             if(que.empty()) break;
+>                 
+>             // 将子节点值存储result
+>             result.push_back(vec);
+> 
+>             // 更新层数标志
+>             floor++;
+>         }
+> 
+>         return result;
+>     }
+> };
+> ```
+> 
+>
+> **更进一步优化：代码更简洁**
+>
+>
+> 设置一个队列`que`，设置结果集`result`
+>
+> 设置层数标志`floor`
+>
+> 开始`while(!que.empty())`循环，将`que`中存储的单层节点值放入vector<int>,然后将左右子节点全部存入`que`队尾
+> > 
+> > 具体做法如下：
+> > 
+> > * 暂存当前层的节点数量`int floor_size = que.size()`
+> > 
+> > * 内嵌`for(int i=0; i < floor_size; i++)`循环，将当前层的节点一一取出，将当前层的节点值存入result； 找到左右子节点，将子节点入队列`que`
+> > 
+> > 
+> > 层数标志增加`floor++`
+> > 
+> >  
+>
+> ```c++
+> class Solution {
+> public:
+>     vector<vector<int>> levelOrder(TreeNode* root) {
+>         // 设置两个队列que； 设置结果集result; 
+>         queue<TreeNode*> que;
+>         vector<vector<int>> result;
+> 
+>         // 如果root 为空，直接返回
+>         if(root == nullptr) return result;
+> 
+>         // 将第1层的root节点入队列que
+>         que.push(root);
+> 
+>         // 设置层数标志floor
+>         int floor = 1; 
+> 
+>         // 将que中存储的单层节点值放入vector<int>,然后将左右子节点全部存入que队尾
+>         while(!que.empty()) { 
+>             // 暂存当前层的节点数量
+>             int floor_size = que.size();
+>             // 将当前层的节点取出，节点值存入vector<int>，找到左右子节点，将下一层的子节点入队que
+>             vector<int> vec; 
+>             for(int i=0; i < floor_size; i++) {
+>                 TreeNode* node = que.front();
+>                 que.pop();
+>                 vec.push_back(node->val);
+>                 if(node->left != nullptr) que.push(node->left);
+>                 if(node->right != nullptr) que.push(node->right);
+>             }
+>                 
+>             // 将当前层的节点值存储result
+>             result.push_back(vec);
+> 
+>             // 更新层数标志
+>             floor++;
+>         }
+> 
+>         return result;
+>     }
+> };
+> ```
+> 
+> 
+
+
+
+
+
+
+> <font color="gree"> 代码随想录 </font>
+>
+> 我们之前讲过了三篇关于二叉树的深度优先遍历的文章：
+>
+> 接下来我们再来介绍二叉树的另一种遍历方式：层序遍历。
+> 
+> 层序遍历一个二叉树。就是从左到右一层一层的去遍历二叉树。这种遍历的方式和我们之前讲过的都不太一样。
+> 
+> 需要借用一个辅助数据结构即队列来实现，**队列先进先出，符合一层一层遍历的逻辑，而用栈先进后出适合模拟深度优先遍历也就是递归的逻辑。**
+>
+> **而这种层序遍历方式就是图论中的广度优先遍历，只不过我们应用在二叉树上。**
+>
+> 使用队列实现二叉树广度优先遍历，动画如下：
+>
+> 
+> <div align=center>
+> <img src="./images/tree_20.gif" style="zoom:100%"/>
+> </div>
+> 
+> ```c++
+> class Solution {
+> public:
+>     vector<vector<int>> levelOrder(TreeNode* root) {
+>         queue<TreeNode*> que;
+>         if (root != NULL) que.push(root);
+>         vector<vector<int>> result;
+>         while (!que.empty()) {
+>             int size = que.size();
+>             vector<int> vec;
+>             // 这里一定要使用固定大小size，不要使用que.size()，因为que.size是不断变化的
+>             for (int i = 0; i < size; i++) {
+>                 TreeNode* node = que.front();
+>                 que.pop();
+>                 vec.push_back(node->val);
+>                 if (node->left) que.push(node->left);
+>                 if (node->right) que.push(node->right);
+>             }
+>             result.push_back(vec);
+>         }
+>         return result;
+>     }
+> };
+> ```
+> 
+> ```c++
+> # 递归法
+> class Solution {
+> public:
+>     void order(TreeNode* cur, vector<vector<int>>& result, int depth)
+>     {
+>         if (cur == nullptr) return;
+>         if (result.size() == depth) result.push_back(vector<int>());
+>         result[depth].push_back(cur->val);
+>         order(cur->left, result, depth + 1);
+>         order(cur->right, result, depth + 1);
+>     }
+>     vector<vector<int>> levelOrder(TreeNode* root) {
+>         vector<vector<int>> result;
+>         int depth = 0;
+>         order(root, result, depth);
+>         return result;
+>     }
+> };
+> ```
+> 
+> <font color="gree"> 层序遍历的递归法很难懂，我们掌握迭代法就可以了 </font>
+> 
+> **此时我们就掌握了二叉树的层序遍历了，那么如下九道力扣上的题目，只需要修改模板的两三行代码（不能再多了），便可打倒！**
+>
+> 
+
+
+
+
+#### 107.二叉树的层次遍历 II
+
+>
+> 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
