@@ -25,6 +25,10 @@
 <font color="yellow">当我们想保证查找效率时，可以用顺序表(数组)存储，当我们想保证插入和删除效率时，我们可以用链式表存储，有没有一种存储方法可以同时兼顾顺序表和链式表的优点？ 
 使用二叉树 ，便可兼顾查找效率和插入删除效率~</font>
 
+<font color="gree">针对二叉树的问题，解题之前一定要想清楚究竟是前中后序遍历，还是层序遍历。</font>
+
+**二叉树解题的大忌就是自己稀里糊涂的过了，但是也不知道自己是怎么遍历的。**
+
 --------------------------------------------------------------------------------
 
 ### 二叉树理论基础 各种博客总结(包括 代码随想录)
@@ -771,7 +775,7 @@
 > if (cur == NULL) return;
 > ```
 >
-> 3. 确定单层递归的逻辑：前序遍历是中左右的循序，所以在单层递归的逻辑，是要先取中节点的数值，代码如下：
+> 3. **确定单层递归的逻辑**：前序遍历是中左右的循序，所以在单层递归的逻辑，是要先取中节点的数值，代码如下：
 >
 > ```c++ {.line-numbers}
 > vec.push_back(cur->val);    // 中
@@ -2036,6 +2040,8 @@
 > 设置一个队列`que`，设置结果集`result`
 >
 > 如果`root`为空，直接返回空集
+>
+> `root`节点入队
 > 
 > 设置层数标志`floor`
 >
@@ -2263,6 +2269,8 @@
 > 设置一个队列`que`，设置结果集`result`
 >
 > 如果`root`为空，直接返回空集
+>
+> `root`节点入队
 > 
 > 设置层数标志`floor`
 >
@@ -2451,6 +2459,8 @@
 > 设置一个队列`que`，设置结果集`result`
 >
 > 如果`root`为空，直接返回空集
+>
+> `root`节点入队
 > 
 > 设置层数标志`floor`
 >
@@ -2625,6 +2635,8 @@
 > 设置一个队列`que`，设置结果集`result`
 >
 > 如果`root`为空，直接返回空集
+>
+> `root`节点入队
 > 
 > 设置层数标志`floor`
 >
@@ -2822,6 +2834,8 @@
 > 设置一个队列`que`，设置结果集`result`
 >
 > 如果`root`为空，直接返回空集
+>
+> `root`节点入队
 > 
 > 设置层数标志`floor`
 >
@@ -2997,6 +3011,8 @@
 > 设置一个队列`que`，设置结果集`result`
 >
 > 如果`root`为空，直接返回空集
+>
+> `root`节点入队
 > 
 > 设置层数标志`floor`
 >
@@ -3194,6 +3210,8 @@
 > 
 > 设置一个队列`que`
 >
+> `root`节点入队
+> 
 > 设置层数标志`floor`
 >
 > 开始`while(!que.empty())`循环，将`que`中存储的单层节点出队列, 将左右子节点全部存入`que`队尾， 如果不是当前层的最后一个节点，将节点的`next`指向同层右侧节点
@@ -3429,6 +3447,8 @@
 > 
 > 设置一个队列`que`
 >
+> `root`节点入队
+> 
 > 设置层数标志`floor`
 >
 > 开始`while(!que.empty())`循环，将`que`中存储的单层节点出队列, 将左右子节点全部存入`que`队尾， 如果不是当前层的最后一个节点，将节点的`next`指向同层右侧节点
@@ -3602,6 +3622,8 @@
 > 设置一个队列`que`
 >
 > 如果`root`为空，直接返回空集
+>
+> `root`节点入队
 > 
 > 设置层数标志`floor`
 >
@@ -3772,9 +3794,11 @@
 >
 > 思路如下：
 >
-> 如果`root`为空，直接返回0
+> 如果`root`为空，直接返回`0`
 > 
 > 设置一个队列`que`
+>
+> `root`节点入队
 > 
 > 设置层数标志`floor`
 > 
@@ -3898,8 +3922,6 @@
 ### 非常经典的题目 226.翻转二叉树
 
 
-### 226.翻转二叉树
-
 > 
 > Leetcode链接: https://leetcode.cn/problems/invert-binary-tree/
 > 
@@ -3964,18 +3986,561 @@
 > ```
 > 
 
+> 
+> <font color="yellow">
+> 
+> **层序遍历**的思路？ **迭代法**能写出来吗？
+>
+> **前序遍历**的思路？ **递归法**能写出来吗？（深度优先遍历一般用递归法，迭代法复杂）
+>
+> **中序遍历**的思路？ **递归法**能写出来吗？（深度优先遍历一般用递归法，迭代法复杂）
+> 
+> **后序遍历**的思路？ **递归法**能写出来吗？（深度优先遍历一般用递归法，迭代法复杂）
+>
+> </font>
+> 
+
 
 
 > 
+> <font color="yellow">层序遍历的思路如下：（层序遍历一般只有迭代法）</font>
+>
 > <font color="gree">
->
-> 思路如下：
->
 > 
+> 如果`root`为空，直接返回空指针`nullptr`
+> 
+> 设置一个队列`que`
+>
+> `root`节点入队
+> 
+> 设置层数标志`floor`
+>
+> 开始`while(!que.empty())`循环，将`que`中存储的单层节点取出,然后将左右子节点全部存入`que`队尾
+> > 
+> > `while`循环体如下：
+> > 
+> > * 层数标志增加`floor++`
+> > 
+> > * 暂存当前层的节点数量`int floor_size = que.size()`
+> > 
+> > * 内嵌`for(int i=0; i < floor_size; i++)`循环
+> > 
+> > > `for`循环体如下：
+> > > * 将当前层的节点一一取出
+> > > * 交换左右指针`left`和`right`
+> > > * 找到左右子节点，将子节点入队列`que`
+> > 
+> > 
+> >  
+>
+> 返回根节点`root`
 >
 > </font>
 >
- 
+> ```c++
+> class Solution {
+> public:
+>     TreeNode* invertTree(TreeNode* root) {
+>         // 设置队列que
+>         queue<TreeNode*> que;
+>         // 如果root 为空，直接返回0
+>         if(root == nullptr) return 0;
+>         // 将第1层的root节点入队列que
+>         que.push(root);
+>         // 设置层数标志floor
+>         int floor = 0; 
+> 
+>         // 将que中存储的单层节点取出,然后将左右子节点全部存入que队尾
+>         while(!que.empty()) {
+>             // 更新层数标志
+>             floor++;     
+>             // 暂存当前层的节点数量
+>             int floor_size = que.size();
+>             // 将当前层的节点取出，找到左右子节点，将下一层的子节点入队que
+>             for(int i=0; i < floor_size; i++) {
+>                 // 从que中取出节点
+>                 TreeNode* node = que.front();
+>                 que.pop();
+>                 // left和right交换
+>                 TreeNode* temp = node->left;
+>                 node->left = node->right;
+>                 node->right = temp;
+>                 // left和right入队            
+>                 if(node->left != nullptr) que.push(node->left);
+>                 if(node->right != nullptr) que.push(node->right);
+>             }
+>         }
+>         
+>         // 返回root
+>         return root;
+>     }
+> };
+> ```
+> 
+> 
+
+
+
+
+> 
+> <font color="yellow">前序遍历的思路如下：</font>
+>
+> <font color="gree">
+>
+> 主要是写递归函数，然后主函数进行调用
+>
+> 1. **确定递归函数的参数和返回值**：因为不需要处理值之类的操作，参数只需要传入节点即可, 也不需要返回值
+>
+> ```c++ {.line-numbers}
+> void recursion(TreeNode* node)
+> ```
+> 
+> 2. **确定终止条件**：当前遍历的节点是空了，那么本层递归就要结束了，所以如果当前遍历的这个节点是空，就直接`return`，代码如下：
+>
+> ```c++ {.line-numbers}
+> if (node == nullptr) return;
+> ```
+>
+> 3. **确定单层递归的逻辑**：前序遍历是中左右的循序，所以在单层递归的逻辑，是要先处理中节点代码如下：
+>
+> ```c++ {.line-numbers}
+> // 先中
+> TreeNode* temp = node->left;
+> node->left = node->right;
+> node->right = temp;
+> // 再左
+> recursion(node->left); // 不用先判断if(node->left != nullptr), 因为进入recursion函数体第一句就会判断
+> // 最后右
+> recursion(node->right); // 不用先判断if(node->right != nullptr), 因为进入recursion函数体第一句就会判断
+> ```
+> 
+> 单层递归的逻辑就是按照中左右的顺序来处理的，这样二叉树的前序遍历，基本就写完了，再看一下完整代码：
+>
+> </font>
+>
+> ```c++
+> class Solution {
+> public:
+>     // 递归函数法
+>     // 1. 确定递归函数的参数和返回值: 只需要处理一个node
+>     // 2. 确定终止条件：只要节点不为空，就往下探索
+>     // 3. 确定（前序遍历）单层递归的逻辑：先中，再左，最后右； 
+>     void recursion(TreeNode* node) {
+>         if(node == nullptr) return;
+>         // 先中
+>         TreeNode* temp = node->left;
+>         node->left = node->right;
+>         node->right = temp;
+>         // 再左
+>         recursion(node->left); // 不用先判断if(node->left != nullptr), 因为进入recursion函数体第一句就会判断
+>         // 最后右
+>         recursion(node->right); // 不用先判断if(node->right != nullptr), 因为进入recursion函数体第一句就会判断
+>     }
+>     // 调用递归函数即可，不能在函数内定义函数，要在函数外定义递归函数
+>     TreeNode* invertTree(TreeNode* root) {
+>         recursion(root);
+>         return root;
+>     }
+> };
+> ```
+> 
+> 
+
+
+
+> 
+> <font color="yellow">后序遍历的代码如下：</font>
+>
+> ```c++
+> class Solution {
+> public:
+>     // 递归函数法
+>     // 1. 确定递归函数的参数和返回值: 只需要处理一个node
+>     // 2. 确定终止条件：只要节点不为空，就往下探索
+>     // 3. 确定（后序遍历）单层递归的逻辑：先左，再右，最后中； 
+>     void recursion(TreeNode* node) {
+>         if(node == nullptr) return;
+>         // 先左
+>         recursion(node->left); // 不用先判断if(node->left != nullptr), 因为进入recursion函数体第一句就会判断
+>         // 再右
+>         recursion(node->right); // 不用先判断if(node->right != nullptr), 因为进入recursion函数体第一句就会判断
+>         // 最后中
+>         TreeNode* temp = node->left;
+>         node->left = node->right;
+>         node->right = temp;        
+>     }
+>     // 调用递归函数即可，不能在函数内定义函数，要在函数外定义递归函数
+>     TreeNode* invertTree(TreeNode* root) {
+>         recursion(root);
+>         return root;
+>     }
+> };
+> ```
+>
+
+
+
+
+> 
+> <font color="yellow">中序遍历的代码如下（有问题，需要修改）：</font>
+>
+> ```c++
+> class Solution {
+> public:
+>     // 递归函数法
+>     // 1. 确定递归函数的参数和返回值: 只需要处理一个node
+>     // 2. 确定终止条件：只要节点不为空，就往下探索
+>     // 3. 确定（中序遍历）单层递归的逻辑：先左，再中，最后右； 
+>     void recursion(TreeNode* node) {
+>         if(node == nullptr) return;
+>         // 先左
+>         recursion(node->left); // 不用先判断if(node->left != nullptr), 因为进入recursion函数体第一句就会判断
+>         // 再中
+>         TreeNode* temp = node->left;
+>         node->left = node->right;
+>         node->right = temp;        
+>         // 最后右
+>         recursion(node->right); // 不用先判断if(node->right != nullptr), 因为进入recursion函数体第一句就会判断
+>     }
+>     // 调用递归函数即可，不能在函数内定义函数，要在函数外定义递归函数
+>     TreeNode* invertTree(TreeNode* root) {
+>         recursion(root);
+>         return root;
+>     }
+> };
+> ```
+> 
+> <div align=center>
+> <img src="./images/tree_35.jpg" style="zoom:100%;"/>
+> </div>
+>  
+> **代码随想录：中序遍历会把某些节点的左右孩子翻转了两次**
+>
+> 由于我们`再中`是，已经翻转了左右顺序，所以`最后右`的`recursion(node->right);`应该改为`recursion(node->left);`
+> ```c++
+> class Solution {
+> public:
+>     // 递归函数法
+>     // 1. 确定递归函数的参数和返回值: 只需要处理一个node
+>     // 2. 确定终止条件：只要节点不为空，就往下探索
+>     // 3. 确定（中序遍历）单层递归的逻辑：先左，再中，最后右； 
+>     void recursion(TreeNode* node) {
+>         if(node == nullptr) return;
+>         // 先左
+>         recursion(node->left); // 不用先判断if(node->left != nullptr), 因为进入recursion函数体第一句就会判断
+>         // 再中
+>         TreeNode* temp = node->left;
+>         node->left = node->right;
+>         node->right = temp;        
+>         // 最后右
+>         recursion(node->left); // 翻转后，原来的右节点现在是node->left
+>     }
+>     // 调用递归函数即可，不能在函数内定义函数，要在函数外定义递归函数
+>     TreeNode* invertTree(TreeNode* root) {
+>         recursion(root);
+>         return root;
+>     }
+> };
+> ```
+> 
+
+
+
+
+
+
+
+
+
+
+> <font color="gree"> 以下是代码随想录 </font>
+>
+> 这道题目背后有一个让程序员心酸的故事，听说`Homebrew`的作者`Max Howell`，就是因为没在白板上写出翻转二叉树，最后被`Google`拒绝了。（真假不做判断，权当一个乐子哈）
+>
+> **题外话**
+> 
+> 这道题目是非常经典的题目，也是比较简单的题目（至少一看就会）。
+> 
+> 但正是因为这道题太简单，一看就会，一些同学都没有抓住起本质，稀里糊涂的就把这道题目过了。
+> 
+> 如果做过这道题的同学也建议认真看完，相信一定有所收获！
+>
+> **思路**
+>
+> 我们之前介绍的都是各种方式遍历二叉树，这次要翻转了，感觉还是有点懵逼。
+> 
+> 这得怎么翻转呢？
+> 
+> 如果要从整个树来看，翻转还真的挺复杂，整个树以中间分割线进行翻转，如图：
+> 
+> 
+> <div align=center>
+> <img src="./images/tree_36.png" style="zoom:100%;"/>
+> </div>
+>  
+> 可以发现想要翻转它，其实就把每一个节点的左右孩子交换一下就可以了。
+>
+> 关键在于遍历顺序，前中后序应该选哪一种遍历顺序？ （一些同学这道题都过了，但是不知道自己用的是什么顺序）
+>
+> 遍历的过程中去翻转每一个节点的左右孩子就可以达到整体翻转的效果。
+>
+> **注意只要把每一个节点的左右孩子翻转一下，就可以达到整体翻转的效果**
+>
+> **这道题目使用前序遍历和后序遍历都可以，唯独中序遍历不方便，因为中序遍历会把某些节点的左右孩子翻转了两次！建议拿纸画一画，就理解了**
+>
+> 那么层序遍历可以不可以呢？**依然可以的！只要把每一个节点的左右孩子翻转一下的遍历方式都是可以的！**
+> 
+> 
+> **递归法**
+> 
+> 对于二叉树的递归法的前中后序遍历，已经详细讲解了。
+> 
+> 我们下文以前序遍历为例，通过动画来看一下翻转的过程:
+> 
+> <div align=center>
+> <img src="./images/tree_37.gif" style="zoom:100%;"/>
+> </div>
+>  
+> 我们来看一下递归三部曲：
+> 
+> 1. 确定递归函数的参数和返回值
+>
+> 参数就是要传入节点的指针，不需要其他参数了，通常此时定下来主要参数，如果在写递归的逻辑中发现还需要其他参数的时候，随时补充。
+>
+> 返回值的话其实也不需要，但是题目中给出的要返回`root`节点的指针，可以直接使用题目定义好的函数，所以就函数的返回类型为`TreeNode*`。
+>
+> ```c++
+> TreeNode* invertTree(TreeNode* root)
+> ```
+>
+> 2. 确定终止条件
+>
+> 当前节点为空的时候，就返回
+>
+> ```c++
+> if (root == NULL) return root;
+> ```
+> 
+> 3. 确定单层递归的逻辑
+>
+> 因为是先前序遍历，所以先进行交换左右孩子节点，然后反转左子树，反转右子树。
+>
+> ```c++
+> swap(root->left, root->right);
+> invertTree(root->left);
+> invertTree(root->right);
+> ```
+> 
+> 基于这递归三步法，代码基本写完，C++代码如下：
+>
+> ```c++
+> class Solution {
+> public:
+>     TreeNode* invertTree(TreeNode* root) {
+>         if (root == NULL) return root;
+>         swap(root->left, root->right);  // 中
+>         invertTree(root->left);         // 左
+>         invertTree(root->right);        // 右
+>         return root;
+>     }
+> };
+> ```
+> 
+> **迭代法： 深度优先遍历**
+>
+> 之前给出了前中后序迭代方式的写法，所以本题可以很轻松的写出如下迭代法的代码：
+> 
+> C++代码迭代法（前序遍历）
+> 
+> ```c++
+> class Solution {
+> public:
+>     TreeNode* invertTree(TreeNode* root) {
+>         if (root == NULL) return root;
+>         stack<TreeNode*> st;
+>         st.push(root);
+>         while(!st.empty()) {
+>             TreeNode* node = st.top();              // 中
+>             st.pop();
+>             swap(node->left, node->right);
+>             if(node->right) st.push(node->right);   // 右
+>             if(node->left) st.push(node->left);     // 左
+>         }
+>         return root;
+>     }
+> };
+> ```
+>
+> 统一的深度遍历迭代法，也只需将文中的代码少做修改便可。
+>
+> 
+> ```c++
+> class Solution {
+> public:
+>     TreeNode* invertTree(TreeNode* root) {
+>         stack<TreeNode*> st;
+>         if (root != NULL) st.push(root);
+>         while (!st.empty()) {
+>             TreeNode* node = st.top();
+>             if (node != NULL) {
+>                 st.pop();
+>                 if (node->right) st.push(node->right);  // 右
+>                 if (node->left) st.push(node->left);    // 左
+>                 st.push(node);                          // 中
+>                 st.push(NULL);
+>             } else {
+>                 st.pop();
+>                 node = st.top();
+>                 st.pop();
+>                 swap(node->left, node->right);          // 节点处理逻辑
+>             }
+>         }
+>         return root;
+>     }
+> };
+> ```
+>
+> 
+> **迭代法： 广度优先遍历**
+>
+> 也就是层序遍历，层数遍历也是可以翻转这棵树的，因为层序遍历也可以把每个节点的左右孩子都翻转一遍，代码如下：
+>
+> ```c++
+> class Solution {
+> public:
+>     TreeNode* invertTree(TreeNode* root) {
+>         queue<TreeNode*> que;
+>         if (root != NULL) que.push(root);
+>         while (!que.empty()) {
+>             int size = que.size();
+>             for (int i = 0; i < size; i++) {
+>                 TreeNode* node = que.front();
+>                 que.pop();
+>                 swap(node->left, node->right); // 节点处理
+>                 if (node->left) que.push(node->left);
+>                 if (node->right) que.push(node->right);
+>             }
+>         }
+>         return root;
+>     }
+> };
+> ```
+>
+> **拓展**
+>
+> **文中我指的是递归的中序遍历是不行的，因为使用递归的中序遍历，某些节点的左右孩子会翻转两次**。
+>
+> 如果非要使用递归中序的方式写，也可以，如下代码就可以避免节点左右孩子翻转两次的情况：
+>
+> ```c++
+> class Solution {
+> public:
+>     TreeNode* invertTree(TreeNode* root) {
+>         if (root == NULL) return root;
+>         invertTree(root->left);         // 左
+>         swap(root->left, root->right);  // 中
+>         invertTree(root->left);         // 注意 这里依然要遍历左孩子，因为中间节点已经翻转了
+>         return root;
+>     }
+> };
+> ```
+> 
+> 代码虽然可以，但这毕竟不是真正的递归中序遍历了。
+> 
+> 但使用迭代方式统一写法的中序是可以的。
+> 
+> 代码如下：
+>
+> ```c++
+> class Solution {
+> public:
+>     TreeNode* invertTree(TreeNode* root) {
+>         stack<TreeNode*> st;
+>         if (root != NULL) st.push(root);
+>         while (!st.empty()) {
+>             TreeNode* node = st.top();
+>             if (node != NULL) {
+>                 st.pop();
+>                 if (node->right) st.push(node->right);  // 右
+>                 st.push(node);                          // 中
+>                 st.push(NULL);
+>                 if (node->left) st.push(node->left);    // 左
+> 
+>             } else {
+>                 st.pop();
+>                 node = st.top();
+>                 st.pop();
+>                 swap(node->left, node->right);          // 节点处理逻辑
+>             }
+>         }
+>         return root;
+>     }
+> };
+> ```
+> 
+> 为什么这个中序就是可以的呢，因为这是用栈来遍历，而不是靠指针来遍历，避免了递归法中翻转了两次的情况，大家可以画图理解一下，这里有点意思的。
+>
+> 
+> **总结**
+>
+> <font color="gree">针对二叉树的问题，解题之前一定要想清楚究竟是前中后序遍历，还是层序遍历。</font>
+>
+> **二叉树解题的大忌就是自己稀里糊涂的过了（因为这道题相对简单），但是也不知道自己是怎么遍历的。**
+>
+> 这也是造成了二叉树的题目“一看就会，一写就废”的原因。
+> 
+> **针对翻转二叉树，我给出了一种递归，三种迭代（两种模拟深度优先遍历，一种层序遍历）的写法，都是之前我们讲过的写法，融汇贯通一下而已。**
+>
+> 大家一定也有自己的解法，但一定要成方法论，这样才能通用，才能举一反三！
+>
+> 
+
+
+
+### 本周小结！（不是系列总结，二叉树还远没有结束）
+
+>
+> **周日我做一个针对本周的打卡留言疑问以及在刷题群里的讨论内容做一下梳理吧**。这样也有助于大家补一补本周的内容，消化消化。
+>
+> **注意这个周末总结和系列总结还是不一样的（二叉树还远没有结束），这个总结是针对留言疑问以及刷题群里讨论内容的归纳。**
+>
+> 
+
+>
+> **周一**
+>
+> 本周我们开始讲解了二叉树，讲解了二叉树的理论基础
+>
+> 有同学会把红黑树和二叉平衡搜索树弄分开了，其实红黑树就是一种二叉平衡搜索树，这两个树不是独立的，所以`C++`中`map`、`multimap`、`set`、`multiset`的底层实现机制是二叉平衡搜索树，再具体一点是红黑树。
+>
+> 对于二叉树节点的定义，C++代码如下：
+>
+> ```c++
+> struct TreeNode {
+>     int val;
+>     TreeNode *left;
+>     TreeNode *right;
+>     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+> };
+> ```
+>
+> 对于这个定义中`TreeNode(int x) : val(x), left(NULL), right(NULL) {}` 有同学不清楚干什么的。
+>
+> 这是构造函数，**这么说吧`C`语言中的结构体是`C++`中类的祖先，所以`C++`结构体也可以有构造函数**。
+>
+> 例如有构造函数，定义初始值为9的节点：
+>
+> ```c++
+> TreeNode* a = new TreeNode(9);
+> ```
+> 
+
+
+
+
+
+
+
 
 
 
