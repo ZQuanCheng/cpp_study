@@ -1,9 +1,17 @@
-### 贪心算法
+# cpp_algorithms
 
+* geeksforgeeks https://www.geeksforgeeks.org
 
-> 
-> https://www.geeksforgeeks.org/greedy-algorithms/
-> 
+--------------------------------------------------------------------------------
+
+# 贪心算法
+
+https://www.geeksforgeeks.org/greedy-algorithms/
+
+## greedy_algorithms.md
+
+--------------------------------------------------------------------------------
+
 
 
 
