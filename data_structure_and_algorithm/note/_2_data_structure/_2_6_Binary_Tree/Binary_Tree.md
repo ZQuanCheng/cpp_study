@@ -4506,10 +4506,12 @@
 >
 > 
 
+#### 周一
+
+> 
+> https://programmercarl.com/%E4%BA%8C%E5%8F%89%E6%A0%91%E7%90%86%E8%AE%BA%E5%9F%BA%E7%A1%80.html
 >
-> **周一**
->
-> 本周我们开始讲解了二叉树，讲解了二叉树的理论基础
+> 讲解了二叉树的理论基础
 >
 > 有同学会把红黑树和二叉平衡搜索树弄分开了，其实红黑树就是一种二叉平衡搜索树，这两个树不是独立的，所以`C++`中`map`、`multimap`、`set`、`multiset`的底层实现机制是二叉平衡搜索树，再具体一点是红黑树。
 >
@@ -4527,12 +4529,403 @@
 > 对于这个定义中`TreeNode(int x) : val(x), left(NULL), right(NULL) {}` 有同学不清楚干什么的。
 >
 > 这是构造函数，**这么说吧`C`语言中的结构体是`C++`中类的祖先，所以`C++`结构体也可以有构造函数**。
->
+> 
+> 构造函数也可以不写，但是`new`一个新的节点的时候就比较麻烦。
+> 
 > 例如有构造函数，定义初始值为9的节点：
 >
 > ```c++ {.line-numbers}
 > TreeNode* a = new TreeNode(9);
 > ```
+>
+> 没有构造函数的话就要这么写：
+>
+> ```c++ {.line-numbers}
+> TreeNode* a = new TreeNode();
+> a->val = 9;
+> a->left = NULL;
+> a->right = NULL;
+> ```
+>
+> 在介绍前中后序遍历的时候，有递归和迭代（非递归），还有一种牛逼的遍历方式：`morris`遍历。
+>
+> `morris`遍历是二叉树遍历算法的超强进阶算法，`morris`遍历可以将非递归遍历中的空间复杂度降为`O(1)`，感兴趣大家就去查一查学习学习，比较小众，面试几乎不会考。我其实也没有研究过，就不做过多介绍了。
+>
+> 
+> 
+
+
+#### 周二
+
+>
+> https://programmercarl.com/%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E9%80%92%E5%BD%92%E9%81%8D%E5%8E%86.html
+>
+> 讲到了递归三要素，以及前中后序的递归写法。
+>
+> <font color="gree">文章中我给出了`leetcode`上三道二叉树的前中后序题目，依然可以解决`n`叉树的前后序遍历，在leetcode上分别是</font>
+> 
+> [589. N叉树的前序遍历](https://leetcode.cn/problems/n-ary-tree-preorder-traversal/)
+> [590. N叉树的后序遍历](https://leetcode.cn/problems/n-ary-tree-postorder-traversal/)
+> 
+> **由于`N(N > 2)`叉树无法确定把中节点放在第几个位置, 所以没有中序遍历**
+> 
+> [429. N叉树的层序遍历](https://leetcode.cn/problems/n-ary-tree-level-order-traversal/)
+>
+> 
+
+
+##### 429.N叉树的层序遍历
+
+>
+> `Leetcode`链接: https://leetcode.cn/problems/n-ary-tree-level-order-traversal/
+>
+>
+> **429. N 叉树的层序遍历**
+> 
+> 给定一个 `N` 叉树，返回其节点值的层序遍历。（即从左到右，逐层遍历）。
+> 
+> 树的序列化输入是用层序遍历，每组子节点都由 `null` 值分隔（参见示例）。
+>
+>
+> **示例1：**
+> > 
+> > <div align=center>
+> > <img src="./images/tree_26.png" style="zoom:100%;"/>
+> > </div>
+> >  
+> ```html
+> 输入：root = [1,null,3,2,4,null,5,6]
+> 输出：[[1],[3,2,4],[5,6]]
+> ```
+>
+> **示例2：**
+> > 
+> > <div align=center>
+> > <img src="./images/tree_27.png" style="zoom:100%;"/>
+> > </div>
+> >  
+> ```html
+> 输入：root = [1,null,2,3,4,5,null,null,6,7,null,8,null,9,10,null,null,11,null,12,null,13,null,null,14]
+> 输出：[[1],[2,3,4,5],[6,7,8,9,10],[11,12,13],[14]]
+> ```
+>
+> **提示：**
+> * 树的高度不会超过 `1000`
+> * 树的节点总数在 `[0, 10^4]` 之间
+>
+> ```c++
+> /*
+> // Definition for a Node.
+> class Node {
+> public:
+>     int val;
+>     vector<Node*> children;
+> 
+>     Node() {}
+> 
+>     Node(int _val) {
+>         val = _val;
+>     }
+> 
+>     Node(int _val, vector<Node*> _children) {
+>         val = _val;
+>         children = _children;
+>     }
+> };
+> */
+> 
+> class Solution {
+> public:
+>     vector<vector<int>> levelOrder(Node* root) {
+>         
+>     }
+> };
+> ```
+> 
+> 
+> 这道题与二叉树的层序遍历本质没有差别，只不过是多了几个树杈
+>
+> <font color="gree">
+> 
+> 迭代法思路如下：
+> 
+> 设置一个队列`que`，设置结果集`result`
+>
+> 如果`root`为空，直接返回空集
+>
+> `root`节点入队
+> 
+> 设置层数标志`floor`
+>
+> 开始`while(!que.empty())`循环，将`que`中存储的单层节点值放入vector<int>,然后将左右子节点全部存入`que`队尾
+> > 
+> > `while`循环体如下：
+> > 
+> > * 层数标志增加`floor++`
+> > 
+> > * 暂存当前层的节点数量`int floor_size = que.size()`
+> > 
+> > * 内嵌`for(int i=0; i < floor_size; i++)`循环
+> > 
+> > > `for`循环体如下：
+> > > * 将当前层的节点一一取出，
+> > > * 将当前层的节点值存入`result`； 
+> > > * 找到所有子节点，将子节点入队列`que`
+> > 
+> > 
+> >  
+>
+> 返回结果集`result`
+>
+> </font>
+>
+> ```c++
+> class Solution {
+> public:
+>     vector<vector<int>> levelOrder(Node* root) {
+>         // 设置队列que； 设置结果集result; 
+>         queue<Node*> que;
+>         vector<vector<int>> result;
+> 
+>         // 如果root 为空，直接返回空集
+>         if(root == nullptr) return result;
+> 
+>         // 将第1层的root节点入队列que
+>         que.push(root);
+> 
+>         // 设置层数标志floor
+>         int floor = 0; 
+> 
+>         // 将que中存储的单层节点值放入vector<int>,然后将所有子节点全部存入que队尾
+>         while(!que.empty()) { 
+>             // 更新层数标志
+>             floor++;
+>             // 暂存当前层的节点数量
+>             int floor_size = que.size();
+>             // 将当前层的节点取出，节点值存入vector<int>，找到所有子节点，将下一层的子节点入队que
+>             vector<int> vec; 
+>             for(int i=0; i < floor_size; i++) {
+>                 Node* node = que.front();
+>                 que.pop();
+>                 vec.push_back(node->val);
+>                 // 对于每一个节点，遍历其children数组，将每一个子节点都放入
+>                 for(int k=0; k < node->children.size(); k++) {
+>                     if(node->children[k] != nullptr) que.push(node->children[k]);
+>                 }
+>             }
+>                 
+>             // 将当前层的节点值存储result
+>             result.push_back(vec);
+> 
+>         }
+> 
+>         return result;        
+>     }
+> };
+> ```
+> 
+> 
+
+
+##### 589. N 叉树的前序遍历
+
+>
+> `Leetcode`链接: https://leetcode.cn/problems/n-ary-tree-preorder-traversal/
+>
+>
+> **589. N 叉树的前序遍历**
+>
+> 
+> 给定一个 `n` 叉树的根节点  `root` ，返回 其节点值的 **前序遍历** 。
+> 
+> `n` 叉树 在输入中按层序遍历进行序列化表示，每组子节点由空值 `null` 分隔（请参见示例）。
+>
+>
+> **示例1：**
+> > 
+> > <div align=center>
+> > <img src="./images/tree_26.png" style="zoom:100%;"/>
+> > </div>
+> >  
+> ```html
+> 输入：root = [1,null,3,2,4,null,5,6]
+> 输出：[1,3,5,6,2,4]
+> ```
+>
+> **示例2：**
+> > 
+> > <div align=center>
+> > <img src="./images/tree_27.png" style="zoom:100%;"/>
+> > </div>
+> >  
+> ```html
+> 输入：root = [1,null,2,3,4,5,null,null,6,7,null,8,null,9,10,null,null,11,null,12,null,13,null,null,14]
+> 输出：[1,2,3,6,7,11,14,4,8,12,5,9,13,10]
+> ```
+> 
+>
+> **提示：**
+> * 节点总数在范围 `[0, 10^4]` 内
+> * `0 <= Node.val <= 10^4`
+> * `n` 叉树的高度小于或等于 `1000`
+>
+>
+> ```c++
+> /*
+> // Definition for a Node.
+> class Node {
+> public:
+>     int val;
+>     vector<Node*> children;
+> 
+>     Node() {}
+> 
+>     Node(int _val) {
+>         val = _val;
+>     }
+> 
+>     Node(int _val, vector<Node*> _children) {
+>         val = _val;
+>         children = _children;
+>     }
+> };
+> */
+> 
+> class Solution {
+> public:
+>     vector<int> preorder(Node* root) {
+>         
+>     }
+> };
+> ```
+> 
+> <font color="yellow">递归法的思路如下：</font>
+>
+> <font color="gree">
+>
+> 主要是写递归函数，然后主函数进行调用
+>
+> 1. **确定递归函数的参数和返回值**：因为需要处理节点值，参数包括传入节点和结果集, 不需要返回值
+>
+> ```c++ {.line-numbers}
+> void recursion(Node* node, vector<int>& vec) {}// 注意传指针或传引用，不要传值
+> ```
+> 
+> 2. **确定终止条件**：当前遍历的节点是空了，那么本层递归就要结束了，所以如果当前遍历的这个节点是空，就直接`return`，代码如下：
+>
+> ```c++ {.line-numbers}
+> if (node == nullptr) return;
+> ```
+>
+> 3. **确定单层递归的逻辑**：前序遍历是：中-从左到右的有所子节点，所以在单层递归的逻辑，是要先处理中节点代码如下：
+>
+> ```c++ {.line-numbers}
+> // 中
+> vec.push_back(node->val);    
+> // 对于每一个节点，遍历其children数组
+> for(int k=0; k < node->children.size(); k++) {
+>     if(node->children[k] != nullptr) recursion(node->children[k], vec);
+> }
+> ```
+> 
+> 单层递归的逻辑就是按照中左右的顺序来处理的，这样二叉树的前序遍历，基本就写完了，再看一下完整代码：
+>
+> </font>
+> 
+> <font color="yellow">递归法的代码如下：</font>
+>
+> ```c++
+> class Solution {
+> public:
+>     // 递归函数
+>     // 1. 确认递归函数的参数和返回值: 要处理的是节点和vector数组。注意：传指针或传引用，不要传值
+>     // 2. 确定终止条件：只要节点不为空，就往下探索
+>     // 3. 确定单层递归的逻辑：先中，再子节点    
+>     void recursion(Node* node, vector<int>& vec){
+>         // 终止条件: 空节点
+>         if (node == nullptr) return;
+>         // 中
+>         vec.push_back(node->val);    
+>         // 对于每一个节点，遍历其children数组
+>         for(int k=0; k < node->children.size(); k++) {
+>             if(node->children[k] != nullptr) recursion(node->children[k], vec);
+>         }
+>     }
+>     // 调用递归函数即可，不能在函数内定义函数，要在函数外定义递归函数
+>     vector<int> preorder(Node* root) {
+>         vector<int> result;
+>         recursion(root, result);
+>         return result;        
+>     }
+> };
+> ```
+> 
+> 
+> 
+> <font color="yellow">迭代法的思路如下：</font>
+> 
+> <font color="gree">
+>
+> 递归法 隐式 使用栈存储参数和返回值
+> 迭代法 明式 使用栈存储？？？
+>
+> * 使用栈stack存储待处理节点
+>
+> * 设置结果集`result`
+>
+> * 若`root`为空，则直接返回空集
+>
+> * 根节点`root`入栈
+>
+> * while循环
+>
+> 开始`while(!sta.empty())`循环，将`sta`中存储的单层节点值放入vector<int>, 然后将所有子节点全部存入`sta`
+> > 
+> > `while`循环体如下：
+> > 
+> > * 暂存当前节点`Node* node = sta.top(); sta.pop();`
+> > 
+> > * 存储节点值`result.push_back(node->val);`
+> > 
+> > * 内嵌`for(int i = node->children.size() - 1; i >= 0; i--)`循环(反顺序从右到左入栈，这样出栈才能保证从左到右)
+> > 
+> 
+> * 返回`result`
+> 
+> </font>
+> 
+> <font color="yellow">迭代法的代码如下：</font>
+> 
+> ```c++
+> class Solution {
+> public:
+>     vector<int> preorder(Node* root) {
+>         // 使用栈stack存储待处理节点
+>         stack<Node*> sta;
+>         // 设置结果集
+>         vector<int> result;
+>         // 若root为空，则直接返回空集
+>         if(root == nullptr) return result;
+>         // 根节点入栈
+>         sta.push(root);
+>         // while循环
+>         while(!sta.empty()) {
+>             // 先中
+>             Node* node = sta.top();
+>             sta.pop();
+>             result.push_back(node->val);
+>             // 遍历子节点数组, 但是需要反顺序从右到左入栈，这样出栈才能保证从左到右
+>             for(int i = node->children.size() - 1; i >= 0; i--) {
+>                 if(node->children[i] != nullptr) sta.push(node->children[i]);
+>             }
+>         }
+> 
+>         // 返回结果集
+>         return result;
+>     }
+> };
+> ```
+> 
 > 
 
 
@@ -4541,16 +4934,387 @@
 
 
 
+##### 590. N 叉树的后序遍历
+
+>
+> `Leetcode`链接: https://leetcode.cn/problems/n-ary-tree-postorder-traversal/
+>
+>
+> **590. N 叉树的后序遍历**
+>
+> 
+> 给定一个 `n` 叉树的根节点  `root` ，返回 其节点值的 **后序遍历** 。
+> 
+> `n` 叉树 在输入中按层序遍历进行序列化表示，每组子节点由空值 `null` 分隔（请参见示例）。
+>
+>
+> **示例1：**
+> > 
+> > <div align=center>
+> > <img src="./images/tree_26.png" style="zoom:100%;"/>
+> > </div>
+> >  
+> ```html
+> 输入：root = [1,null,3,2,4,null,5,6]
+> 输出：[5,6,3,2,4,1]
+> ```
+>
+> **示例2：**
+> > 
+> > <div align=center>
+> > <img src="./images/tree_27.png" style="zoom:100%;"/>
+> > </div>
+> >  
+> ```html
+> 输入：root = [1,null,2,3,4,5,null,null,6,7,null,8,null,9,10,null,null,11,null,12,null,13,null,null,14]
+> 输出：[2,6,14,11,7,3,12,8,4,13,9,10,5,1]
+> ```
+> 
+>
+> **提示：**
+> * 节点总数在范围 `[0, 10^4]` 内
+> * `0 <= Node.val <= 10^4`
+> * `n` 叉树的高度小于或等于 `1000`
+>
+>
+> ```c++
+> /*
+> // Definition for a Node.
+> class Node {
+> public:
+>     int val;
+>     vector<Node*> children;
+> 
+>     Node() {}
+> 
+>     Node(int _val) {
+>         val = _val;
+>     }
+> 
+>     Node(int _val, vector<Node*> _children) {
+>         val = _val;
+>         children = _children;
+>     }
+> };
+> */
+> 
+> class Solution {
+> public:
+>     vector<int> postorder(Node* root) {
+>         
+>     }
+> };
+> ```
+> 
+> <font color="yellow">递归法的思路如下：</font>
+>
+> <font color="gree">
+>
+> 主要是写递归函数，然后主函数进行调用
+>
+> 1. **确定递归函数的参数和返回值**：因为需要处理节点值，参数包括传入节点和结果集, 不需要返回值
+>
+> ```c++ {.line-numbers}
+> void recursion(Node* node, vector<int>& vec) {}// 注意传指针或传引用，不要传值
+> ```
+> 
+> 2. **确定终止条件**：当前遍历的节点是空了，那么本层递归就要结束了，所以如果当前遍历的这个节点是空，就直接`return`，代码如下：
+>
+> ```c++ {.line-numbers}
+> if (node == nullptr) return;
+> ```
+>
+> 3. **确定单层递归的逻辑**：后序遍历是：从左到右的有所子节点-中，所以在单层递归的逻辑，是要先处理中节点代码如下：
+>
+> ```c++ {.line-numbers}
+> // 对于每一个节点，遍历其children数组
+> for(int k=0; k < node->children.size(); k++) {
+>     if(node->children[k] != nullptr) recursion(node->children[k], vec);
+> }
+> // 中
+> vec.push_back(node->val);    
+> ```
+> 
+> 单层递归的逻辑就是按照中左右的顺序来处理的，这样二叉树的前序遍历，基本就写完了，再看一下完整代码：
+>
+> </font>
+> 
+> <font color="yellow">递归法的代码如下：</font>
+> 
+> ```c++
+> class Solution {
+> public:
+>     // 递归函数
+>     // 1. 确认递归函数的参数和返回值: 要处理的是节点和vector数组。注意：传指针或传引用，不要传值
+>     // 2. 确定终止条件：只要节点不为空，就往下探索
+>     // 3. 确定单层递归的逻辑：先中，再子节点    
+>     void recursion(Node* node, vector<int>& vec){
+>         // 终止条件: 空节点
+>         if (node == nullptr) return;
+>         // 对于每一个节点，遍历其children数组
+>         for(int k=0; k < node->children.size(); k++) {
+>             if(node->children[k] != nullptr) recursion(node->children[k], vec);
+>         }
+>         // 中
+>         vec.push_back(node->val);    
+>     }
+>     // 调用递归函数即可，不能在函数内定义函数，要在函数外定义递归函数
+>     vector<int> postorder(Node* root) {
+>         vector<int> result;
+>         recursion(root, result);
+>         return result;        
+>     }
+> };
+> ```
+> 
+> 
+> 
+> <font color="yellow">迭代法的思路如下：（在先序遍历的基础上修改，待处理节点的入栈顺序翻转， 最后再将`vector`反转顺序即可）</font>
+> 
+> <font color="gree">
+>
+> 递归法 隐式 使用栈存储参数和返回值
+> 迭代法 明式 使用栈存储？？？
+>
+> * 使用栈stack存储待处理节点
+>
+> * 设置结果集`result`
+>
+> * 若`root`为空，则直接返回空集
+>
+> * 根节点`root`入栈
+>
+> * while循环
+>
+> 开始`while(!sta.empty())`循环，将`sta`中存储的单层节点值放入vector<int>, 然后将所有子节点全部存入`sta`
+> > 
+> > `while`循环体如下：
+> > 
+> > * 暂存当前节点`Node* node = sta.top(); sta.pop();`
+> > 
+> > * 存储节点值`result.push_back(node->val);`
+> > 
+> > * 内嵌`for(int i = 0; i < node->children.size(); i++)`循环(从左到右入栈，这样出栈才能保证从右到左)
+> > 
+>
+> 
+> * 翻转顺序`reverse(result.begin(), result.end())`
+> > 反转前顺序是中， 子节点3，子节点2，子节点1
+> > 反转后顺序是子节点1，子节点2， 子节点3，中
+> 
+> * 返回`result`
+> 
+> </font>
+> 
+> <font color="yellow">迭代法的代码如下：</font>
+> 
+> ```c++
+> class Solution {
+> public:
+>     vector<int> postorder(Node* root) {
+>         // 使用栈stack存储待处理节点
+>         stack<Node*> sta;
+>         // 设置结果集
+>         vector<int> result;
+>         // 若root为空，则直接返回空集
+>         if(root == nullptr) return result;
+>         // 根节点入栈
+>         sta.push(root);
+>         // while循环
+>         while(!sta.empty()) {
+>             // 先中
+>             Node* node = sta.top();
+>             sta.pop();
+>             result.push_back(node->val);
+>             // 遍历子节点数组, 从左到右入栈，这样出栈才能保证从右到左
+>             for(int i = 0; i < node->children.size(); i++) {
+>                 if(node->children[i] != nullptr) sta.push(node->children[i]);
+>             }
+>         }
+> 
+>         // 反转前顺序是中， 子节点3，子节点2，子节点1
+>         // 反转后顺序是子节点1，子节点2， 子节点3，中
+>         reverse(result.begin(), result.end());
+> 
+>         // 返回结果集
+>         return result;
+>     }
+> };
+> ```
+> 
+> 
 
 
 
+#### 周三
+
+>
+> https://programmercarl.com/%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E8%BF%AD%E4%BB%A3%E9%81%8D%E5%8E%86.html
+>
+> 我们开始用栈来实现递归的写法，也就是所谓的迭代法。
+>
+> 细心的同学发现文中前后序遍历空节点是否入栈写法是不同的
+> 
+> 其实空节点入不入栈都差不多，但感觉空节点不入栈确实清晰一些，符合文中动画的演示。
+> 
+> 拿前序遍历来举例，空节点入栈：
+>
+> ```c++
+> class Solution {
+> public:
+>     vector<int> preorderTraversal(TreeNode* root) {
+>         stack<TreeNode*> st;
+>         vector<int> result;
+>         st.push(root);
+>         while (!st.empty()) {
+>             TreeNode* node = st.top();                      // 中
+>             st.pop();
+>             if (node != NULL) result.push_back(node->val);
+>             else continue;
+>             st.push(node->right);                           // 右
+>             st.push(node->left);                            // 左
+>         }
+>         return result;
+>     }
+> };
+> ```
+> 
+> 前序遍历空节点不入栈的代码：（注意注释部分和上文的区别）
+> 
+> ```c++
+> class Solution {
+> public:
+>     vector<int> preorderTraversal(TreeNode* root) {
+>         stack<TreeNode*> st;
+>         vector<int> result;
+>         if (root == NULL) return result;
+>         st.push(root);
+>         while (!st.empty()) {
+>             TreeNode* node = st.top();                       // 中
+>             st.pop();
+>             result.push_back(node->val);
+>             if (node->right) st.push(node->right);           // 右（空节点不入栈）
+>             if (node->left) st.push(node->left);             // 左（空节点不入栈）
+>         }
+>         return result;
+>     }
+> };
+> ```
+> 
+> 在实现迭代法的过程中，有同学问了：递归与迭代究竟谁优谁劣呢？
+> 
+> 从时间复杂度上其实迭代法和递归法差不多（在不考虑函数调用开销和函数调用产生的堆栈开销），但是空间复杂度上，递归开销会大一些，因为递归需要系统堆栈存参数返回值等等。
+> 
+> 递归更容易让程序员理解，但收敛不好，容易栈溢出。
+> 
+> 这么说吧，递归是方便了程序员，难为了机器（各种保存参数，各种进栈出栈）。
+> 
+> **在实际项目开发的过程中我们是要尽量避免递归！因为项目代码参数、调用关系都比较复杂，不容易控制递归深度，甚至会栈溢出。**
+> 
+> 
+
+
+#### 周四
+
+>
+> https://programmercarl.com/%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E7%BB%9F%E4%B8%80%E8%BF%AD%E4%BB%A3%E6%B3%95.html
+>
+> 我们使用空节点作为标记，给出了统一的前中后序迭代法。
+>
+> 此时又多了一种前中后序的迭代写法，那么有同学问了：前中后序迭代法是不是一定要统一来写，这样才算是规范。
+>
+> 其实没必要，还是自己感觉哪一种更好记就用哪种。
+>
+> **但是一定要掌握前中后序一种迭代的写法，并不因为某种场景的题目一定要用迭代，而是现场面试的时候，面试官看你顺畅的写出了递归，一般会进一步考察能不能写出相应的迭代。**
+>
+> 
+
+
+#### 周五
+
+>
+> https://programmercarl.com/0102.%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E5%B1%82%E5%BA%8F%E9%81%8D%E5%8E%86.html
+>
+> 我们介绍了二叉树的另一种遍历方式（图论中广度优先搜索在二叉树上的应用）即：层序遍历。
+>
+> 看完这篇文章，去leetcode上怒刷五题，文章中 编号107题目的样例图放错了（原谅我匆忙之间总是手抖），但不影响大家理解。
+>
+> 只有同学发现leetcode上“515. 在每个树行中找最大值”，也是层序遍历的应用，依然可以分分钟解决，所以就是一鼓作气解决六道了，哈哈。
+>
+> **层序遍历遍历相对容易一些，只要掌握基本写法（也就是框架模板），剩下的就是在二叉树每一行遍历的时候做做逻辑修改。**
+>
+> 
+> 
+
+
+#### 周六
+
+>
+> https://programmercarl.com/0226.%E7%BF%BB%E8%BD%AC%E4%BA%8C%E5%8F%89%E6%A0%91.html
+>
+> 我们把翻转二叉树这么一道简单又经典的问题，充分的剖析了一波，相信就算做过这道题目的同学，看完本篇之后依然有所收获！
+>
+> **文中我指的是递归的中序遍历是不行的，因为使用递归的中序遍历，某些节点的左右孩子会翻转两次。**
+>
+> 如果非要使用递归中序的方式写，也可以，如下代码就可以避免节点左右孩子翻转两次的情况：
+>
+> ```c++
+> class Solution {
+> public:
+>     TreeNode* invertTree(TreeNode* root) {
+>         if (root == NULL) return root;
+>         invertTree(root->left);         // 左
+>         swap(root->left, root->right);  // 中
+>         invertTree(root->left);         // 注意 这里依然要遍历左孩子，因为中间节点已经翻转了
+>         return root;
+>     }
+> };
+> ```
+> 
+> 代码虽然可以，但这毕竟不是真正的递归中序遍历了。
+> 
+> 但使用迭代方式统一写法的中序是可以的。
+> 
+> 代码如下：
+> 
+> ```c++
+> class Solution {
+> public:
+>     TreeNode* invertTree(TreeNode* root) {
+>         stack<TreeNode*> st;
+>         if (root != NULL) st.push(root);
+>         while (!st.empty()) {
+>             TreeNode* node = st.top();
+>             if (node != NULL) {
+>                 st.pop();
+>                 if (node->right) st.push(node->right);  // 右
+>                 st.push(node);                          // 中
+>                 st.push(NULL);
+>                 if (node->left) st.push(node->left);    // 左
+> 
+>             } else {
+>                 st.pop();
+>                 node = st.top();
+>                 st.pop();
+>                 swap(node->left, node->right);          // 节点处理逻辑
+>             }
+>         }
+>         return root;
+>     }
+> };
+> ```
+> 
+> 为什么这个中序就是可以的呢，因为这是用栈来遍历，而不是靠指针来遍历，避免了递归法中翻转了两次的情况，大家可以画图理解一下，这里有点意思的。
+>
+> 
 
 
 
+#### 总结
 
-
-
-
+>
+> **本周我们都是讲解了二叉树，从理论基础到遍历方式，从递归到迭代，从深度遍历到广度遍历，最后再用了一个翻转二叉树的题目把我们之前讲过的遍历方式都串了起来。**
+> 
 
 
 
