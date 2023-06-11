@@ -4530,7 +4530,7 @@
 >
 > 例如有构造函数，定义初始值为9的节点：
 >
-> ```c++
+> ```c++ {.line-numbers}
 > TreeNode* a = new TreeNode(9);
 > ```
 > 
