@@ -846,7 +846,10 @@ int main()
 > <div align=center>
 > <img src="./images/merge_sort_1.gif" style="zoom:100%;"/>
 > </div>
->
+> 
+
+#### 递归法
+
 > 
 > **根据思路和动图，我的代码实现**
 >
@@ -980,17 +983,648 @@ int main()
 > 排序后: 2, 3, 7, 8, 9, 10, 12, 15, 17, 21, 55, 
 > 耗时:120 ms
 > ```
->
 > 
-> **还可以进行优化**
+
+
+> 
+> **优化1： 省去`space.clear();`, 直接索引覆盖，但是调用前需要设置好`space`的大小`space.resize(nums.size());`**
 >
 > https://blog.csdn.net/CltCj/article/details/122664204
+> 
+>
+> ```c++
+> void mergeSort(vector<int>& nums, vector<int>& space, int start, int end) {
+> 
+>     if (start >= end) return; //表示区间元素小于2个，递归终止
+> 
+>     // 申请空间长度
+>     // 当长度为奇数时，让左子序列大一个。
+>     // 例如，start = 0; end= 14; 一共15个元素时
+>     // (end - start) / 2 = 7，让左子序列为8个(0~7)，右子序列为7个(8~14)
+>     // 例如，start = 0; end= 15; 一共16个元素时
+>     // (end - start) / 2 = 7，让左子序列为8个(0~7)，右子序列为7个(8~15) 
+>     int left_start = start;
+>     int left_end = start + (end - start)/2;  
+>     int right_start = left_end + 1;
+>     int right_end = end;
+> 
+>     // 先递归子序列
+>     mergeSort(nums, space, left_start, left_end);    //对区间左半边元素递归排序
+>     mergeSort(nums, space, right_start, right_end);  //对区间右半边元素递归排序
+> 
+>     // 双指针起始端
+>     int left = left_start;
+>     int right = right_start;
+> 
+> 
+>     int index = 0; //已排序数组space的计数器
+> 
+>     // 对已排序的两序列进行归并处理
+>     // 如果两个指针没到头
+>     while(left <= left_end && right <= right_end) {
+>         if(nums[left] <= nums[right]) {
+>             space[index] = nums[left]; // space.push_back(nums[left]);
+>             index++;
+>             left++;
+>         };
+>         if(nums[left] > nums[right]) {
+>             space[index] = nums[right]; // space.push_back(nums[right]);
+>             index++;
+>             right++;
+>         };   
+>     }    
+>     // left指针超出序列尾, right未超出
+>     // right指针剩下所有元素合并到space尾部
+>     while(right <= right_end) {
+>         space[index] = nums[right]; // space.push_back(nums[right]); 
+>         index++;
+>         right++;
+>     }
+>     // right指针超出序列尾, left未超出
+>     // left指针剩下所有元素合并到space尾部
+>     while(left <= left_end) {
+>         space[index] = nums[left]; // space.push_back(nums[left]);
+>         index++;
+>         left++;
+>     }   
+>     
+>     // 将空间中的已排序数列放回
+>     for(int i=start; i <= end; i++) {
+>         nums[i] = space[i-start];
+>     }
+> 
+> }
+> 
+> 
+> int main()
+> {
+>     vector<int> nums = {12, 7, 3, 2, 8, 9, 10, 21, 55, 15, 17};
+>     ...
+>     vector<int> space;
+>     space.resize(nums.size());
+>     mergeSort(nums, space, 0, nums.size() - 1);
+>     ...
+> }
+> ```
+>
+> 
+> **实机 测一下优化1 的时间复杂度：**
+>
+> ```c++
+> #include <iostream> 
+> #include <vector>
+> using namespace std;
+> #include <chrono>
+> #include <thread>
+> using namespace chrono;
+> 
+> void mergeSort(vector<int>& nums, vector<int>& space, int start, int end)  
+> {
+>     ...
+> } 
+> 
+> int main()
+> {
+>     vector<int> nums = {12, 7, 3, 2, 8, 9, 10, 21, 55, 15, 17};
+> 
+>     cout << "排序前: ";
+>     for(int i=0; i < nums.size(); i++) {
+>         cout << nums[i] << ", ";
+>     }
+>     cout << endl;
+> 
+>     vector<int> space;
+>     space.resize(nums.size());
+>     mergeSort(nums, space, 0, nums.size() - 1);
+> 
+>     cout << "排序后: ";
+>     for(int i=0; i < nums.size(); i++) {
+>         cout << nums[i] << ", ";
+>     }
+>     cout << endl;
+> 
+> 
+>     // 执行100000次, 测试运行时间
+>     milliseconds start_time = duration_cast<milliseconds >(
+>         system_clock::now().time_since_epoch()
+>     );
+> 
+>     
+>     for(int i=0 ; i < 100000; i++) {
+>         vector<int> test = {12, 7, 3, 2, 8, 9, 10, 21, 55, 15, 17};
+>         vector<int> test_space;
+>         test_space.resize(test.size());
+>         mergeSort(test, test_space, 0, test.size() - 1);
+>     }
+> 
+>     milliseconds end_time = duration_cast<milliseconds >(
+>         system_clock::now().time_since_epoch()
+>     );
+> 
+> 
+>     cout << "耗时:" << milliseconds(end_time).count() - milliseconds(start_time).count()
+>         <<" ms"<< endl;
+> 
+> 
+>     
+>     cout << endl;
+>     pause(); // system("pause"); 
+> 
+>     return 0;
+> }
+> ```
+>
+> **运行结果如下：**
+>
+> ```c++
+> 排序前: 12, 7, 3, 2, 8, 9, 10, 21, 55, 15, 17, 
+> 排序后: 2, 3, 7, 8, 9, 10, 12, 15, 17, 21, 55, 
+> 耗时:50 ms
+> ```
+> 
+> 
+> <font color="yellow">节省了几乎`2.5`倍的时间，从`120ms`到`50ms` </font>
+>
+
+> 
+> **优化2（不是很好理解）： `space`初始化和`nums`相同;  每次递归时，在子序列中调换`nums`和`space`的定位：主要数组？辅助数组？**
+>
+> ```c++
+> // 先递归子序列
+> mergeSort(space, nums, left_start, left_end);    //对区间左半边元素递归排序
+> mergeSort(space, nums, right_start, right_end);  //对区间右半边元素递归排序
+> ```
+>
+> **完整代码如下**
+> 
+> ```c++
+> void mergeSort(vector<int>& nums, vector<int>& space, int start, int end) {
+> 
+>     if (start >= end) return; //表示区间元素小于2个，递归终止
+> 
+>     // 申请空间长度
+>     // 当长度为奇数时，让左子序列大一个。
+>     // 例如，start = 0; end= 14; 一共15个元素时
+>     // (end - start) / 2 = 7，让左子序列为8个(0~7)，右子序列为7个(8~14)
+>     // 例如，start = 0; end= 15; 一共16个元素时
+>     // (end - start) / 2 = 7，让左子序列为8个(0~7)，右子序列为7个(8~15) 
+>     int left_start = start;
+>     int left_end = start + (end - start)/2;  
+>     int right_start = left_end + 1;
+>     int right_end = end;
+> 
+>     // 先递归子序列
+>     mergeSort(space, nums, left_start, left_end);    //对区间左半边元素递归排序
+>     mergeSort(space, nums, right_start, right_end);  //对区间右半边元素递归排序
+> 
+>     // 双指针起始端
+>     int left = left_start;
+>     int right = right_start;
+> 
+> 
+>     int index = 0; //已排序数组space的计数器
+> 
+>     // 对已排序的两序列进行归并处理
+>     // 如果两个指针没到头
+>     while(left <= left_end && right <= right_end) {
+>         if(nums[left] <= nums[right]) {
+>             space[index] = nums[left]; // space.push_back(nums[left]);
+>             index++;
+>             left++;
+>         };
+>         if(nums[left] > nums[right]) {
+>             space[index] = nums[right]; // space.push_back(nums[right]);
+>             index++;
+>             right++;
+>         };   
+>     }    
+>     // left指针超出序列尾, right未超出
+>     // right指针剩下所有元素合并到space尾部
+>     while(right <= right_end) {
+>         space[index] = nums[right]; // space.push_back(nums[right]); 
+>         index++;
+>         right++;
+>     }
+>     // right指针超出序列尾, left未超出
+>     // left指针剩下所有元素合并到space尾部
+>     while(left <= left_end) {
+>         space[index] = nums[left]; // space.push_back(nums[left]);
+>         index++;
+>         left++;
+>     }   
+>     
+>     // 将空间中的已排序数列放回
+>     // for(int i=start; i <= end; i++) {
+>         // nums[i] = space[i-start];
+>     // }
+> 
+> }
+> 
+> 
+> int main()
+> {
+>     vector<int> nums = {12, 7, 3, 2, 8, 9, 10, 21, 55, 15, 17};
+>     ...
+>     vector<int> space(nums);
+>     mergeSort(nums, space, 0, nums.size() - 1);
+>     ...
+> }
+> ```
+>
+> 
+> **实机 测一下优化2 的时间复杂度：**
+>
+> ```c++
+> #include <iostream> 
+> #include <vector>
+> using namespace std;
+> #include <chrono>
+> #include <thread>
+> using namespace chrono;
+> 
+> void mergeSort(vector<int>& nums, vector<int>& space, int start, int end)  
+> {
+>     ...
+> } 
+> 
+> int main()
+> {
+>     vector<int> nums = {12, 7, 3, 2, 8, 9, 10, 21, 55, 15, 17};
+> 
+>     cout << "排序前: ";
+>     for(int i=0; i < nums.size(); i++) {
+>         cout << nums[i] << ", ";
+>     }
+>     cout << endl;
+> 
+>     vector<int> space(nums);
+>     mergeSort(nums, space, 0, nums.size() - 1);
+> 
+>     cout << "排序后: ";
+>     for(int i=0; i < nums.size(); i++) {
+>         cout << nums[i] << ", ";
+>     }
+>     cout << endl;
+> 
+> 
+>     // 执行100000次, 测试运行时间
+>     milliseconds start_time = duration_cast<milliseconds >(
+>         system_clock::now().time_since_epoch()
+>     );
+> 
+>     
+>     for(int i=0 ; i < 100000; i++) {
+>         vector<int> test = {12, 7, 3, 2, 8, 9, 10, 21, 55, 15, 17};
+>         vector<int> test_space(test);
+>         mergeSort(test, test_space, 0, test.size() - 1);
+>     }
+> 
+>     milliseconds end_time = duration_cast<milliseconds >(
+>         system_clock::now().time_since_epoch()
+>     );
+> 
+> 
+>     cout << "耗时:" << milliseconds(end_time).count() - milliseconds(start_time).count()
+>         <<" ms"<< endl;
+> 
+> 
+>     
+>     cout << endl;
+>     pause(); // system("pause"); 
+> 
+>     return 0;
+> }
+> ```
+>
+> **运行结果如下：**
+>
+> ```c++
+> 排序前: 12, 7, 3, 2, 8, 9, 10, 21, 55, 15, 17, 
+> 排序后: 2, 3, 7, 8, 9, 10, 12, 15, 17, 21, 55, 
+> 耗时:30 ms
+> ```
+> 
+> 
+> <font color="yellow">节省了几乎`4`倍的时间，从`120ms`到`50ms`到`30ms` </font>
+>
+> 
+
+
+
+#### 迭代法（递归法一定能转化为迭代法）
+
+
+>
+> **使用原版代码的递归法，转为迭代法**
+>
+> ```c++
+> void mergeSort(vector<int>& nums, vector<int>& space) {
+> 
+>     if (nums.size() < 2) return; //区间元素小于2个，递归终止
+> 
+> 	int seg;//区间分段的计数器，1,2,4,8...
+> 	int start;//区间起始的计时器
+>     
+> 	//排序的趟数的循环
+> 	for (seg = 1; seg < nums.size(); seg = seg * 2){
+> 
+> 		//每趟排序选取区间的循环
+> 		for (start = 0; start < nums.size(); start = start + seg * 2){
+>                     
+>             // 左右区间
+>             // 例如，start = 0; seg= 2; 一共2个元素时
+>             // 让左子序列为2个(0 1)，右子序列为2个(2~3)
+>             int left_start = start;
+>             int left_end = min(start + seg - 1, int(nums.size() - 1));      //考虑分段不均的情况，mid1不能超出len 
+>             int right_start = min(left_end + 1, int(nums.size() - 1));      // 需要将size_t类型转换为Int类型，不然min()函数会报错
+>             int right_end = min(start + seg * 2 - 1, int(nums.size() - 1));
+> 
+>             // 双指针
+>             int left = left_start;
+>             int right = right_start;
+> 
+> 
+>             // 对已排序的两序列进行归并处理
+>             // 如果两个指针没到头
+>             while(left <= left_end && right <= right_end) {
+>                 if(nums[left] <= nums[right]) {
+>                     space.push_back(nums[left]);
+>                     left++;
+>                 };
+>                 if(nums[left] > nums[right]) {
+>                     space.push_back(nums[right]);
+>                     right++;
+>                 };   
+>             }    
+>             // left指针超出序列尾, right未超出
+>             // right指针剩下所有元素合并到space尾部
+>             while(right <= right_end) {
+>                 space.push_back(nums[right]);
+>                 right++;
+>             }
+>             // right指针超出序列尾, left未超出
+>             // left指针剩下所有元素合并到space尾部
+>             while(left <= left_end) {
+>                 space.push_back(nums[left]);
+>                 left++;
+>             }   
+>     
+> 
+>             // 将区间中的已排序数列放回
+>             for(int i=left_start; i <= right_end; i++) {
+>                 nums[i] = space[i-left_start];
+>             }    
+> 
+>             // 空间清理
+>             space.clear();            
+> 
+>         }
+>     }
+> }
+> ```
+> 
+> 
+> **实机 测一下原版迭代法的时间复杂度：**
+>
+> ```c++
+> #include <iostream> 
+> #include <vector>
+> using namespace std;
+> #include <chrono>
+> #include <thread>
+> using namespace chrono;
+> 
+> void mergeSort(vector<int>& nums, vector<int>& space)  
+> {
+>     ...
+> } 
+> 
+> int main()
+> {
+>     vector<int> nums = {12, 7, 3, 2, 8, 9, 10, 21, 55, 15, 17};
+> 
+>     cout << "排序前: ";
+>     for(int i=0; i < nums.size(); i++) {
+>         cout << nums[i] << ", ";
+>     }
+>     cout << endl;
+> 
+>     vector<int> space;
+>     mergeSort(nums, space);
+> 
+>     cout << "排序后: ";
+>     for(int i=0; i < nums.size(); i++) {
+>         cout << nums[i] << ", ";
+>     }
+>     cout << endl;
+> 
+> 
+>     // 执行100000次, 测试运行时间
+>     milliseconds start_time = duration_cast<milliseconds >(
+>         system_clock::now().time_since_epoch()
+>     );
+> 
+>     
+>     for(int i=0 ; i < 100000; i++) {
+>         vector<int> test = {12, 7, 3, 2, 8, 9, 10, 21, 55, 15, 17};
+>         vector<int> test_space;
+>         mergeSort(test, test_space);
+>     }
+> 
+>     milliseconds end_time = duration_cast<milliseconds >(
+>         system_clock::now().time_since_epoch()
+>     );
+> 
+> 
+>     cout << "耗时:" << milliseconds(end_time).count() - milliseconds(start_time).count()
+>         <<" ms"<< endl;
+> 
+> 
+>     
+>     cout << endl;
+>     pause(); // system("pause"); 
+> 
+>     return 0;
+> }
+> ```
+>
+> **运行结果如下：**
+>
+> ```c++
+> 排序前: 12, 7, 3, 2, 8, 9, 10, 21, 55, 15, 17, 
+> 排序后: 2, 3, 7, 8, 9, 10, 12, 15, 17, 21, 55, 
+> 耗时:120 ms
+> ```
+> 
+> 
+> <font color="yellow">相同的思路：递归法`120ms`, 迭代法`120ms`</font>
 >
 > 
 
 
 
 
+
+
+
+
+>
+> **使用优化1的递归法，转为迭代法**
+>
+> ```c++
+> void mergeSort(vector<int>& nums, vector<int>& space) {
+> 
+>     if (nums.size() < 2) return; //区间元素小于2个，递归终止
+> 
+> 	int seg;//区间分段的计数器，1,2,4,8...
+> 	int start;//区间起始的计时器
+>     
+> 	//排序的趟数的循环
+> 	for (seg = 1; seg < nums.size(); seg = seg * 2){
+> 
+> 		//每趟排序选取区间的循环
+> 		for (start = 0; start < nums.size(); start = start + seg * 2){
+>                     
+>             // 左右区间
+>             // 例如，start = 0; seg= 2; 一共2个元素时
+>             // 让左子序列为2个(0 1)，右子序列为2个(2~3)
+>             int left_start = start;
+>             int left_end = min(start + seg - 1, int(nums.size() - 1));      //考虑分段不均的情况，mid1不能超出len 
+>             int right_start = min(left_end + 1, int(nums.size() - 1));      // 需要将size_t类型转换为Int类型，不然min()函数会报错
+>             int right_end = min(start + seg * 2 - 1, int(nums.size() - 1));
+> 
+>             // 双指针
+>             int left = left_start;
+>             int right = right_start;
+> 
+>             //已排序数组space的计数器
+>             int index = 0; 
+> 
+>             // 对已排序的两序列进行归并处理
+>             // 如果两个指针没到头
+>             while(left <= left_end && right <= right_end) {
+>                 if(nums[left] <= nums[right]) {
+>                     space[index] = nums[left]; // space.push_back(nums[left]);
+>                     index++;
+>                     left++;
+>                 };
+>                 if(nums[left] > nums[right]) {
+>                     space[index] = nums[right]; // space.push_back(nums[right]);
+>                     index++;
+>                     right++;
+>                 };   
+>             }    
+>             // left指针超出序列尾, right未超出
+>             // right指针剩下所有元素合并到space尾部
+>             while(right <= right_end) {
+>                 space[index] = nums[right]; // space.push_back(nums[right]); 
+>                 index++;
+>                 right++;
+>             }
+>             // right指针超出序列尾, left未超出
+>             // left指针剩下所有元素合并到space尾部
+>             while(left <= left_end) {
+>                 space[index] = nums[left]; // space.push_back(nums[left]);
+>                 index++;
+>                 left++;
+>             }   
+> 
+>             // 将区间中的已排序数列放回
+>             for(int i=left_start; i <= right_end; i++) {
+>                 nums[i] = space[i-left_start];
+>             }    
+> 
+>         }
+>     }
+> }
+> ```
+> 
+> 
+> 
+> **实机 测一下优化1 的时间复杂度：**
+>
+> ```c++
+> #include <iostream> 
+> #include <vector>
+> using namespace std;
+> #include <chrono>
+> #include <thread>
+> using namespace chrono;
+> 
+> void mergeSort(vector<int>& nums, vector<int>& space)  
+> {
+>     ...
+> } 
+> 
+> int main()
+> {
+>     vector<int> nums = {12, 7, 3, 2, 8, 9, 10, 21, 55, 15, 17};
+> 
+>     cout << "排序前: ";
+>     for(int i=0; i < nums.size(); i++) {
+>         cout << nums[i] << ", ";
+>     }
+>     cout << endl;
+> 
+>     vector<int> space;
+>     space.resize(nums.size());
+>     mergeSort(nums, space);
+> 
+>     cout << "排序后: ";
+>     for(int i=0; i < nums.size(); i++) {
+>         cout << nums[i] << ", ";
+>     }
+>     cout << endl;
+> 
+> 
+>     // 执行100000次, 测试运行时间
+>     milliseconds start_time = duration_cast<milliseconds >(
+>         system_clock::now().time_since_epoch()
+>     );
+> 
+>     
+>     for(int i=0 ; i < 100000; i++) {
+>         vector<int> test = {12, 7, 3, 2, 8, 9, 10, 21, 55, 15, 17};
+>         vector<int> test_space;
+>         test_space.resize(test.size());
+>         mergeSort(test, test_space);
+>     }
+> 
+>     milliseconds end_time = duration_cast<milliseconds >(
+>         system_clock::now().time_since_epoch()
+>     );
+> 
+> 
+>     cout << "耗时:" << milliseconds(end_time).count() - milliseconds(start_time).count()
+>         <<" ms"<< endl;
+> 
+> 
+>     
+>     cout << endl;
+>     pause(); // system("pause"); 
+> 
+>     return 0;
+> }
+> ```
+>
+> **运行结果如下：**
+>
+> ```c++
+> 排序前: 12, 7, 3, 2, 8, 9, 10, 21, 55, 15, 17, 
+> 排序后: 2, 3, 7, 8, 9, 10, 12, 15, 17, 21, 55, 
+> 耗时:60 ms
+> ```
+> 
+> 
+> <font color="yellow">相同的思路：递归法`50ms`, 迭代法`60ms`</font>
+>
+> 
+
+
+
+>
+> **优化2的递归法，无法转为迭代法**
+> 
 
 
 
