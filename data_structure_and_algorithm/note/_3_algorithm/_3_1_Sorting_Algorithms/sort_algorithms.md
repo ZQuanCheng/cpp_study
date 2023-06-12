@@ -1534,8 +1534,85 @@ int main()
 >                 nums[i] = space[i-left_start];
 >             }    
 > 
->         }
->     }
+>         } // for (start = 0; start < nums.size(); start = start + seg * 2) 
+>         
+>     } // for (seg = 1; seg < nums.size(); seg = seg * 2)
+> }
+> ```
+> 
+> **其实可以不用每一个长度为`seg`的小区间都取回，可以等一遍结束一起取回**
+>
+> 将`int index = 0; `改成`int index = left_start; `
+>
+> **代码如下**
+> 
+> ```c++
+> void mergeSort(vector<int>& nums, vector<int>& space) {
+> 
+>     if (nums.size() < 2) return; //区间元素小于2个，递归终止
+> 
+> 	int seg;//区间分段的计数器，1,2,4,8...
+> 	int start;//区间起始的计时器
+>     
+> 	//排序的趟数的循环
+> 	for (seg = 1; seg < nums.size(); seg = seg * 2){
+> 
+> 		//每趟排序选取区间的循环
+> 		for (start = 0; start < nums.size(); start = start + seg * 2){
+>                     
+>             // 左右区间
+>             // 例如，start = 0; seg= 2; 一共2个元素时
+>             // 让左子序列为2个(0 1)，右子序列为2个(2~3)
+>             int left_start = start;
+>             int left_end = min(start + seg - 1, int(nums.size() - 1));      //考虑分段不均的情况，mid1不能超出len 
+>             int right_start = min(left_end + 1, int(nums.size() - 1));      // 需要将size_t类型转换为Int类型，不然min()函数会报错
+>             int right_end = min(start + seg * 2 - 1, int(nums.size() - 1));
+> 
+>             // 双指针
+>             int left = left_start;
+>             int right = right_start;
+> 
+>             //已排序数组space的计数器
+>             int index = left_start; 
+> 
+>             // 对已排序的两序列进行归并处理
+>             // 如果两个指针没到头
+>             while(left <= left_end && right <= right_end) {
+>                 if(nums[left] <= nums[right]) {
+>                     space[index] = nums[left]; // space.push_back(nums[left]);
+>                     index++;
+>                     left++;
+>                 };
+>                 if(nums[left] > nums[right]) {
+>                     space[index] = nums[right]; // space.push_back(nums[right]);
+>                     index++;
+>                     right++;
+>                 };   
+>             }    
+>             // left指针超出序列尾, right未超出
+>             // right指针剩下所有元素合并到space尾部
+>             while(right <= right_end) {
+>                 space[index] = nums[right]; // space.push_back(nums[right]); 
+>                 index++;
+>                 right++;
+>             }
+>             // right指针超出序列尾, left未超出
+>             // left指针剩下所有元素合并到space尾部
+>             while(left <= left_end) {
+>                 space[index] = nums[left]; // space.push_back(nums[left]);
+>                 index++;
+>                 left++;
+>             }   
+> 
+>         } // for (start = 0; start < nums.size(); start = start + seg * 2)
+>
+>         // 可以只用一句话swap(nums, space);
+>         // 将已排序数列放回
+>         for(int i=0; i <= nums.size(); i++) {
+>             nums[i] = space[i];
+>         }   
+> 
+>     } // for (seg = 1; seg < nums.size(); seg = seg * 2) 
 > }
 > ```
 > 
@@ -1625,6 +1702,30 @@ int main()
 >
 > **优化2的递归法，无法转为迭代法**
 > 
+
+
+
+
+--------------------------------------------------------------------------------
+
+### 堆排序 `Heap Sort`
+
+>
+> 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
