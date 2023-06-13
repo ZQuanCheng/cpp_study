@@ -25,7 +25,7 @@ https://www.geeksforgeeks.org/sorting-algorithms/
 > 6. 归并排序 `Merge Sort`
 > 7. 堆排序   `Heap Sort`
 > 8. 计数排序 `Counting Sort`
-> 9. 桶排序   `Bucket Sort`
+> 9. 桶排序/箱排序   `Bucket Sort`
 > 10. 基数排序 `Radix Sort`
 >
 > </font>
@@ -793,7 +793,7 @@ int main()
 > ```c++
 > 排序前: 12, 7, 3, 2, 8, 9, 10, 21, 55, 15, 17, 
 > 排序后: 2, 3, 7, 8, 9, 10, 12, 15, 17, 21, 55, 
-> 耗时:22 ms
+> 耗时:20 ms
 > ```
 >
 > <font color="yellow">我自己的写的代码，不仅时间复杂度非常高，空间复杂度也很高，不合适</font>
@@ -985,6 +985,7 @@ int main()
 > ```
 > 
 
+#### 递归法: 优化1
 
 > 
 > **优化1： 省去`space.clear();`, 直接索引覆盖，但是调用前需要设置好`space`的大小`space.resize(nums.size());`**
@@ -1139,12 +1140,16 @@ int main()
 > ```c++
 > 排序前: 12, 7, 3, 2, 8, 9, 10, 21, 55, 15, 17, 
 > 排序后: 2, 3, 7, 8, 9, 10, 12, 15, 17, 21, 55, 
-> 耗时:50 ms
+> 耗时:60 ms
 > ```
 > 
 > 
-> <font color="yellow">节省了几乎`2.5`倍的时间，从`120ms`到`50ms` </font>
+> <font color="yellow">节省了几乎`2`倍的时间，从`120ms`到`60ms` </font>
 >
+
+
+#### 递归法: 优化2
+
 
 > 
 > **优化2（不是很好理解）： `space`初始化和`nums`相同;  每次递归时，在子序列中调换`nums`和`space`的定位：主要数组？辅助数组？**
@@ -1301,11 +1306,11 @@ int main()
 > ```c++
 > 排序前: 12, 7, 3, 2, 8, 9, 10, 21, 55, 15, 17, 
 > 排序后: 2, 3, 7, 8, 9, 10, 12, 15, 17, 21, 55, 
-> 耗时:30 ms
+> 耗时:40 ms
 > ```
 > 
 > 
-> <font color="yellow">节省了几乎`4`倍的时间，从`120ms`到`50ms`到`30ms` </font>
+> <font color="yellow">节省了几乎`3`倍的时间，从`120ms`到`60ms`到`40ms` </font>
 >
 > 
 
@@ -1453,19 +1458,17 @@ int main()
 > ```c++
 > 排序前: 12, 7, 3, 2, 8, 9, 10, 21, 55, 15, 17, 
 > 排序后: 2, 3, 7, 8, 9, 10, 12, 15, 17, 21, 55, 
-> 耗时:120 ms
+> 耗时:130 ms
 > ```
 > 
 > 
-> <font color="yellow">相同的思路：递归法`120ms`, 迭代法`120ms`</font>
+> <font color="yellow">相同的思路：递归法`120ms`, 迭代法`130ms`</font>
 >
 > 
 
 
 
-
-
-
+#### 迭代法: 优化1（递归法一定能转化为迭代法）
 
 
 >
@@ -1539,6 +1542,86 @@ int main()
 >     } // for (seg = 1; seg < nums.size(); seg = seg * 2)
 > }
 > ```
+> 
+> **实机 测一下优化1 的时间复杂度：**
+>
+> ```c++
+> #include <iostream> 
+> #include <vector>
+> using namespace std;
+> #include <chrono>
+> #include <thread>
+> using namespace chrono;
+> 
+> void mergeSort(vector<int>& nums, vector<int>& space)  
+> {
+>     ...
+> } 
+> 
+> int main()
+> {
+>     vector<int> nums = {12, 7, 3, 2, 8, 9, 10, 21, 55, 15, 17};
+> 
+>     cout << "排序前: ";
+>     for(int i=0; i < nums.size(); i++) {
+>         cout << nums[i] << ", ";
+>     }
+>     cout << endl;
+> 
+>     vector<int> space;
+>     space.resize(nums.size());
+>     mergeSort(nums, space);
+> 
+>     cout << "排序后: ";
+>     for(int i=0; i < nums.size(); i++) {
+>         cout << nums[i] << ", ";
+>     }
+>     cout << endl;
+> 
+> 
+>     // 执行100000次, 测试运行时间
+>     milliseconds start_time = duration_cast<milliseconds >(
+>         system_clock::now().time_since_epoch()
+>     );
+> 
+>     
+>     for(int i=0 ; i < 100000; i++) {
+>         vector<int> test = {12, 7, 3, 2, 8, 9, 10, 21, 55, 15, 17};
+>         vector<int> test_space;
+>         test_space.resize(test.size());
+>         mergeSort(test, test_space);
+>     }
+> 
+>     milliseconds end_time = duration_cast<milliseconds >(
+>         system_clock::now().time_since_epoch()
+>     );
+> 
+> 
+>     cout << "耗时:" << milliseconds(end_time).count() - milliseconds(start_time).count()
+>         <<" ms"<< endl;
+> 
+> 
+>     
+>     cout << endl;
+>     pause(); // system("pause"); 
+> 
+>     return 0;
+> }
+> ```
+>
+> **运行结果如下：**
+>
+> ```c++
+> 排序前: 12, 7, 3, 2, 8, 9, 10, 21, 55, 15, 17, 
+> 排序后: 2, 3, 7, 8, 9, 10, 12, 15, 17, 21, 55, 
+> 耗时:80 ms
+> ```
+> 
+> 
+> <font color="yellow">相同的思路：递归法`60ms`, 迭代法`80ms`</font>
+> 
+
+
 > 
 > **其实可以不用每一个长度为`seg`的小区间都取回，可以等一遍结束一起取回**
 >
@@ -1616,9 +1699,335 @@ int main()
 > }
 > ```
 > 
+>
+> **实机测试运行结果如下：**
+>
+> ```c++
+> 排序前: 12, 7, 3, 2, 8, 9, 10, 21, 55, 15, 17, 
+> 排序后: 2, 3, 7, 8, 9, 10, 12, 15, 17, 21, 55, 
+> 耗时:90 ms
+> ```
+> 
+> <font color="yellow">相同的思路：递归法`60ms`, 迭代法`80ms`, 修改后的迭代法`90ms`</font>
 > 
 > 
-> **实机 测一下优化1 的时间复杂度：**
+
+#### 迭代法: 优化2（不太会转化这个）
+
+
+>
+> **优化2的递归法，无法转为迭代法**
+> 
+
+#### 总结
+
+> 
+> <font color="gree">这样来看，递归法反而能节省一些时间，只是可能造成栈溢出，所以一般用迭代法</font>
+> 
+
+
+--------------------------------------------------------------------------------
+
+### 堆排序 `Heap Sort`
+
+>
+> 堆排序是利用堆这种数据结构设计的排序算法，堆具备以下特点：
+>
+> 1）完全二叉树
+> 
+> 2）大顶堆：二叉树根结点值都大于或等于其左右子树结点的值
+> 
+> 3）小顶堆：根结点的值都小于或等于其左右子树结点的值。
+> 
+> **基本思想**
+>
+> 先把数组构造成一个大顶堆（父亲节点大于其子节点）, 然后把堆顶（数组最大值，数字第一个元素）和数组最后一个元素交换， 这样就把最大值放到了数组最后边。把数组长度`n-1`, 再进行构造堆，把剩余的第二大值放到堆顶，输出堆顶（放到剩余未排序数组最后面）。依次类推，直至数组排序完成。
+>
+> **二叉树的性质：**
+>
+> 在第一个元素的索引为 `0` 的情形中：
+>
+> **性质一：**
+> 
+>  索引为 `i` 的左孩子的索引是`( 2 ∗ i + 1 )`;
+>
+> **性质二：**
+> 
+>  索引为 `i` 的右孩子的索引是`( 2 ∗ i + 2 )`;
+>
+> **性质三：**
+> 
+>  索引为 `i` 的父结点的索引是`floor( (i−1) / 2 )` ;
+> 
+> **基本思路：**
+>
+> * `Step1：`建立大根堆,将`n`个元素组成的无序序列构建一个大顶堆。(第`1`层`1`个，第`2`层`2`个，第`3`层`4`个, ...)
+>    
+> <div align=center>
+> <img src="./images/heap_sort_1.png" style="zoom:60%;"/>
+> </div>
+>
+> 从最后一个叶子节点开始，从左到右，从下到上调整，将完全二叉树调整为大顶堆。
+>
+> > 1. 找到第一个**非叶子**结点`4`，由于`4`的左结点`7`比`4`大，所以交换`4`和`7`，交换后为大顶堆结构。
+> >    
+> > <div align=center>
+> > <img src="./images/heap_sort_2.png" style="zoom:60%;"/>
+> > </div>
+> > 
+> > 2.找到第二个**非叶子**结点`6`，由于`6`的右结点`8`比`6`大，所以交换`6`和`8`，交换后符合大顶堆结构。
+> >    
+> > <div align=center>
+> > <img src="./images/heap_sort_3.png" style="zoom:60%;"/>
+> > </div>
+> > 
+>
+> * `Step2：`交换堆元素，交换堆尾元素和堆首元素，使堆尾元素为最大元素；
+>    
+> <div align=center>
+> <img src="./images/heap_sort_4.png" style="zoom:60%;"/>
+> </div>
+>
+> * `Step3：`重建大根堆，将前`n − 1`个元素组成的无序序列调整为大顶堆。
+> 
+> * `Step4：`重复执行步骤二和步骤三，直到整个序列有序
+>
+> **我的代码如下（迭代法）**
+> 
+> ```c++
+> void heapSort(vector<int>& nums) {
+>     // 堆排序
+>     // 设置标志，当一轮遍历完成，flag未变成true，则停止
+>     bool flag = false;
+>     // 每轮都会将最大值放在数组最后，所以每轮遍历的结尾。将堆的长度缩短一个长度
+>     for(int end = nums.size()-1; end >= 1; end--) {
+>         // 标志位先置false
+>         flag = false;
+>         
+>         // 1. 从右到左，从下到上检查，倒序遍历
+>         // 将所有非叶子节点（父节点）的值，设置为父节点、左孩子、有孩子三者的最大值
+>         for(int i=end; i >= 0; i--) {
+>             // 检查是否为非叶子节点（父节点）: 如果是则将父节点、左孩子、有孩子的最大值放在父节点
+>             if(2*i + 1 <= end || 2*i + 2 <= end) { // 存在左孩子或右孩子，即为非叶子节点（父节点）
+>                 // 如果左孩子存在，且值大于父节点
+>                 if(2*i + 1 <= end && nums[2*i + 1] > nums[i]) {
+>                     swap(nums[i], nums[2*i + 1]); 
+>                     flag = true;
+>                 }
+>                 // 如果右孩子存在，且值大于（左孩子和父节点的较大值）
+>                 if(2*i + 2 <= end && nums[2*i + 2] > nums[i]) {
+>                     swap(nums[i], nums[2*i + 2]); 
+>                     flag = true;
+>                 }
+>                 // 上面两个步骤可以将三者的最大值放在父节点
+>                 
+>             }
+>             // 如果左右孩子都存在，要让左孩子 >= 右孩子
+>             if(2*i + 1 <= end && 2*i + 2 <= end) { 
+>                 if(nums[2*i + 1] < nums[2*i + 2]) swap(nums[2*i + 1], nums[2*i + 2]);
+>                 flag = true;
+>             } 
+>         }
+> 
+>         // 如果上面发生了数值的交换flag = true;，则说明堆排序未结束，执行
+>         // 2. 交换堆尾元素和堆首元素，使堆尾元素为最大元素；
+>         if(flag) swap(nums[0], nums[end]);
+>         // 如果上面遍历完都没有发生变动，说明排序已完成
+>         if(!flag) break;
+> 
+>     } // for(int end = nums.size()-1; end >= 1; end--) {
+> 
+> }
+> // 注： 
+> // 索引为 i 的父结点的索引是floor((i−1)/2);
+> // 索引为 i 的左孩子的索引是( 2 ∗ i + 1 );
+> // 索引为 i 的右孩子的索引是( 2 ∗ i + 2 );
+> ```
+> 
+> **递归法（没看懂，还是我的迭代法好懂）**
+>
+> https://blog.csdn.net/CltCj/article/details/122664204
+>
+> ```c++
+> /*
+> 堆排序
+> */
+> 
+> /*
+>  * (最大)堆的向下调整算法
+>  *
+>  * 注：数组实现的堆中，第N个节点的左孩子的索引值是(2N+1)，右孩子的索引是(2N+2)。
+>  *     其中，N为数组下标索引值，如数组中第1个数对应的N为0。
+>  *
+>  * 参数说明：
+>  *     nums -- 待排序的数组
+>  *     index -- 第一个非叶子点的下标
+>  *	   
+>  */
+> 
+> //构造大顶堆	
+> void maxheap_down(vector<int>&nums,int len,int index)
+> {
+> 	int left = 2 * index + 1;//左(left)孩子的位置
+> 	int right = 2 * index + 2;//右(right)孩子的位置
+> 	
+> 	int maxIdx = index;//默认当前结点为最大
+> 	if (left<len && nums[left]>nums[maxIdx]) maxIdx = left;
+> 	if (right<len && nums[right]>nums[maxIdx]) maxIdx = right;
+> 
+> 	if (maxIdx != index)
+> 	{
+> 		swap(nums[maxIdx], nums[index]);
+> 		maxheap_down(nums,len, maxIdx);
+> 	}
+> }
+> 
+> void heapSort(vector<int>& nums,int size)
+> {
+> 	
+> 	//构建大顶堆
+> 	for (int i = size/2 - 1; i >= 0; i--)
+> 	{
+> 
+> 		maxheap_down(nums, size,i);
+> 	}
+> 
+> 	//调制大顶堆
+> 	for (int i = size - 1; i >= 1; i--)
+> 	{
+> 		swap(nums[0], nums[i]);
+> 		maxheap_down(nums, i, 0);
+> 	}
+> }
+> ```
+> 
+> 
+
+
+
+#### 补充
+
+> 
+> <font color="gree">之前，学习`优先级队列std::priority_queue`时，就说过大顶堆和小顶堆的事情</font>
+> 
+> <font color="yellow"> 
+> 
+> 总结：
+>
+> `C++`内置排序函数`std::sort()`
+> 
+> * `sort(arr.begin(), arr.end());` 不传入第三个参数，则默认升序
+> * `sort(arr.begin(), arr.end(), less<int>());`为升序
+> * `sort(arr.begin(), arr.end(), greater<int>());` 为降序
+>
+> `集合std::set`(`key`就是`value`)
+>
+> * `less`: `key`越小，优先级越高，越靠近队头（`begin()`）。即按`key`升序
+>
+> * `greater`: `key`越大，优先级越高，越靠近队头（`begin()`）。即按`key`降序
+>
+> `映射std::map`(`pair<key, value>`)
+>
+> * `less`: `key`越小，优先级越高，越靠近队头（`begin()`）。即按`key`升序
+>
+> * `greater`: `key`越大，优先级越高，越靠近队头（`begin()`）。即按`key`降序
+>
+> 
+> `优先级队列std::priority_queue`
+>
+> * `less`: `key`越小，优先级越高，越靠近队头。对应大顶堆/大根堆(`top()`指向的队尾元素最大`max`). 取出的元素顺序为降序
+> * `greater`: `key`越大，优先级越高，越靠近队头。对应小顶堆/小根堆(`top()`指向的队尾元素最小`min`). 取出的元素顺序为升序序
+> 
+> 注：
+> 
+> `优先级队列std::priority_queue`的`std::less`和`std::sort()函数`的`std::less`功能正好相反。
+> > 其实`sort(vec.begin(), vec.end(), less<int>());`和`priority_queue<int, vector<int>, less<int>> vec;`都是升序，只不过`std::priority_queue`只有`top()`这个取值函数，只能从队尾取元素，导致元素取出后是降序。
+> 
+> `优先级队列std::priority_queue`的`std::greater`和`std::sort()函数`的`std::greater`功能正好相反
+> > 其实`sort(vec.begin(), vec.end(), greater<int>());`和`priority_queue<int, vector<int>, greater<int>> vec;`都是降序，只不过`std::priority_queue`只有`top()`这个取值函数，只能从队尾取元素，导致元素取出后是升序。
+> 
+> </font>
+>
+> 
+
+
+
+
+
+
+--------------------------------------------------------------------------------
+
+### 计数排序 `Counting Sort`   对于数据有要求：必须全是非负数（自然数）， 但是可以通过修改，适用于整数
+ 
+> 
+> https://blog.csdn.net/zhoujiajie0521/article/details/122183332
+>
+> 根据这个博客
+>
+> 计数排序要求待排序的`n`个元素的大小在`[0, k]`之间，并且`k`与`n`在一个数量级上，即`k=O(n)`.对于每一个输入元素`x`, 确定小于等于`x`的个数为`i`。
+>
+> **对于数据有要求：必须全是非负数（自然数）**
+>
+> 
+> 
+> https://blog.csdn.net/CltCj/article/details/122664204
+> 
+> 计数排序就是对一个待排序的数组进行排序，将结果一个一个放在一个申请的空间内。
+>
+> **排序方法：**
+> 
+> 计数排序每次都将查询整个待排序数组，自第一位数到最后一位，每次找出整个待排序数组内大于（小于）当前待排数的个数 `count`。然后将当前待排数放入到新数组的第 `count+1` 位。
+>
+> **基本思想：**
+>
+> 以升序为例
+>
+> 1. 申请空间`space`
+> 
+> 2. 由待排序数组的第一个数开始
+>
+> 3. 如果待排序数组中有`count`个比第一个小，则把第一个放入申请空间`space`数组内的第`count+1`位, 即`space[count]`
+>
+> 4. 再由待排序数组的第二个数开始，重复步骤2
+>
+> 5. 以此类推，比较所有数，放入申请空间数组内
+>
+> 6. 将申请空间数组赋给待排序数组，输出待排序数组
+>
+> **代码如下**
+>
+> ```c++
+> void countSort(vector<int>& nums) {
+> 
+> 	if (nums.size() < 2) return;
+> 	//确定最大值
+>     int maxValue = nums[0];
+> 	for (int i = 1; i < nums.size(); ++i){
+> 		if (nums[i] > maxValue) maxValue = nums[i];
+> 	}
+>     
+> 	//确认统计数组长度并初始化
+> 	vector<int>nums_temp(maxValue + 1, 0);
+> 	for (int i = 0; i < nums.size(); i++)
+> 	{
+> 		++nums_temp[nums[i]];
+> 	}
+> 
+> 	// 排序数组，某个数出现了几次，便在nums里累计输出几次
+> 	int index = 0;
+> 	for (int i = 0; i <= maxValue; ++i)
+> 	{
+> 		for (int j = 0; j < nums_temp[i]; ++j)
+> 		{
+> 			nums[index] = i;
+> 			index++;
+> 		}
+> 	}
+> 
+> }
+> ```
+> 
+> **实机测一下时间复杂度：**
 >
 > ```c++
 > #include <iostream> 
@@ -1628,14 +2037,14 @@ int main()
 > #include <thread>
 > using namespace chrono;
 > 
-> void mergeSort(vector<int>& nums, vector<int>& space)  
+> void countSort(vector<int>& nums)  
 > {
 >     ...
 > } 
 > 
 > int main()
 > {
->     vector<int> nums = {12, 7, 3, 2, 8, 9, 10, 21, 55, 15, 17};
+>     vector<int> nums = {12, 7, 3, 2, 8, 9, 10, 21, 55, 15, 17, 7};
 > 
 >     cout << "排序前: ";
 >     for(int i=0; i < nums.size(); i++) {
@@ -1643,9 +2052,7 @@ int main()
 >     }
 >     cout << endl;
 > 
->     vector<int> space;
->     space.resize(nums.size());
->     mergeSort(nums, space);
+>     countSort(nums);
 > 
 >     cout << "排序后: ";
 >     for(int i=0; i < nums.size(); i++) {
@@ -1661,10 +2068,8 @@ int main()
 > 
 >     
 >     for(int i=0 ; i < 100000; i++) {
->         vector<int> test = {12, 7, 3, 2, 8, 9, 10, 21, 55, 15, 17};
->         vector<int> test_space;
->         test_space.resize(test.size());
->         mergeSort(test, test_space);
+>         vector<int> test = {12, 7, 3, 2, 8, 9, 10, 21, 55, 15, 17, 7};
+>         countSort(test);
 >     }
 > 
 >     milliseconds end_time = duration_cast<milliseconds >(
@@ -1687,20 +2092,247 @@ int main()
 > **运行结果如下：**
 >
 > ```c++
-> 排序前: 12, 7, 3, 2, 8, 9, 10, 21, 55, 15, 17, 
-> 排序后: 2, 3, 7, 8, 9, 10, 12, 15, 17, 21, 55, 
-> 耗时:60 ms
+> 排序前: 12, 7, 3, 2, 8, 9, 10, 21, 55, 15, 17, 7, 
+> 排序后: 2, 3, 7, 7, 8, 9, 10, 12, 15, 17, 21, 55, 
+> 耗时:40 ms
+> ```
+>
+> 
+
+
+> 
+> **如果我们将数据范围扩展到，全体整数，如何写呢？**
+> 
+> **我的代码如下（迭代法）**
+> 
+> ```c++
+> void countSort(vector<int>& nums) {
+>     vector<int> space;
+>     space.resize(nums.size());
+>     // 遍历数组
+>     for(int i=0; i < nums.size(); i++) {
+>         // 计算出数组中，小于nums[i]的元素数量
+>         int count = 0;
+>         for(int j=0; j < nums.size(); j++) {
+>             if(nums[j] < nums[i]) count++;
+>         }
+>         // 将nums[i]，放入申请空间`space`数组内的第`count+1`位, 即`space[count]`
+>         space[count] = nums[i];
+>     }
+>     // space放回nums
+>     for(int i=0; i < nums.size(); i++){
+>         nums[i] = space[i];
+>     }
+> }
+> ```
+> 
+> **有问题：以上代码处理不了，有重复值的数组**
+>
+> 例如：
+> 当`vector<int> nums = {12, 7, 3, 2, 8, 9, 10, 21, 55, 15, 17, 7};`时，运行会得到
+>
+> ```c++
+> 排序前: 12, 7, 3, 2, 8, 9, 10, 21, 55, 15, 17, 7, 
+> 排序后: 2, 3, 7, 0, 8, 9, 10, 12, 15, 17, 21, 55, 
+> 耗时:70 ms
+> ```
+> 
+> 分析：
+> 因为小于`7`的数量是相同的，第一个`7`填充到`space[2]`后，第二个`7`的`count`会和第一个`7`一样，导致发生覆盖`space[2]`，没有填充到后面的位置`space[3]`
+>
+> 如何修改代码？
+>
+> 计算每种数组出现的次数，避免同样的数值的覆盖
+>
+> ```c++
+> void countSort(vector<int>& nums) {
+>     // 计算每个数值出现的次数
+>     unordered_map<int, int> nums_map;  
+>     for(int i=0; i < nums.size(); i++) {
+>         nums_map[nums[i]] = nums_map[nums[i]] + 1;
+>     }
+> 
+>     // 申请空间，存储排序结果
+>     vector<int> space;            
+>     space.resize(nums.size());
+> 
+>     // 遍历数组
+>     for(int i=0; i < nums.size(); i++) {
+>         // 计算出数组中，小于nums[i]的元素数量
+>         int count = 0;
+>         for(int j=0; j < nums.size(); j++) {
+>             if(nums[j] < nums[i]) count++;
+>         }
+>         // 将nums[i]，放入申请空间`space`数组内的第`count+1`位, 即`space[count]`
+>         // 对于多此出现的数值，要根据nums_map中记录的出现次数来放置
+>         if(nums_map[nums[i]] > 0) {
+>             int index = count + nums_map[nums[i]] - 1;
+>             space[index] = nums[i];
+>             // 更新nums_map，下一次再出现，放入space中的位置就会不一样
+>             nums_map[nums[i]] = nums_map[nums[i]] - 1; 
+>         }
+>     }
+> 
+>     // space放回nums
+>     for(int i=0; i < nums.size(); i++){
+>         nums[i] = space[i];
+>     }
+> 
+> }
+> ```
+> 
+>
+> **运行结果如下：**
+>
+> ```c++
+> 排序前: 12, 7, 3, 2, 8, 9, 10, 21, 55, 15, 17, 7, 
+> 排序后: 2, 3, 7, 7, 8, 9, 10, 12, 15, 17, 21, 55, 
+> 耗时:500 ms
 > ```
 > 
 > 
-> <font color="yellow">相同的思路：递归法`50ms`, 迭代法`60ms`</font>
+> <font color="yellow">`500ms`时间复杂度太高了</font>
 >
 > 
-
-
-
+> 
+> **修改我们的代码**
+> 
+> ```c++
+> void countSort(vector<int>& nums) {
+>     // 计算每个数值出现的次数
+>     map<int, int, less<int>> nums_map;   // map根据key从小到大排列
+>     for(int i=0; i < nums.size(); i++) {
+>         nums_map[nums[i]] = nums_map[nums[i]] + 1;
+>     }
+> 
+>     // 申请空间，存储排序结果
+>     vector<int> space;            
+> 
+>     // 遍历map，某个数出现了几次，便在space里累计输出几次
+>     map<int, int, less<int>>::iterator it;
+>     for(it = nums_map.begin(); it != nums_map.end(); it++) {
+>         int num = it->first;
+>         int count = it->second;
+>         while(count > 0) {
+>             space.push_back(num);
+>             count--;
+>         }
+>     }
+> 
+>     // space放回nums
+>     for(int i=0; i < space.size(); i++){
+>         nums[i] = space[i];
+>     }
+> }
+> ```
 >
-> **优化2的递归法，无法转为迭代法**
+> **运行结果如下：**
+>
+> ```c++
+> 排序前: 12, 7, 3, 2, 8, 9, 10, 21, 55, 15, 17, 7, 
+> 排序后: 2, 3, 7, 7, 8, 9, 10, 12, 15, 17, 21, 55, 
+> 耗时:300 ms
+> ```
+> 
+> <font color="yellow">`300ms`的时间复杂度太高了</font>
+> 
+> **优化我的代码**
+>
+> 我们不要用`std::map`来实现哈希表，用数组来实现哈希表，统计数值对应的出现次数
+> 
+> ```c++
+> void countSort(vector<int>& nums) {
+>     // ---------使用数组实现哈希表，统计数值出现的次数--------------
+>     // 先确定最小值、最大值
+>     int minValue = nums[0];
+>     int maxValue = nums[0];
+>     for(int i=0; i < nums.size(); i++) {
+>         if(nums[i] < minValue) minValue = nums[i];
+>         if(nums[i] > maxValue) maxValue = nums[i];
+>     }
+>     // 建立数组, 长度为数值最多的可能种类
+>     vector<int> count(maxValue - minValue + 1, 0); // 初始化为0
+>     // 计算每个数值出现的次数
+>     for(int i=0; i < nums.size(); i++) {
+>         count[nums[i] - minValue]++;  // 相对数值
+>     }
+>     
+>     // -----------------在申请空间中存放排序结果--------------------
+>     // 申请空间，存储排序结果
+>     vector<int> space;            
+>     // 遍历map，某个数出现了几次，便在space里累计输出几次
+>     for(int i=0; i < count.size(); i++) {
+>         int num = minValue + i;   // 真实数值 = 最小值 + 相对数值
+>         int num_count = count[i]; 
+>         for(int k=0; k < num_count; k++) {
+>             space.push_back(num);
+>         }
+>     }
+>      
+>     // ---------------------space放回nums----------------
+>     for(int i=0; i < space.size(); i++){
+>         nums[i] = space[i];
+>     }
+> }
+> ```
+>
+> **运行结果如下：**
+>
+> ```c++
+> 排序前: 12, 7, 3, 2, 8, 9, 10, 21, 55, 15, 17, 7, 
+> 排序后: 2, 3, 7, 7, 8, 9, 10, 12, 15, 17, 21, 55, 
+> 耗时:100 ms
+> ```
+> 
+> <font color="yellow">使用数组代替`map`实现哈希表，运行时间从`300ms`缩短到`100ms`</font>
+>
+> 
+> **继续优化我的代码**
+>
+> 不申请额外的数组空间`space`
+> 
+> ```c++
+> void countSort(vector<int>& nums) {
+>     // ---------使用数组实现哈希表，统计数值出现的次数--------------
+>     // 先确定最小值、最大值
+>     int minValue = nums[0];
+>     int maxValue = nums[0];
+>     for(int i=0; i < nums.size(); i++) {
+>         if(nums[i] < minValue) minValue = nums[i];
+>         if(nums[i] > maxValue) maxValue = nums[i];
+>     }
+>     // 建立数组, 长度为数值最多的可能种类
+>     vector<int> count(maxValue - minValue + 1, 0); // 初始化为0
+>     // 计算每个数值出现的次数
+>     for(int i=0; i < nums.size(); i++) {
+>         count[nums[i] - minValue]++;  // 相对数值
+>     }
+>     
+>     // -----------------在nums中存放排序结果, 覆盖原来的数组--------------------
+>     int index = 0;          
+>     // 遍历map，某个数出现了几次，便在nums里累计输出几次
+>     for(int i=0; i < count.size(); i++) {
+>         int num = minValue + i;   // 真实数值 = 最小值 + 相对数值
+>         int num_count = count[i]; 
+>         for(int k=0; k < num_count; k++) {
+>             nums[index] = num;
+>             index++;
+>         }
+>     }
+>      
+> }
+> ```
+>
+> **运行结果如下：**
+>
+> ```c++
+> 排序前: 12, 7, 3, 2, 8, 9, 10, 21, 55, 15, 17, 7, 
+> 排序后: 2, 3, 7, 7, 8, 9, 10, 12, 15, 17, 21, 55, 
+> 耗时:50 ms
+> ```
+> 
+> <font color="yellow">使用数组代替`map`实现哈希表，运行时间从`300ms`缩短到`100ms`； 不申请额外空间，直接在`nums`上覆盖，运行时间从`100ms`缩短到`50ms`；</font>
+> 
 > 
 
 
@@ -1708,8 +2340,352 @@ int main()
 
 --------------------------------------------------------------------------------
 
-### 堆排序 `Heap Sort`
+### 桶排序/箱排序  `Bucket Sort`  对于数据有要求：必须全是非负数（自然数）， 但是可以通过修改，适用于整数
+ 
+> 
+> 桶排序 (`Bucket sort`)或所谓的箱排序，是一个排序算法，工作的原理是将数组分到有限数量的桶子里。每个桶子再个别排序（有可能再使用别的排序算法或是以递归方式继续使用桶排序进行排序）。桶排序是鸽巢排序的一种归纳结果。当要被排序的数组内的数值是均匀分配的时候，桶排序使用线性时间`O(n)`。但桶排序并不是比较排序，他不受到`O(nlogn)`下限的影响。
+> 
+> 
+> 桶排序是按一定规则分配`n`个桶，这`n`个桶是有序的。然后对桶内的数字再进行排序，最后依次合并桶内数据。
+> 
+> 需要注意三个点：
+> 
+> 1. 桶的数据结构可以用数组或者链表，用链表更加灵活，没有大小限制
+> 
+> 2. 桶的划分规则视具体业务而定，**以数据能均匀分布到各个桶内为基准**。
+> 
+> 3. 单个桶的排序算法不固定，一般用插入排序。
+>
+> **代码如下：**
+> 
+> ```c++
+> // 数组， 桶的个数， 每个桶的宽度
+> void bucketSort(vector<int>& nums, int bucket_count, int bucket_width) {
+>     // 新建桶：桶的个数为bucket_count， 每个桶的宽度为bucket_width(用于分割数据范围)
+>     vector<vector<int>> buckets;
+>     for(int i=0; i < bucket_count; i++) {
+>         vector<int> vec;
+>         buckets.push_back(vec);
+>     }
+>     // 将元素放入桶中, 每个桶都会进行插入排序
+>     vector<int> top(bucket_count, -1); // 每个桶内的顶部(无元素时，top为-1，有一个元素时，top为0)
+>     for(int i=0 ; i < nums.size(); i++) {
+>         // 若 bucket_width = 10， 则数值从0~9放第0个桶，10~19放第1个桶，... 
+>         // 即更大的数，需要更大的宽度，就需要放后面的桶中
+>         int temp = nums[i];
+>         int k = temp / bucket_width;  // 第k个桶的宽度适合该元素
+>         buckets[k].push_back(temp);   // 第k个桶内的顶部放入元素
+>         top[k]++;  // 放入后顶部上升   
+> 
+>         // 插入排序
+>         int loc = top[k]; // 从顶部开始检查, loc即location
+>         // 当桶内超过1个元素时，需要排序
+>         // 只要是大于temp的，全部向上移动一位，会覆盖掉temp
+>         while(loc > 0 && temp < buckets[k][loc - 1]) {
+>             buckets[k][loc] = buckets[k][loc - 1];
+>             loc--;
+>         }
+>         // 将大于temp的元素全部后移之后，我们重新放入temp
+>         buckets[k][loc] = temp;
+>     }
+> 
+>     // 桶中元素依次放回nums    
+>     int index = 0;
+>     for(int k=0; k < bucket_count; k++) {
+>         // 第k桶
+>         for(int i=0; i <= top[k]; i++) {
+>             nums[index] = buckets[k][i];
+>             index++;
+>         }
+>     }
+> 
+> }
+> ```
+> 
+> **实机测一下时间复杂度：**
+>
+> ```c++
+> #include <iostream> 
+> #include <vector>
+> using namespace std;
+> #include <chrono>
+> #include <thread>
+> using namespace chrono;
+> 
+> void bucketSort(vector<int>& nums, int bucket_count, int bucket_width) 
+> {
+>     ...
+> } 
+> 
+> int main()
+> {
+>     vector<int> nums = {12, 7, 3, 2, 8, 9, 10, 21, 55, 15, 17, 7};
+> 
+>     cout << "排序前: ";
+>     for(int i=0; i < nums.size(); i++) {
+>         cout << nums[i] << ", ";
+>     }
+>     cout << endl;
+> 
+>     int bucket_count = 6;
+>     int bucket_width = 10;
+>     bucketSort(nums, bucket_count, bucket_width);
+> 
+>     cout << "排序后: ";
+>     for(int i=0; i < nums.size(); i++) {
+>         cout << nums[i] << ", ";
+>     }
+>     cout << endl;
+> 
+> 
+>     // 执行100000次, 测试运行时间
+>     milliseconds start_time = duration_cast<milliseconds >(
+>         system_clock::now().time_since_epoch()
+>     );
+> 
+>     
+>     for(int i=0 ; i < 100000; i++) {
+>         vector<int> test = {12, 7, 3, 2, 8, 9, 10, 21, 55, 15, 17, 7};
+>         bucketSort(test, bucket_count, bucket_width);
+>     }
+> 
+>     milliseconds end_time = duration_cast<milliseconds >(
+>         system_clock::now().time_since_epoch()
+>     );
+> 
+> 
+>     cout << "耗时:" << milliseconds(end_time).count() - milliseconds(start_time).count()
+>         <<" ms"<< endl;
+> 
+> 
+>     
+>     cout << endl;
+>     pause(); // system("pause"); 
+> 
+>     return 0;
+> }
+> ```
+>
+> **运行结果如下：**
+>
+> ```c++
+> 排序前: 12, 7, 3, 2, 8, 9, 10, 21, 55, 15, 17, 7, 
+> 排序后: 2, 3, 7, 7, 8, 9, 10, 12, 15, 17, 21, 55, 
+> 耗时:260 ms
+> ```
+>
+> **换个分布均匀的数据**
+>
+> ```c++
+> 排序前: 12, 7, 23, 32, 48, 39, 40, 21, 55, 15, 57, 7, 
+> 排序后: 7, 7, 12, 15, 21, 23, 32, 39, 40, 48, 55, 57, 
+> 耗时:252 ms
+> ```
+>
+> **时间差不多，估计是因为数据量不够大的原因，显示不出来分配均匀的好处**
+>
+> 
+>
+> 
 
+
+
+
+> 
+> **如果我们将数据范围扩展到，全体整数，如何写呢？**
+> 
+> **我的代码如下（迭代法）**
+> 
+> ```c++
+> // 数组， 桶的个数， 每个桶的宽度
+> void bucketSort(vector<int>& nums, int bucket_count, int bucket_width) {
+>     // 确定最小值
+>     int minValue = nums[0];
+>     for(int i=0; i < nums.size(); i++) {
+>         if(nums[i] < minValue) minValue = nums[i];
+>     }
+> 
+>     // 新建桶：桶的个数为bucket_count， 每个桶的宽度为bucket_width(用于分割数据范围)
+>     vector<vector<int>> buckets;
+>     for(int i=0; i < bucket_count; i++) {
+>         vector<int> vec;
+>         buckets.push_back(vec);
+>     }
+>     // 将元素放入桶中, 每个桶都会进行插入排序
+>     vector<int> top(bucket_count, -1); // 每个桶内的顶部(无元素时，top为-1，有一个元素时，top为0)
+>     for(int i=0 ; i < nums.size(); i++) {
+>         // 若 bucket_width = 10， 则相对数值(temp-minValue)为0~9时放第0个桶，10~19时放第1个桶，... 
+>         // 即更大的数，需要更大的宽度，就需要放后面的桶中
+>         int temp = nums[i];
+>         int k = (temp-minValue) / bucket_width;  // 第k个桶的宽度适合该元素
+>         buckets[k].push_back(temp);   // 第k个桶内的顶部放入元素
+>         top[k]++;  // 放入后顶部上升   
+> 
+>         // 插入排序
+>         int loc = top[k]; // 从顶部开始检查, loc即location
+>         // 当桶内超过1个元素时，需要排序
+>         // 只要是大于temp的，全部向上移动一位，会覆盖掉temp
+>         while(loc > 0 && temp < buckets[k][loc - 1]) {
+>             buckets[k][loc] = buckets[k][loc - 1];
+>             loc--;
+>         }
+>         // 将大于temp的元素全部后移之后，我们重新放入temp
+>         buckets[k][loc] = temp;
+>     }
+> 
+>     // 桶中元素依次放回nums    
+>     int index = 0;
+>     for(int k=0; k < bucket_count; k++) {
+>         // 第k桶
+>         for(int i=0; i <= top[k]; i++) {
+>             nums[index] = buckets[k][i];
+>             index++;
+>         }
+>     }
+> 
+> }
+> ```
+>
+> ```c++
+> 排序前: -12, -7, -23, -32, -48, -39, -40, -21, -55, -15, -57, -7, 
+> 排序后: -57, -55, -48, -40, -39, -32, -23, -21, -15, -12, -7, -7, 
+> 耗时:252 ms
+> ```
+> 
+> 
+
+
+
+> 
+> **上面时间复杂度过高的原因之一，每次`push_back`,`vector`扩容耗费时间，如果能提前定好容量呢？**
+>
+> ```c++
+> // 数组， 桶的个数， 每个桶的宽度, 每个桶的最大容量
+> void bucketSort(vector<int>& nums, int bucket_count, int bucket_width, int bucket_capacity) {
+>     // 确定最小值
+>     int minValue = nums[0];
+>     for(int i=0; i < nums.size(); i++) {
+>         if(nums[i] < minValue) minValue = nums[i];
+>     }
+> 
+>     // 新建桶：桶的个数为bucket_count， 每个桶的宽度为bucket_width(用于分割数据范围)
+>     vector<vector<int>> buckets;
+>     for(int i=0; i < bucket_count; i++) {
+>         vector<int> vec;
+>         vec.resize(bucket_capacity);
+>         buckets.push_back(vec);
+>     }
+> 
+>     // 将元素放入桶中, 每个桶都会进行插入排序
+>     vector<int> top(bucket_count, -1); // 每个桶内的顶部(无元素时，top为-1，有一个元素时，top为0)
+>     for(int i=0 ; i < nums.size(); i++) {
+>         // 若 bucket_width = 10， 则相对数值(temp-minValue)为0~9时放第0个桶，10~19时放第1个桶，... 
+>         // 即更大的数，需要更大的宽度，就需要放后面的桶中
+>         int temp = nums[i];
+>         int k = (temp-minValue) / bucket_width;  // 第k个桶的宽度适合该元素
+> 
+>         top[k]++;  // 放入后顶部上升   
+>         buckets[k][top[k]] = temp;   // 第k个桶内的顶部放入元素        
+> 
+> 
+>         // 插入排序
+>         int loc = top[k]; // 从顶部开始检查, loc即location
+>         // 当桶内超过1个元素时，需要排序
+>         // 只要是大于temp的，全部向上移动一位，会覆盖掉temp
+>         while(loc > 0 && temp < buckets[k][loc - 1]) {
+>             buckets[k][loc] = buckets[k][loc - 1];
+>             loc--;
+>         }
+>         // 将大于temp的元素全部后移之后，我们重新放入temp
+>         buckets[k][loc] = temp;
+>     }
+> 
+>     // 桶中元素依次放回nums    
+>     int index = 0;
+>     for(int k=0; k < bucket_count; k++) {
+>         // 第k桶
+>         for(int i=0; i <= top[k]; i++) {
+>             nums[index] = buckets[k][i];
+>             index++;
+>         }
+>     }
+> 
+> }
+> ```
+> 
+> 
+> **实机测一下时间复杂度：**
+>
+> ```c++
+>     ...
+>     // 执行100000次
+>     int bucket_count = 6;
+>     int bucket_width = 10;
+>     bucketSort(nums, bucket_count, bucket_width);
+>     ...
+> ```
+>
+> **运行结果如下：**
+>
+> ```c++
+> 排序前: -12, -7, -23, -32, -48, -39, -40, -21, -55, -15, -57, -7, 
+> 排序后: -57, -55, -48, -40, -39, -32, -23, -21, -15, -12, -7, -7, 
+> 耗时:200 ms
+> ```
+>
+>
+> **虽然有所改善，但还是太高**
+>
+> 
+
+
+
+>
+> **博客的代码时间复杂度很低，如何相应的修改我们的代码？**
+>
+> https://blog.csdn.net/CltCj/article/details/122664204
+>
+> ```c++
+> void bucketSort(vector<int>& nums, int offset) 
+> {
+> 	int i, j;
+> 	vector<int> buckets(offset);
+> 
+> 	for (i = 0; i < offset; i++) {// 清零
+> 		buckets[i] = 0;
+>     }
+> 	// 1.计数,将数组arr中的元素放到桶中
+> 	for (i = 0; i < nums.size(); i++) {
+> 		buckets[nums[i]]++; // 将arr[i]的值对应buckets数组的下标，每有一个就加1
+>     }
+> 	// 2.排序
+> 	for (i = 0, j = 0; i < offset; i++) {
+> 		while (buckets[i] > 0) { // 说明存有元素,相同的整数，要重复输出
+> 			nums[j] = i;
+> 			buckets[i]--;
+> 			j++;
+> 		}
+> 	}
+> }
+> ```
+> 
+> **实机测试一下**
+>
+> ```c++
+>     ...
+>     // 执行100000次
+>     int offset = 10;
+>     bucketSort(nums, offset);
+>     ...
+> ```
+>
+> **运行结果如下：**
+>
+> ```c++
+> 排序前: 12, 7, 23, 32, 48, 39, 40, 21, 55, 15, 57, 7, 
+> 排序后: 7, 7, 23, 32, 48, 39, 40, 21, 55, 15, 57, 7, 
+> 耗时:22 ms
+> ```
 >
 > 
 
@@ -1727,6 +2703,45 @@ int main()
 
 
 
+
+--------------------------------------------------------------------------------
+
+### 基数排序 `Radix Sort`
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--------------------------------------------------------------------------------
+
+### 测试用例中是否有负数，0， 整数；是否有重复值
+ 
 
 
 

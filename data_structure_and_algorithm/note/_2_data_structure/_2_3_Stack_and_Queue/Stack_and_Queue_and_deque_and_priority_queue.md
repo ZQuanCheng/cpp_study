@@ -748,31 +748,46 @@ https://blog.csdn.net/qq_50533529/article/details/124673008
 >
 > 虽然按道理使用`less`比较应该默认是小根堆（即堆顶元素最小），但是`priority_queue<>`默认是大根堆的。每次入队元素进去经排序调整后，优先级最大的元素排在最前面，也就是队头指向的位置，这时候队尾指向优先级最小的元素！我们重载运算符的时候比较函数里面写`<`就相当于`>`排序方式，这点需要花点时间想想
 >
+> 
+> 
+> <font color="gree">之前，学习`优先级队列std::priority_queue`时，就说过大顶堆和小顶堆的事情</font>
+> 
 > <font color="yellow"> 
 > 
 > 总结：
 >
+> `C++`内置排序函数`std::sort()`
+> 
+> * `sort(arr.begin(), arr.end());` 不传入第三个参数，则默认升序
+> * `sort(arr.begin(), arr.end(), less<int>());`为升序
+> * `sort(arr.begin(), arr.end(), greater<int>());` 为降序
+>
 > `集合std::set`(`key`就是`value`)
 >
-> * `less`: `key`越小，优先级越高，越靠近队头（`begin()`）
+> * `less`: `key`越小，优先级越高，越靠近队头（`begin()`）。即按`key`升序
 >
-> * `greater`: `key`越大，优先级越高，越靠近队头（`begin()`）
+> * `greater`: `key`越大，优先级越高，越靠近队头（`begin()`）。即按`key`降序
 >
 > `映射std::map`(`pair<key, value>`)
 >
-> * `less`: `key`越小，优先级越高，越靠近队头（`begin()`）
+> * `less`: `key`越小，优先级越高，越靠近队头（`begin()`）。即按`key`升序
 >
-> * `greater`: `key`越大，优先级越高，越靠近队头（`begin()`）
+> * `greater`: `key`越大，优先级越高，越靠近队头（`begin()`）。即按`key`降序
 >
 > 
 > `优先级队列std::priority_queue`
 >
-> * `less`: `key`越小，优先级越高，越靠近队头。对应大根堆(`top`指向的队尾元素最大`max`),
-> * `greater`: `key`越大，优先级越高，越靠近队头。对应小根堆(`top`指向的队尾元素最小`min`)
->
+> * `less`: `key`越小，优先级越高，越靠近队头。对应大顶堆/大根堆(`top()`指向的队尾元素最大`max`). 取出的元素顺序为降序
+> * `greater`: `key`越大，优先级越高，越靠近队头。对应小顶堆/小根堆(`top()`指向的队尾元素最小`min`). 取出的元素顺序为升序序
 > 
-> 以上的`std::less`和`std::sort()函数`的`std::less`功能正好相反
-> 以上的`std::greater`和`std::sort()函数`的`std::greater`功能正好相反
+> 注：
+> 
+> `优先级队列std::priority_queue`的`std::less`和`std::sort()函数`的`std::less`功能正好相反。
+> > 其实`sort(vec.begin(), vec.end(), less<int>());`和`priority_queue<int, vector<int>, less<int>> vec;`都是升序，只不过`std::priority_queue`只有`top()`这个取值函数，只能从队尾取元素，导致元素取出后是降序。
+> 
+> `优先级队列std::priority_queue`的`std::greater`和`std::sort()函数`的`std::greater`功能正好相反
+> > 其实`sort(vec.begin(), vec.end(), greater<int>());`和`priority_queue<int, vector<int>, greater<int>> vec;`都是降序，只不过`std::priority_queue`只有`top()`这个取值函数，只能从队尾取元素，导致元素取出后是升序。
+> 
 > </font>
 >
 > 
