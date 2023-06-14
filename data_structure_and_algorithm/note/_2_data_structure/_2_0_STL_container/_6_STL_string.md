@@ -714,21 +714,95 @@
 
 ##### 总结
 
+
+> 
+> `<stdlib.h>`中的函数只能实现从字符串向`int`的转变，没有内置函数可以直接将`int`转为`string`或`const char*`类型
 > 
 > ```c++
 > string s1 = "123"; 
 > s1.c_str() // 将 string类型 转换为 const char*类型转换
 > 
 > #include <cstdlib> 
-> // 注： itoa()：将 int类型 转换为 const char*类型。
 > // 注： atoi()：将 const char*类型 转换为 int类型。
 > // 注： stoi()：将 string类型 转换为 int类型。
-> // 注： itos()：将 int类型 转换为 string类型。
 > // 注： stol（）：将 string类型 转换为 long int类型。
-> // 注： stol（）：将 string类型 转换为 long long int类型。
 > 
 > 一般转换的字符串长度不超过10
 > ```
+> 
+> 需要通过字符串流`<sstream>`实现`int`转为`string`的转变，进而通过`string::c_str()`, 转变为`const char*`类型
+> 
+> ```c++
+> #include <sstream>
+> // <stdlib.h>中没有itoa()：将 int类型 转换为 const char*类型。
+> // <stdlib.h>中没有itos()：将 int类型 转换为 string 类型。
+> // 如果想要itos()，需要自己通过字符串流写一个函数
+> // 如果想要itoa()，需要itos()之后，通过string::c_str()将string类型 转换为 const char*类型
+> 
+> // 实现 int -> sting 的转变
+> string itos(int i) //整数转字符串
+> {
+>     stringstream ss;
+>     ss << i;
+>     return ss.str(); // 返回string类型
+> }    
+> 
+> // 实现 int -> const char* 的转变
+> string itoa(int i) //整数转字符串
+> {
+>     stringstream ss;
+>     ss << i;
+>     string s = ss.str();
+>     return s.c_str(); // 返回const char*类型
+> }    
+> 
+> int main() 
+> {
+>    int i = 1897;
+>    string s = itos(i); 
+>    cout << "i=" << i << ", s = " << s << endl;
+>    return 0;
+> }
+> ```
+> 
+> **当然也可以使用`C++`内置`to_string()`函数**
+>
+> ```c++
+> 函数原型：
+> string to_string (int val);
+> string to_string (long val);
+> string to_string (long long val);
+> string to_string (unsigned val);
+> string to_string (unsigned long val);
+> string to_string (unsigned long long val);
+> string to_string (float val);
+> string to_string (double val);
+> string to_string (long double val);
+> 
+> 功能：
+> 将数值转化为字符串。返回对应的字符串。
+> 
+> 示例：
+> 
+> #include <iostream>   
+> #include <string>     
+> using namespace std;
+>  
+> int main ()
+> {
+>    int i = 1897;
+>    string s = to_string(i); 
+>    cout << "i=" << i << ", s = " << s << endl;
+>    return 0;
+> }
+> ```
+> 
+> 
+
+
+
+
+
 
 #####  `string`类型 转换为 `const char*`类型
 > ```c++
@@ -885,20 +959,90 @@
 
 ##### 总结
 
+
+> 
+> `<stdlib.h>`中的函数只能实现从字符串向`int`的转变，没有内置函数可以直接将`int`转为`string`或`const char*`类型
 > 
 > ```c++
 > string s1 = "123"; 
 > s1.c_str() // 将 string类型 转换为 const char*类型转换
 > 
 > #include <cstdlib> 
-> // 注： itoa()：将 int类型 转换为 const char*类型。
 > // 注： atoi()：将 const char*类型 转换为 int类型。
 > // 注： stoi()：将 string类型 转换为 int类型。
-> // 注： itos()：将 int类型 转换为 string类型。
 > // 注： stol（）：将 string类型 转换为 long int类型。
-> // 注： stol（）：将 string类型 转换为 long long int类型。
 > 
 > 一般转换的字符串长度不超过10
 > ```
+> 
+> 需要通过字符串流`<sstream>`实现`int`转为`string`的转变，进而通过`string::c_str()`, 转变为`const char*`类型
+> 
+> ```c++
+> #include <sstream>
+> // <stdlib.h>中没有itoa()：将 int类型 转换为 const char*类型。
+> // <stdlib.h>中没有itos()：将 int类型 转换为 string 类型。
+> // 如果想要itos()，需要自己通过字符串流写一个函数
+> // 如果想要itoa()，需要itos()之后，通过string::c_str()将string类型 转换为 const char*类型
+> 
+> // 实现 int -> sting 的转变
+> string itos(int i) //整数转字符串
+> {
+>     stringstream ss;
+>     ss << i;
+>     return ss.str(); // 返回string类型
+> }    
+> 
+> // 实现 int -> const char* 的转变
+> string itoa(int i) //整数转字符串
+> {
+>     stringstream ss;
+>     ss << i;
+>     string s = ss.str();
+>     return s.c_str(); // 返回const char*类型
+> }    
+> 
+> int main() 
+> {
+>    int i = 1897;
+>    string s = itos(i); 
+>    cout << "i=" << i << ", s = " << s << endl;
+>    return 0;
+> }
+> ```
+> 
+> **当然也可以使用`C++`内置`to_string()`函数**
+>
+> ```c++
+> 函数原型：
+> string to_string (int val);
+> string to_string (long val);
+> string to_string (long long val);
+> string to_string (unsigned val);
+> string to_string (unsigned long val);
+> string to_string (unsigned long long val);
+> string to_string (float val);
+> string to_string (double val);
+> string to_string (long double val);
+> 
+> 功能：
+> 将数值转化为字符串。返回对应的字符串。
+> 
+> 示例：
+> 
+> #include <iostream>   
+> #include <string>     
+> using namespace std;
+>  
+> int main ()
+> {
+>    int i = 1897;
+>    string s = to_string(i); 
+>    cout << "i=" << i << ", s = " << s << endl;
+>    return 0;
+> }
+> ```
+> 
+> 
+
 
 

@@ -1043,26 +1043,33 @@
 > https://leetcode.cn/problems/binary-tree-preorder-traversal/
 > 
 > <font color="yellow">我的优化后的迭代解法为</font>
->
+> 
 > ```c++
 > class Solution {
 > public:
 >     vector<int> preorderTraversal(TreeNode* root) {
->         vector<int> vec;
+>         // 结果集
+>         vector<int> result;
+>         // 若root为空则返回空集
+>         if(root == nullptr) return result; 
 >         // 使用栈暂存未处理的节点
->         stack<TreeNode*> sta;        
->         if(root != nullptr) sta.push(root);
->         TreeNode* node = nullptr;        
+>         stack<TreeNode*> sta;     
+>         // root节点入栈   
+>         sta.push(root);   
+>         // 遍历待处理的节点
 >         while (!sta.empty()) {
->             node = sta.top();                       // 中
+>             // 取出待处理节点
+>             TreeNode* node = sta.top();                       
 >             sta.pop();
->             vec.push_back(node->val);
+>             // 先中
+>             result.push_back(node->val);
+>             // 再左，最后右
 >             // 先入的后处理，所以先将右节点入栈
 >             if (node->right) sta.push(node->right);  // 右（空节点不入栈）
 >             if (node->left) sta.push(node->left);    // 左（空节点不入栈）
 >         }
 > 
->         return vec;
+>         return result;
 >     }
 > };
 > ``` 
@@ -1079,21 +1086,26 @@
 > class Solution {
 > public:
 >     vector<int> inorderTraversal(TreeNode* root) {
->         vector<int> vec;
->         stack<TreeNode*> sta;
+>         // 结果集
+>         vector<int> result;
+>         // 若root为空则返回空集
+>         if(root == nullptr) return result; 
+>         // 使用栈暂存未处理的节点
+>         stack<TreeNode*> sta;    
+>         // 从root开始
 >         TreeNode* node = root;
->         while (node != NULL || !sta.empty()) {
->             if (node != NULL) { // 指针来访问节点，访问到最底层
+>         while (node != nullptr || !sta.empty()) {
+>             if (node != nullptr) { // 指针来访问节点，访问到最底层
 >                 sta.push(node); // 将访问的节点放进栈
 >                 node = node->left;                // 左
 >             } else {
 >                 node = sta.top(); // 从栈里弹出的数据，就是要处理的数据（放进result数组里的数据）
 >                 sta.pop();
->                 vec.push_back(node->val);     // 中
+>                 result.push_back(node->val);     // 中
 >                 node = node->right;               // 右
 >             }
 >         }
->         return vec;
+>         return result;
 >     }
 > };
 > ``` 
@@ -1114,22 +1126,31 @@
 >         // 由于左右是对称的概念，我们镜像修改left和right，就可以得到中右左
 >         // 反转后就可以得到左右中
 >         // 先序遍历的代码将left改为right，right改为left，最后reverse
->         vector<int> vec;
+> 
+>         // 结果集
+>         vector<int> result;
+>         // 若root为空则返回空集
+>         if(root == nullptr) return result; 
 >         // 使用栈暂存未处理的节点
->         stack<TreeNode*> sta;        
->         if(root != nullptr) sta.push(root);
->         TreeNode* node = nullptr;        
+>         stack<TreeNode*> sta;     
+>         // root节点入栈   
+>         sta.push(root);   
+>         // 遍历待处理的节点
 >         while (!sta.empty()) {
->             node = sta.top();                       // 中
+>             // 取出待处理节点
+>             TreeNode* node = sta.top();                       
 >             sta.pop();
->             vec.push_back(node->val);
->             // 先入的后处理，所以先将左节点入栈
->             if (node->left) sta.push(node->left);    // 左（空节点不入栈）            
+>             // 先中
+>             result.push_back(node->val);
+>             // 再左，最后右
+>             // 先入的后处理，所以先将右节点入栈
+>             if (node->left) sta.push(node->left);    // 左（空节点不入栈）
 >             if (node->right) sta.push(node->right);  // 右（空节点不入栈）
 >         }
+> 
 >         // 以上得到中右左的顺序
->         reverse(vec.begin(), vec.end()); // 将结果反转之后就是左右中的顺序了
->         return vec;
+>         reverse(result.begin(), result.end()); // 将结果反转之后就是左右中的顺序了
+>         return result;
 >     }
 > };
 > ``` 
@@ -3820,7 +3841,7 @@
 > > 
 > > 
 > >  
->
+> 
 > 返回层数`floor`
 >
 > </font>
