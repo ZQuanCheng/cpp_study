@@ -91,7 +91,7 @@ https://www.geeksforgeeks.org/dynamic-programming/
 > <font color="gree">
 > 
 > 1. 确定`dp`数组（`dp table`）以及下标的含义: 即`dp[i]`代表什么？
-> 2. 确定递推公式（状态转移公式）
+> 2. 确定递推公式（状态转移方程）
 > 3. `dp`数组如何初始化
 > 4. 确定遍历顺序
 > 5. 举例推导`dp`数组（举例是为了搞清楚状态转移）

@@ -78,6 +78,8 @@ https://www.geeksforgeeks.org/dynamic-programming/
 
 #### 我的代码
 
+##### 递归法
+
 >
 > **其实这个题目，第一个想法就是递归实现**
 >
@@ -125,6 +127,8 @@ https://www.geeksforgeeks.org/dynamic-programming/
 >
 > 
 
+##### 动态规划
+
 > 
 > **<font color="yellow">如何就成了动态规划的例题了呢？</font>**
 > 
@@ -136,7 +140,7 @@ https://www.geeksforgeeks.org/dynamic-programming/
 > > 
 > > `dp[i]`的定义为：第`i`个数的斐波那契数值是`dp[i]`
 > > 
-> 2. 确定递推公式（状态转移公式）
+> 2. 确定递推公式（状态转移方程）
 > > 
 > > 为什么这是一道非常简单的入门题目呢？
 > > 

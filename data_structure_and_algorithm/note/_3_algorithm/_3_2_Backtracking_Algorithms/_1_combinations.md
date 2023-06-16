@@ -201,7 +201,7 @@ https://www.geeksforgeeks.org/backtracking-algorithms/
 > 
 
 >
-> <font color="gree">如果不想要在`combine`中只调用一次`recursion()` 可以这样写</font>
+> <font color="gree">如果想要在`combine`中只调用一次`recursion()` 可以这样写</font>
 >
 > ```c++
 > class Solution {
@@ -241,15 +241,73 @@ https://www.geeksforgeeks.org/backtracking-algorithms/
 > 
 
 
+
+>
+> **降低时间复杂度**
+>
+> `for()`循环中，结束的位置，实际上不是limit，而是更低的数字
+>
+> 因为要保证`next`后续还有`k-numset.size()`个数字，所以应该是
+>
+> `for(int next = num+1; next <= n - (k - numset.size()) + 1; next++)`
+>
+> 当`next > n - (k - numset.size()) + 1`之后，递归是不可能满足`if(numset.size() == length)`的，不会有组合加入结果集`result`; 继续遍历完全是浪费时间了
+>
+> 在代码中是`for(int next=num+1; next <= limit - (length - numset.size()) + 1; next++)`
+> 
+> 
+> ```c++
+> class Solution {
+> private:
+>     vector<vector<int>> result;
+>     vector<int> numset;   
+> 
+>     void recursion(int num, int limit, int length) {
+>         // 整数放入组合中. 这里加一个if判断，是为了初次进入递归函数时，避免0加入组合
+>         if(num > 0) numset.push_back(num);
+>         
+>         // 何时停止？当组合中有length个整数时
+>         if(numset.size() == length) {
+>             result.push_back(numset);
+>             return;
+>         }
+> 
+>         // 若不足k个，则继续递归。寻找比当前整数更大的数
+>         for(int next=num+1; next <= limit - (length - numset.size()) + 1; next++) {
+>             recursion(next, limit, length);
+>             numset.pop_back(); // 回溯，使用更大的一个数加入组合
+>         }
+>     }
+> 
+> public:
+>     vector<vector<int>> combine(int n, int k) {
+>         int limit = n;
+>         int length = k;
+>         if(result.size() != 0) result.clear();
+>         if(numset.size() != 0) numset.clear();
+>         recursion(0, limit, length);
+>         return result;
+>     }
+> };
+> ```
+> 
+> 
+
+
+
+
+
+> **根据代码随想录的逻辑优化代码**
 > 
 > <font color="gree">
 > 
-> 代码随想录中的递归处理跟我的有所不同, `numset.push_back`放在了`for`循环中 
+> 代码随想录中的递归处理跟我的有所不同, `numset.push_back`放在了`for`循环中，起始从`int next=num+1`改成`int next=num` 
 >
 > 但是结构更清晰，可以看到横向遍历，纵向深入
 > 
 > </font>
 >
+> 
 > ```c++
 > class Solution {
 > private:
@@ -263,8 +321,14 @@ https://www.geeksforgeeks.org/backtracking-algorithms/
 >             return;
 >         }
 > 
->         // 若不足k个，则继续递归。寻找比当前整数更大的数
->         for(int next=num; next <= limit; next++) {
+>         /* 若不足k个，则继续递归。寻找比当前整数更大的数
+>          * 要保证next后续还有k-numset.size()个数字，
+>          * 所以循环结束为next <= n - (k - numset.size()) + 1
+>          * 当next > n - (k - numset.size()) + 1之后，
+>          * 递归是不可能满足if(numset.size() == length)的，
+>          * 不会有组合加入结果集result; 继续遍历完全是浪费时间了
+>          */
+>         for(int next=num; next <= limit - (length - numset.size()) + 1; next++) {
 >             numset.push_back(next);
 >             recursion(next + 1, limit, length);
 >             numset.pop_back(); // 回溯，使用更大的一个数加入组合
@@ -282,6 +346,7 @@ https://www.geeksforgeeks.org/backtracking-algorithms/
 >     }
 > };
 > ```
+> 
 > 
 > **代码随想录的算法，看着更符合回溯法模板**
 >
@@ -302,6 +367,11 @@ https://www.geeksforgeeks.org/backtracking-algorithms/
 > 
 >
 > 
+
+
+
+
+
 
 
 
