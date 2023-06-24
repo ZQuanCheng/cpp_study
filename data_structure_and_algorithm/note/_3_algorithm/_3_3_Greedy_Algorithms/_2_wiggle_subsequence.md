@@ -428,7 +428,7 @@ https://www.geeksforgeeks.org/greedy-algorithms/
 > 用示例二来举例，如图所示：
 > 
 > <div align=center>
-> <img src="./images/wiggle_subsequence_1.png" style="zoom:100%;"/>
+> <img src="./images/_2_wiggle_subsequence_1.png" style="zoom:100%;"/>
 > </div>
 >
 > **局部最优：删除单调坡度上的节点（不包括单调坡度两端的节点），那么这个坡度就可以有两个局部峰值。**
@@ -464,7 +464,7 @@ https://www.geeksforgeeks.org/greedy-algorithms/
 > 例如 `[1,2,2,2,1]` 这样的数组，如图：
 > 
 > <div align=center>
-> <img src="./images/wiggle_subsequence_2.png" style="zoom:100%;"/>
+> <img src="./images/_2_wiggle_subsequence_2.png" style="zoom:100%;"/>
 > </div>
 > 
 > 它的摇摆序列长度是多少呢？ 其实是长度是 `3`，也就是我们在删除的时候 要不删除左面的三个 `2`，要不就删除右边的三个 `2`。
@@ -472,7 +472,7 @@ https://www.geeksforgeeks.org/greedy-algorithms/
 > 如图，可以统一规则，删除左边的三个 `2`：
 > 
 > <div align=center>
-> <img src="./images/wiggle_subsequence_3.png" style="zoom:100%;"/>
+> <img src="./images/_2_wiggle_subsequence_3.png" style="zoom:100%;"/>
 > </div>
 > 
 > 在图中，当 `i` 指向第一个 `2` 的时候，`prediff > 0 && curdiff = 0` ，当 `i` 指向最后一个 `2` 的时候 `prediff = 0 && curdiff < 0`。
@@ -507,7 +507,7 @@ https://www.geeksforgeeks.org/greedy-algorithms/
 > 那么为了规则统一，针对序列`[2,5]`，可以假设为`[2,2,5]`，这样它就有坡度了即 `preDiff = 0`，如图：
 > 
 > <div align=center>
-> <img src="./images/wiggle_subsequence_4.png" style="zoom:100%;"/>
+> <img src="./images/_2_wiggle_subsequence_4.png" style="zoom:100%;"/>
 > </div>
 >
 > 针对以上情形，`result` 初始为 `1`（**默认最右面有一个峰值**），此时 `curDiff > 0 && preDiff <= 0`，那么 `result++`（计算了左面的峰值），最后得到的 `result` 就是 `2`（峰值个数为 `2` 即摆动序列长度为 `2`）
@@ -554,7 +554,7 @@ https://www.geeksforgeeks.org/greedy-algorithms/
 > 在版本一中，我们忽略了一种情况，即 如果在一个单调坡度上有平坡，例如`[1,2,2,2,3,4]`，如图：
 > 
 > <div align=center>
-> <img src="./images/wiggle_subsequence_5.png" style="zoom:100%;"/>
+> <img src="./images/_2_wiggle_subsequence_5.png" style="zoom:100%;"/>
 > </div>
 > 
 > 图中，我们可以看出，版本一的代码在三个地方记录峰值，但其实结果是 `2`，因为 单调中的平坡 不能算峰值（即摆动）。
@@ -594,7 +594,7 @@ https://www.geeksforgeeks.org/greedy-algorithms/
 > **本题异常情况的本质，就是要考虑平坡**， 平坡分两种，一个是 上下中间有平坡，一个是单调有平坡，如图：
 > 
 > <div align=center>
-> <img src="./images/wiggle_subsequence_6.png" style="zoom:100%;"/>
+> <img src="./images/_2_wiggle_subsequence_6.png" style="zoom:100%;"/>
 > </div>
 > 
 > 

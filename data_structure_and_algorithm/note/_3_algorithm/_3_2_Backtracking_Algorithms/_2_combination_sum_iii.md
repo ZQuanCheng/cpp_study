@@ -468,7 +468,7 @@ https://www.geeksforgeeks.org/backtracking-algorithms/
 > **图形化表示在代码随想录中有**
 > 
 > <div align=center>
-> <img src="./images/combination_sum_iii_2.png" style="zoom:100%;"/>
+> <img src="./images/_2_combination_sum_iii_2.png" style="zoom:100%;"/>
 > </div>
 >
 > 
@@ -495,7 +495,7 @@ https://www.geeksforgeeks.org/backtracking-algorithms/
 > 选取过程如图：
 > 
 > <div align=center>
-> <img src="./images/combination_sum_iii_1.png" style="zoom:100%;"/>
+> <img src="./images/_2_combination_sum_iii_1.png" style="zoom:100%;"/>
 > </div>
 > 
 > 图中，可以看出，只有最后取到集合`（1，3）`和为 `4` 符合条件。

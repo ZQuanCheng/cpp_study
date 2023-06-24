@@ -79,7 +79,7 @@ https://www.geeksforgeeks.org/backtracking-algorithms/
 > **试一试递归**
 > 
 > <div align=center>
-> <img src="./images/combinations_1.png" style="zoom:100%;"/>
+> <img src="./images/_1_combinations_1.png" style="zoom:100%;"/>
 > </div>
 > 
 > ```c++
@@ -435,7 +435,7 @@ https://www.geeksforgeeks.org/backtracking-algorithms/
 > 那么我把组合问题抽象为如下树形结构：
 > 
 > <div align=center>
-> <img src="./images/combinations_1.png" style="zoom:100%;"/>
+> <img src="./images/_1_combinations_1.png" style="zoom:100%;"/>
 > </div>
 > 
 > 可以看出这棵树，一开始集合是 `1，2，3，4`， 从左向右取数，取过的数，不再重复取。
@@ -484,7 +484,7 @@ https://www.geeksforgeeks.org/backtracking-algorithms/
 > > 从下图中红线部分可以看出，在集合`[1,2,3,4]`取`1`之后，下一层递归，就要在`[2,3,4]`中取数了，那么下一层递归如何知道从`[2,3,4]`中取数呢，靠的就是`startIndex`。
 > > 
 > > <div align=center>
-> > <img src="./images/combinations_2.png" style="zoom:100%;"/>
+> > <img src="./images/_1_combinations_2.png" style="zoom:100%;"/>
 > > </div>
 > > 
 > > 所以需要`startIndex`来记录下一层递归，搜索的起始位置。
@@ -507,7 +507,7 @@ https://www.geeksforgeeks.org/backtracking-algorithms/
 > > 如图红色部分：
 > > 
 > > <div align=center>
-> > <img src="./images/combinations_3.png" style="zoom:100%;"/>
+> > <img src="./images/_1_combinations_3.png" style="zoom:100%;"/>
 > > </div>
 > > 
 > > 此时用`result`二维数组，把`path`保存起来，并终止本层递归。
@@ -527,7 +527,7 @@ https://www.geeksforgeeks.org/backtracking-algorithms/
 > > 回溯法的搜索过程就是一个树型结构的遍历过程，在如下图中，可以看出`for`循环用来横向遍历，递归的过程是纵向遍历。
 > > 
 > > <div align=center>
-> > <img src="./images/combinations_4.png" style="zoom:100%;"/>
+> > <img src="./images/_1_combinations_4.png" style="zoom:100%;"/>
 > > </div>
 > > 
 > > 如此我们才遍历完图中的这棵树。
@@ -639,7 +639,7 @@ https://www.geeksforgeeks.org/backtracking-algorithms/
 > 这么说有点抽象，如图所示：
 > 
 > <div align=center>
-> <img src="./images/combinations_5.png" style="zoom:100%;"/>
+> <img src="./images/_1_combinations_5.png" style="zoom:100%;"/>
 > </div>
 >
 > 图中每一个节点（图中为矩形），就代表本层的一个`for`循环，那么每一层的`for`循环从第二个数开始遍历的话，都没有意义，都是无效遍历。

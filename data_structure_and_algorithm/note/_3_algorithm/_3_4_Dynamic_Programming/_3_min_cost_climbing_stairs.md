@@ -363,7 +363,7 @@ https://www.geeksforgeeks.org/dynamic-programming/
 >
 > 
 > <div align=center>
-> <img src="./images/min_cost_climbing_stairs_1.png" style="zoom:100%;"/>
+> <img src="./images/_3_min_cost_climbing_stairs_1.png" style="zoom:100%;"/>
 > </div>
 > 
 > 如果大家代码写出来有问题，就把`dp`数组打印出来，看看和如上推导的是不是一样的。

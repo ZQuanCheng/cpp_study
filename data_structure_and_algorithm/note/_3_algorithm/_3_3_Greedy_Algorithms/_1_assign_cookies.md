@@ -129,7 +129,7 @@ https://www.geeksforgeeks.org/greedy-algorithms/
 > 只通过了`19/21`个测试用例
 > 
 > <div align=center>
-> <img src="./images/assign_cookies_1.jpg" style="zoom:100%;"/>
+> <img src="./images/_1_assign_cookies_1.jpg" style="zoom:100%;"/>
 > </div>
 > 
 > 我们试一试直接用`sort`排序
@@ -309,7 +309,7 @@ https://www.geeksforgeeks.org/greedy-algorithms/
 > 如图：
 > 
 > <div align=center>
-> <img src="./images/assign_cookies_2.png" style="zoom:100%;"/>
+> <img src="./images/_1_assign_cookies_2.png" style="zoom:100%;"/>
 > </div>
 > 
 > 这个例子可以看出饼干 9 只有喂给胃口为 7 的小孩，这样才是整体最优解，并想不出反例，那么就可以撸代码了。
@@ -361,7 +361,7 @@ https://www.geeksforgeeks.org/greedy-algorithms/
 > 如果 `for` 控制的是饼干， `if` 控制胃口，就是出现如下情况 ：
 > 
 > <div align=center>
-> <img src="./images/assign_cookies_3.png" style="zoom:100%;"/>
+> <img src="./images/_1_assign_cookies_3.png" style="zoom:100%;"/>
 > </div>
 > 
 > `if` 里的 `index` 指向 胃口 `10`， `for` 里的 `i` 指向饼干 `9`，因为 饼干 `9` 满足不了 胃口 `10`，所以 `i` 持续向前移动，而 `index` 走不到`s[index] >= g[i]` 的逻辑，所以 `index` 不会移动，那么当 `i` 持续向前移动，最后所有的饼干都匹配不上。

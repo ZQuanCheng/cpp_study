@@ -331,7 +331,7 @@ https://www.geeksforgeeks.org/dynamic-programming/
 > >
 > > 
 > > <div align=center>
-> > <img src="./images/climbing_stairs_1.png" style="zoom:100%;"/>
+> > <img src="./images/_2_climbing_stairs_1.png" style="zoom:100%;"/>
 > > </div>
 > > 
 > > 如果代码出问题了，就把`dp table` 打印出来，看看究竟是不是和自己推导的一样。
