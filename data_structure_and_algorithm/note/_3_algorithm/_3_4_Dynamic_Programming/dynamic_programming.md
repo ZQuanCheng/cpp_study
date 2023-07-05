@@ -58,7 +58,7 @@ https://www.geeksforgeeks.org/dynamic-programming/
 > 
 > 例如：有`N`件物品和一个最多能背重量为 `W` 的背包。第`i`件物品的重量是`weight[i]`，得到的价值是`value[i]` 。每件物品只能用一次，求解将哪些物品装入背包里物品价值总和最大。
 > 
-> 动态规划中`dp[j]`是由`dp[j-weight[i]]`推导出来的， `j`：第`j`个状态，`i`：第`i`个物品
+> 动态规划中`dp[j]`是由`dp[j-weight[i]]`推导出来的， `j`：背包当前重量，`dp[j]`：背包当前包含的价值，`i`：第`i`个物品。
 > 
 > 然后取`max(dp[j], dp[j - weight[i]] + value[i])`。
 >
