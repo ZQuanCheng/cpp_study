@@ -130,7 +130,7 @@ https://programmercarl.com/%E5%9B%9E%E6%BA%AF%E7%AE%97%E6%B3%95%E7%90%86%E8%AE%B
 > > 
 > > <font color="gree">因为回溯算法需要的参数可不像二叉树递归的时候那么容易一次性确定下来，所以一般是先写逻辑，然后需要什么参数，就填什么参数。</font>
 > > 
-> > 因为：二叉树递归，参数经常是`(TreeNode* node, vector<int> result)`之类的，有经验的可以直接写出来，相对容易确定参数。
+> > 因为：二叉树递归，参数经常是`(TreeNode* node, vector<int>& result)`之类的，有经验的可以直接写出来，相对容易确定参数。
 > > 
 > > <font color="yellow">但后面的回溯题目的讲解中，为了方便大家理解，我在一开始就帮大家把参数确定下来。</font>
 > > 

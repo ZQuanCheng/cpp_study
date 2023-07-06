@@ -275,7 +275,7 @@ https://www.geeksforgeeks.org/greedy-algorithms/
 >         // 标记待分配的饼干
 >         int index = s.size() - 1;  
 >         // 从胃口最大的孩子开始
->         for(int i = g.size() - 1; i < g.size(); i--) {
+>         for(int i = g.size() - 1; i >= 0; i--) {
 >             // 对于当前饼干，是否能待分配的孩子
 >             if(index >= 0 && s[index] >= g[i]){ 
 >                 result++;
@@ -288,8 +288,45 @@ https://www.geeksforgeeks.org/greedy-algorithms/
 >     }
 > };
 > ```
+>
+> 或者是下面这样
+>
+> ```c++
+> class Solution {
+> public:
+>     int findContentChildren(vector<int>& g, vector<int>& s) {
+>         // 如果空集，则直接返回
+>         if(g.empty() || s.empty()) return 0;
 > 
+>         // 很直观的想法：先排序，后从小到大给饼干
+>         sort(g.begin(), g.end());
+>         sort(s.begin(), s.end());
+>         
+>         // 设置结果
+>         int result = 0;
+>         
+>         // 从大到小遍历孩子的胃口，先将最大的饼干给满足的胃口较大的孩子
+>         int cur = s.size() - 1; // 游标指针，指向未被吃掉的最大的饼干
+>     
+>         for(int i = g.size() - 1; i >= 0; i--) {
+>             // 判断当前孩子的胃口值，是否小于等于当前饼干的尺寸
+>             // 如果小于，说明可以满足，就吃掉，游标向左移动
+>             if(g[i] <= s[cur]) {
+>                 cur--;
+>                 result++;
+>             } 
+>             // 如果吃掉后，饼干没了，停止循环
+>             if(cur < 0) break;
+>         }
 > 
+>         return result;
+>     }
+> };
+> ```
+> 
+
+
+
 
 
 #### 代码随想录

@@ -414,7 +414,7 @@ https://www.geeksforgeeks.org/greedy-algorithms/
 
 
 
-#### 代码随想录
+#### 代码随想录（非常反人类，笔试中不可能这样想的）
 
 ##### 思路 1（贪心解法）
 
@@ -806,8 +806,130 @@ https://www.geeksforgeeks.org/greedy-algorithms/
 
 
 
+#### leetcode精选答案
 
-
+>
+> https://leetcode.cn/problems/wiggle-subsequence/solution/tan-xin-si-lu-qing-xi-er-zheng-que-de-ti-jie-by-lg/
+>
+>
+> 
+> <font color="gree">
+>
+> 动态规划的`5`步曲
+> 
+> 1. 确定`dp`数组（`dp table`）以及下标的含义: 即`dp[i]`代表什么？
+> > 
+> > 这里用了两种情况, 有了`两个dp[]数组`
+> > 
+> > `up[i]`： 原始数组切片`nums[0:i]` 中，`最后两个数字递增`的最长摆动`子序列的长度`
+> > 
+> > `down[i]`： 原始数切片`nums[0:i]` 中，`最后两个数字递减`的最长摆动`子序列的长度`
+> 
+> 2. 确定递推公式（状态转移方程）
+> > 
+> > ```c++
+> > if(nums[i] > nums[i-1]) {  
+> >     up[i] = down[i-1] + 1; // up序列更新
+> >     down[i] = down[i-1];   // down序列不变
+> > }
+> > else if(nums[i] < nums[i-1]) { 
+> >     up[i] = up[i-1];       // up序列不变 
+> >     down[i] = up[i-1] + 1; // down序列更新
+> > }
+> > else { // nums[i+1] = nums[i], 时，什么都不做
+> >     up[i] = up[i-1];       // up序列不变 
+> >     down[i] = down[i-1];   // down序列不变
+> > }
+> > ```
+> > 
+> > 解释如下：
+> > 
+> > `2.1. nums[i+1] > nums[i]`
+> > > 
+> > > * 假设 `down[i]` 表示的最长摆动序列的最远末尾元素下标正好为 `i`，遇到新的上升元素后，`up[i+1] = down[i] + 1` ，这是因为 `up` 一定从 `down` 中产生（初始除外），并且 `down[i]` 此时最大。
+> > > 
+> > > * 假设 `down[i] `表示的最长摆动序列的最远末尾元素下标小于 `i`，设为 `j`，那么 `nums[j:i]` 一定是递增的，因为若`nums[j:i]`完全递减，则最远元素下标等于 `i`，不会是`j`；若波动，那么 `down[i] > down[j]`。由于 `nums[j:i]` 递增，`down[j:i]` 一直等于 `down[j]` ，依然满足 `up[i+1] = down[i] + 1 `
+> > > 
+> > 
+> > `2.2. nums[i+1] < nums[i]`，类似第一种情况
+> > > 
+> > > * 假设 `up[i]` 表示的最长摆动序列的最远末尾元素下标正好为 `i`，遇到新的下降元素后，`down[i+1] = up[i] + 1` ，这是因为 `down` 一定从 `up` 中产生（初始除外），并且 `up[i]` 此时最大。
+> > > 
+> > > * 假设 `up[i] `表示的最长摆动序列的最远末尾元素下标小于 `i`，设为 `j`，那么 `nums[j:i]` 一定是递减的，因为若`nums[j:i]`完全递增，最远元素下标等于 `i`，不会是`j`；若波动，那么 `up[i] < up[j]`。由于 `nums[j:i]` 递减，`up[j:i]` 一直等于 `up[j]` ，依然满足 `down[i+1] = up[i] + 1 `
+> > > 
+> > 
+> > `2.3. nums[i+1] == nums[i]`，新的元素不能用于任何序列，保持不变
+> > 
+> > 
+> 3. `dp`数组如何初始化
+> > 
+> > ```c++
+> > dp[0] = 1;
+> > down[0] = 1;
+> > ```
+> >  
+> 4. 确定遍历顺序
+> > 
+> > ```c++
+> > for (int i = 1; i < nums.size(); i++)
+> > ```
+> > 
+> 
+> 5. 举例推导`dp`数组（举例是为了搞清楚状态转移）
+> > 
+> > <div align=center>
+> > <img src="./images/_2_wiggle_subsequence_7.png" style="zoom:100%;"/>
+> > </div>
+> > 
+> > 注意：
+> > `up`： `最后两个数字保持递增`
+> > `down`： `最后两个数字保持递减`
+> 
+> </font>
+>
+> 代码如下：
+>
+> ```c++
+> class Solution {
+> public:
+>     int wiggleMaxLength(vector<int>& nums) {
+>         // 构建dp数组
+>         vector<int> up(nums.size()+1, 0);
+>         vector<int> down(nums.size()+1, 0);
+> 
+>         // dp数组初始化
+>         up[0] = 1;
+>         down[0] = 1;
+> 
+>         // 从下标1开始遍历
+>         for (int i = 1; i < nums.size(); i++) {
+>             if(nums[i] > nums[i-1]) {  
+>                 up[i] = down[i-1] + 1; // up序列更新
+>                 down[i] = down[i-1];   // down序列不变
+>             }
+>             else if(nums[i] < nums[i-1]) { 
+>                 up[i] = up[i-1];        // up序列不变         
+>                 down[i] = up[i-1] + 1;  // down序列更新
+>             }
+>             else { // nums[i] = nums[i-1], 时，什么都不做
+>                 up[i] = up[i-1];      // up序列不变 
+>                 down[i] = down[i-1];  // down序列不变                       
+>             }
+>         }
+> 
+>         // 返回值
+>         return max(up[nums.size() - 1], down[nums.size() - 1]);
+>     }
+> }; 
+> ``` 
+> 
+> > 
+> > <div align=center>
+> > <img src="./images/_2_wiggle_subsequence_8.png" style="zoom:100%;"/>
+> > </div>
+> > 
+>
+> 
 
 
 
