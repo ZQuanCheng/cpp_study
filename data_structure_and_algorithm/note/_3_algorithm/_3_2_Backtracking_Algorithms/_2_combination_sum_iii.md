@@ -565,7 +565,7 @@ https://www.geeksforgeeks.org/backtracking-algorithms/
 > 如图：
 > 
 > <div align=center>
-> <img src="./images/combination_sum_iii_1.png" style="zoom:100%;"/>
+> <img src="./images/_2_combination_sum_iii_1.png" style="zoom:100%;"/>
 > </div>
 > 
 > 处理过程就是 `path`收集每次选取的元素，相当于树型结构里的边，`sum`来统计`path`里元素的总和。
@@ -628,7 +628,7 @@ https://www.geeksforgeeks.org/backtracking-algorithms/
 > 这道题目，剪枝操作其实是很容易想到了，想必大家看上面的树形图的时候已经想到了。
 > 
 > <div align=center>
-> <img src="./images/combination_sum_iii_2.png" style="zoom:100%;"/>
+> <img src="./images/_2_combination_sum_iii_2.png" style="zoom:100%;"/>
 > </div>
 >
 > 已选元素总和如果已经大于`n`（图中数值为`4`）了，那么往后遍历就没有意义了，直接剪掉。

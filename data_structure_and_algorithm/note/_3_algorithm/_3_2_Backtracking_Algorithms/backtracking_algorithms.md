@@ -252,51 +252,48 @@ https://programmercarl.com/%E5%9B%9E%E6%BA%AF%E7%AE%97%E6%B3%95%E7%90%86%E8%AE%B
 > public:  
 >     // 递归函数
 >     // 结果集 vector<string>& allpath: 传引用，因为所有路径都需要存进去， 需要使用同一个路径容器
->     // root到当前节点路径上的节点集 vector<int>& nodeset：传引用，方便回溯到上一层的父节点
->     void recursion(TreeNode* node, vector<int>& nodeset, vector<string>& allpath) { 
->         // 若node为空则返回, 
->         // 其实这里多此一举了，进入之前就已经判断过不为空
->         if(node == nullptr) return;        
+>     // root到当前节点路径上的节点集 vector<TreeNode*>& nodeset：传引用，方便回溯到上一层的父节点
+>     void recursion(TreeNode* node, vector<string>& allpath, vector<TreeNode*>& nodeset) {      
 >         // 先中
->         nodeset.push_back(node->val); // 当前节点，加入路径
+>         nodeset.push_back(node); // 当前节点，加入路径
 >         // 如果当前节点node为叶子节点，则转化为字符串，返回到父节点
 >         if(node->left == nullptr && node->right == nullptr) {
 >             // 路径转化为string
 >             string str;
 >             for (int i = 0; i < nodeset.size() - 1; i++) {
->                 str += to_string(nodeset[i]);
+>                 str += to_string(nodeset[i]->val);
 >                 str += "->";
 >             }
->             str += to_string(nodeset[nodeset.size() - 1]);
+>             str += to_string(nodeset[nodeset.size() - 1]->val);
 >             allpath.push_back(str);
 >             return;
 >         }   
 >         // 再左
 >         if(node->left != nullptr) {
->             recursion(node->left, nodeset, allpath);
->             // 恢复到进入左孩子之前，这样我们才能进入右孩子，正确建立路径数组
+>             recursion(node->left, allpath, nodeset); // 递归深入  
 >             nodeset.pop_back(); // 回溯
+>             // 恢复到进入左孩子之前，这样我们才能进入右孩子，正确建立路径数组
 >         }
 >         // 最后右
 >         if(node->right != nullptr) {
->             recursion(node->right, nodeset, allpath);
->             // 恢复到进入左右孩子之前，这样我们才能返回父节点，保证路径数组正确
+>             recursion(node->right, allpath, nodeset); // 递归深入  
 >             nodeset.pop_back(); // 回溯
+>             // 恢复到进入左右孩子之前，这样我们才能返回父节点，保证路径数组正确
 >         }
->         return;
 >     }
 > 
 >     vector<string> binaryTreePaths(TreeNode* root) {
 >         vector<string> allpath;
 >         if(root == nullptr) return allpath; // 若root为空则返回空集
 >         // 从root开始遍历
->         vector<int> nodeset; // 路径上的节点集
->         recursion(root, nodeset, allpath);
+>         vector<TreeNode*> nodeset; // 路径上的节点集
+>         recursion(root, allpath, nodeset);
 >         // 返回
 >         return allpath;
 >     } 
 > };
 > ```
+> 
 >
 > **也可以隐含回溯，代码结构也是用了回溯法的模板**
 > 

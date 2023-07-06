@@ -16,6 +16,12 @@
 
 --------------------------------------------------------------------------------
 
+## 配套：回溯算法理论基础
+
+## backtracking_algorithms.md
+
+--------------------------------------------------------------------------------
+
 ## 二叉树的所有路径 binary tree paths
 
 ## _6_binary_tree_paths.md
@@ -442,52 +448,110 @@
 
 ##### 如果不想频繁传值拷贝，想要传引用怎么办呢？
 
+> <font color="gree">
+> 
+> 方法一： 
+> 
+> 使用`vector<TreeNode*>& nodeset`, 存放节点指针
 >
+> </font> 
 > 
 > ```c++
 > class Solution {
 > public:  
 >     // 递归函数
 >     // 结果集 vector<string>& allpath: 传引用，因为所有路径都需要存进去， 需要使用同一个路径容器
->     // root到当前节点路径上的节点集 vector<int>& nodeset：传引用，方便回溯到上一层的父节点
->     void recursion(TreeNode* node, vector<int>& nodeset, vector<string>& allpath) { 
->         // 若node为空则返回
->         if(node == nullptr) return;        
+>     // root到当前节点路径上的节点集 vector<TreeNode*>& nodeset：传引用，方便回溯到上一层的父节点
+>     void recursion(TreeNode* node, vector<string>& allpath, vector<TreeNode*>& nodeset) {      
 >         // 先中
->         nodeset.push_back(node->val); // 当前节点，加入路径
+>         nodeset.push_back(node); // 当前节点，加入路径
 >         // 如果当前节点node为叶子节点，则转化为字符串，返回到父节点
 >         if(node->left == nullptr && node->right == nullptr) {
 >             // 路径转化为string
 >             string str;
 >             for (int i = 0; i < nodeset.size() - 1; i++) {
->                 str += to_string(nodeset[i]);
+>                 str += to_string(nodeset[i]->val);
 >                 str += "->";
 >             }
->             str += to_string(nodeset[nodeset.size() - 1]);
+>             str += to_string(nodeset[nodeset.size() - 1]->val);
 >             allpath.push_back(str);
 >             return;
 >         }   
 >         // 再左
 >         if(node->left != nullptr) {
->             recursion(node->left, nodeset, allpath);
->             // 恢复到进入左孩子之前，这样我们才能进入右孩子，正确建立路径数组
+>             recursion(node->left, allpath, nodeset); // 递归深入  
 >             nodeset.pop_back(); // 回溯
+>             // 恢复到进入左孩子之前，这样我们才能进入右孩子，正确建立路径数组
 >         }
 >         // 最后右
 >         if(node->right != nullptr) {
->             recursion(node->right, nodeset, allpath);
->             // 恢复到进入左右孩子之前，这样我们才能返回父节点，保证路径数组正确
+>             recursion(node->right, allpath, nodeset); // 递归深入  
 >             nodeset.pop_back(); // 回溯
+>             // 恢复到进入左右孩子之前，这样我们才能返回父节点，保证路径数组正确
 >         }
->         return;
 >     }
 > 
 >     vector<string> binaryTreePaths(TreeNode* root) {
 >         vector<string> allpath;
 >         if(root == nullptr) return allpath; // 若root为空则返回空集
 >         // 从root开始遍历
->         vector<int> nodeset; // 路径上的节点集
->         recursion(root, nodeset, allpath);
+>         vector<TreeNode*> nodeset; // 路径上的节点集
+>         recursion(root, allpath, nodeset);
+>         // 返回
+>         return allpath;
+>     } 
+> };
+> ```
+> 
+> <font color="gree">
+> 
+> 方法二： 
+> 
+> 使用`vector<int>& nodeValset`, 存放节点值
+>
+> </font> 
+> 
+> ```c++
+> class Solution {
+> public:  
+>     // 递归函数
+>     // 结果集 vector<string>& allpath: 传引用，因为所有路径都需要存进去， 需要使用同一个路径容器
+>     // root到当前节点路径上的节点的值val的集合 vector<int>& nodeValset：传引用，方便回溯到上一层的父节点
+>     void recursion(TreeNode* node, vector<string>& allpath, vector<int>& nodeValset) {       
+>         // 先中
+>         nodeValset.push_back(node->val); // 当前节点，加入路径
+>         // 如果当前节点node为叶子节点，则转化为字符串，返回到父节点
+>         if(node->left == nullptr && node->right == nullptr) {
+>             // 路径转化为string
+>             string str;
+>             for (int i = 0; i < nodeValset.size() - 1; i++) {
+>                 str += to_string(nodeValset[i]);
+>                 str += "->";
+>             }
+>             str += to_string(nodeValset[nodeValset.size() - 1]);
+>             allpath.push_back(str);
+>             return;
+>         }   
+>         // 再左
+>         if(node->left != nullptr) {
+>             recursion(node->left, allpath, nodeValset);
+>             // 恢复到进入左孩子之前，这样我们才能进入右孩子，正确建立路径数组
+>             nodeValset.pop_back(); // 回溯
+>         }
+>         // 最后右
+>         if(node->right != nullptr) {
+>             recursion(node->right, allpath, nodeValset);
+>             // 恢复到进入左右孩子之前，这样我们才能返回父节点，保证路径数组正确
+>             nodeValset.pop_back(); // 回溯
+>         }
+>     }
+> 
+>     vector<string> binaryTreePaths(TreeNode* root) {
+>         vector<string> allpath;
+>         if(root == nullptr) return allpath; // 若root为空则返回空集
+>         // 从root开始遍历
+>         vector<int> nodeValset; // 路径上的节点集
+>         recursion(root, allpath, nodeValset);
 >         // 返回
 >         return allpath;
 >     } 
