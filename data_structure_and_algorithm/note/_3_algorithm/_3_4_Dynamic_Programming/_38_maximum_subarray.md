@@ -293,7 +293,7 @@ https://www.geeksforgeeks.org/greedy-algorithms/
 > https://leetcode.cn/problems/maximum-subarray/solution/xiang-xi-jie-du-dong-tai-gui-hua-de-shi-xian-yi-li/
 > 
 > <div align=center>
-> <img src="./images/_3_maximum_subarray_1.png" style="zoom:100%;"/>
+> <img src="./images/_38_maximum_subarray_1.png" style="zoom:100%;"/>
 > </div>
 > 
 > <font color="gree">
@@ -304,14 +304,18 @@ https://www.geeksforgeeks.org/greedy-algorithms/
 > 
 > * `根据子序列的长度为标杆`，如先遍历出子序列长度为 `1` 的子序列，在遍历出长度为 `2` 的 等等。
 > 
-> * `以子序列的结束节点为基准`，先遍历出以某个节点为结束的所有子序列，因为每个节点都可能会是子序列的结束节点，因此要遍历下整个序列，如: 以 `b` 为结束点的所有子序列: `[a , b] [b]`; 以 `c` 为结束点的所有子序列: `[a, b, c] [b, c] [ c ]`。
+> * `以某个节点为结束的所有子序列（以子序列的结束节点为基准）`，先遍历出以某个节点为结束的所有子序列，因为每个节点都可能会是子序列的结束节点，因此要遍历下整个序列，如: 以 `b` 为结束点的所有子序列: `[a , b] [b]`; 以 `c` 为结束点的所有子序列: `[a, b, c] [b, c] [ c ]`。
 >
-> </font>
 > 
-> 第一种遍历方式通常用于暴力解法, 第二种遍历方式 `leetcode` (5. 最长回文子串 ) 中的解法就用到了。
+> 第一种遍历方式通常用于暴力解法, 
+> 
+> 第二种遍历方式 `leetcode` (5. 最长回文子串 ) 中的解法就用到了。
 > 
 > 本题，我们就是采用了第三种遍历方式
 >
+>
+> </font>
+> 
 > <font color="yellow">
 > 
 > **第三种遍历方式 因为可以产生递推关系, 采用动态规划时, 经常通过此种遍历方式, 如 背包问题, 最大公共子串 , 这里的动态规划解法也是以 先遍历出 以某个节点为结束节点的所有子序列 的思路**
@@ -404,7 +408,7 @@ https://www.geeksforgeeks.org/greedy-algorithms/
 > 如动画所示：
 > 
 > <div align=center>
-> <img src="./images/_3_maximum_subarray_2.gif" style="zoom:100%;"/>
+> <img src="./images/_38_maximum_subarray_2.gif" style="zoom:100%;"/>
 > </div>
 > 
 > 红色的起始位置就是贪心每次取 `count` 为正数的时候，开始一个区间的统计。

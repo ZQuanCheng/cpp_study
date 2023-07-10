@@ -853,7 +853,7 @@ https://blog.csdn.net/alidada_blog/article/details/83029438
      ```
      > initialization<br>
      ```c++ 
-     // 使用容器std::array和std::ector进行 二维数组 初始化时，要多加一组大括号{}  
+     // 使用容器std::array和std::vector进行 二维数组 初始化时，要多加一组大括号{}  
      vector<vector<type>> array_name = { { {}, {}, {},...,{} } };
      ```
      > Example :<br>
