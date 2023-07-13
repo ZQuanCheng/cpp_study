@@ -161,6 +161,70 @@ public:
 ```
 
 
+>
+> 遍历过程改为，一层层遍历
+> 
+> 不用执着于左侧这种方式，我们只要初始化时将最左侧一列完成，就可以一层层地，从`dp[][1] ~ dp[][n-1]`遍历了
+> > 
+> > <div align=center>
+> > <img src="./images/_5_unique_paths_2.bmp" style="zoom:100%;"/>
+> > </div>
+> > 
+> 
+
+```c++
+class Solution {
+public:
+    int uniquePaths(int m, int n) {
+        // 分析如下：
+        // 如果设置向下为-1，向右为1； 则要满足向下的累积和为-m, 向右的累计和为n
+        // 这样遍历感觉很难算？
+
+        // 考虑三大算法：
+        // 1. 这并不是回溯算法的相关问题
+        // 2. 贪心感觉也想不出来 
+        // 3. 如果使用动态规划呢？
+
+        // 设置二维数组dp[i, j]： 指的是从左上角到坐标(i, j)的路径总数
+        vector<vector<int>> dp(m, vector<int>(n)); // 初始化时，记得设置长宽，不然添加元素时一次次resize很费时间
+        
+        // 那么递推公式是什么呢？
+        // dp[i ,j] = dp[i, j-1]+ dp[i-1,j], 
+        // 即只能从左侧(i-1, j)或者上侧(i, j-1)的两个网格点到达(i, j)
+
+        // 初始化？dp[0, 0] = 0;
+        // 第一排、第一列（最上侧、最左侧） 全部初始化为1，因为路径都是只有一条
+        // dp[0, 0], dp[0, 1], dp[0, 2], ..., dp[0, n-1]; dp[0, 0], dp[1, 0], dp[2,0], ..., dp[m-1, 0]
+        dp[0][0] = 0;
+        for(int i=0; i < n; i++) {
+            dp[0][i] = 1;
+        }
+        for(int i=0; i < m; i++) {
+            dp[i][0] = 1;
+        }        
+
+        // 遍历方式？
+        // 从递归公式dp[i][j] = dp[i - 1][j] + dp[i][j - 1] 中可以看出，
+        // 一定是从左到右一层一层遍历，这样保证推导dp[i][j]的时候，dp[i - 1][j] 和 dp[i][j - 1]一定是有数值。
+        // 只要我们先把dp[][0]最左侧一列都遍历完，后续就可以一层层地，从dp[][1] ~ dp[][n-1]遍历
+        
+        // 从第二排第二列开始，a=1
+        for (int i = 1; i < m; i++) {
+            for (int j = 1; j < n; j++) {
+                    dp[i][j] = dp[i-1][j] + dp[i][j-1];           
+            }
+        }
+        
+        // 返回(m, n),即dp[m-1, n-1]
+        return dp[m-1][n-1];
+    }
+};
+```
+
+
+
+
+
 
 
 
@@ -177,7 +241,7 @@ public:
 > 
 > > 
 > > <div align=center>
-> > <img src="./images/_5_unique_paths_2.png" style="zoom:100%"/>
+> > <img src="./images/_5_unique_paths_3.png" style="zoom:100%"/>
 > > </div>
 > >  
 > 
@@ -252,7 +316,7 @@ public:
 > 
 > > 
 > > <div align=center>
-> > <img src="./images/_5_unique_paths_3.png" style="zoom:100%"/>
+> > <img src="./images/_5_unique_paths_4.png" style="zoom:100%"/>
 > > </div>
 > >  
 > 
@@ -310,7 +374,7 @@ public:
 > 
 > > 
 > > <div align=center>
-> > <img src="./images/_5_unique_paths_2.png" style="zoom:100%"/>
+> > <img src="./images/_5_unique_paths_3.png" style="zoom:100%"/>
 > > </div>
 > >  
 > 
@@ -324,8 +388,8 @@ public:
 > 
 > > 
 > > <div align=center>
-> > <img src="./images/_5_unique_paths_4.png" style="zoom:100%"/>
 > > <img src="./images/_5_unique_paths_5.png" style="zoom:100%"/>
+> > <img src="./images/_5_unique_paths_6.png" style="zoom:100%"/>
 > > </div>
 > >  
 >
