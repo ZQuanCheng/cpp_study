@@ -9,12 +9,18 @@
 <https://chat.openai.com/chat>
 
 * Lambda简介
-  > * Lambda 有很多叫法，有Lambda表达式、Lambda函数、匿名函数<br>
-  > * Lambda 用于创建匿名函数对象。<br>
-  > * Lambda 可以在需要函数对象的地方定义函数，通常可以替代函数指针的使用。<br>
-  > * Lambda 可以被用于任何接受函数指针的地方，并且可以捕获其所在作用域中的变量。<br>
-  > * Lambda 是在调用或作为函数参数传递的位置处定义匿名函数对象的便捷方法。<br>
-  > * 通常，Lambda用于封装传递给算法或异步方法的几行代码<br>
+  > * `Lambda` 有很多叫法，有`Lambda表达式`、`Lambda函数`、`匿名函数`
+  > 
+  > * `Lambda` 用于`创建匿名函数对象`。
+  > 
+  > * `Lambda` 可以在需要函数对象的地方定义函数，通常可以替代函数指针的使用。
+  > 
+  > * `Lambda` 可以被用于任何接受函数指针的地方，并且可以捕获其所在作用域中的变量。
+  > 
+  > * `Lambda` 是在调用或作为函数参数传递的位置处定义匿名函数对象的便捷方法。
+  > 
+  > * 通常，`Lambda`用于`封装传递给算法或异步方法的几行代码`
+
 
 
 * Lambda表达式的一般形式
@@ -53,10 +59,10 @@
   > ```c++  
   > 元素5的位置是：4
   > ```
-  > 示例中，<br>
-  > Lambda表达式被用于std::find_if算法中，用于查找vector中的元素5。<br>
-  > Lambda表达式的函数体使用了关键字return，表示返回i == 5的比较结果。<br>
-  > Lambda表达式可以在函数调用的地方直接定义，不需要单独的函数定义。<br>
+  > 示例中，
+  > Lambda表达式被用于std::find_if算法中，用于查找vector中的元素5。
+  > Lambda表达式的函数体使用了关键字return，表示返回i == 5的比较结果。
+  > Lambda表达式可以在函数调用的地方直接定义，不需要单独的函数定义。
   > ```c++
   > /*
   > iterator findif(iterator first，iterator end，value)
@@ -112,13 +118,15 @@
   > 
   > // 使用Lambda表达式遍历vector
   > for_each(v.begin(), v.end(), [](int i) { cout << i << " "; });
-  >     
-
-  > ```
+  > // https://blog.csdn.net/weixin_43165135/article/details/125526408
+  > 
   > 输出结果为：
   > ```c++  
   > 5 4 3 2 1
   > ```
+  > 
+  > `for_each`的用法： https://blog.csdn.net/weixin_43165135/article/details/125526408
+  > 
 
 --------------------------------------------------------------------------------
 
@@ -173,7 +181,7 @@
 
 #### <font color="yellow"> 1. Lambda捕获列表[ ] </font>
   >> Lambda表达式与普通函数最大的区别是，除了可以使用参数以外，Lambda函数还可以通过捕获列表访问一些上下文中的数据。<br>
-  >> 具体地，捕捉列表描述了上下文中哪些数据可以被Lambda使用，以及使用方式（以值传递的方式或引用传递的方式）。<br>
+  >> 具体地，`捕捉列表描述了上下文中哪些数据可以被Lambda使用，以及使用方式`（以值传递的方式或引用传递的方式）。<br>
   >> 语法上，在“[ ]”包括起来的是捕获列表，捕获列表由多个捕获项组成，并以逗号分隔。捕获列表有以下几种形式：<br>
   > * [ ]表示不捕获任何变量
   >> ```c++
@@ -420,8 +428,9 @@
   >> ``` 
   >> 如果执行 print( ); 运行结果为 Hello World!
 
-#### <font color="yellow"> 2. C++仿函数 </font>
-  > * 仿函数（functor）又称为函数对象（function object）是一个能行使函数功能的类。<font color="yellow">本质上是类 </font>。仿函数的语法几乎和我们普通的函数调用一样，不过作为仿函数的类，都必须重载operator()运算符，仿函数与Lamdba表达式的作用是一致的。举个例子：
+#### <font color="yellow"> 2. C++仿函数（与Lamdba表达式的作用一致） </font>
+
+  > * 仿函数（functor）又称为函数对象（function object）是一个能行使函数功能的类。<font color="yellow">本质上是类 </font>。仿函数的语法几乎和我们普通的函数调用一样，不过`作为仿函数的类，都必须重载operator()运算符`，`仿函数与Lamdba表达式的作用是一致的`。举个例子：
   >> ```c++
   >> #include <string>
   >> class Functor
@@ -448,17 +457,17 @@
 ### Lamdba表达式适用场景
 #### <font color="yellow"> 1. Lamdba用于 STL算法库 </font>
 
-  > * for_each应用实例
+  > * `for_each`应用实例
   >> ```c++
   >> int a[4] = {11, 2, 33, 4};
-  >> sort(a, a+4, [=](int x, int y) -> bool { return x < y; } );
+  >> sort(a, a+4, [](int x&, int& y) -> bool { return x < y; } );
   >> // 此处lambda的返回值，编译器自动判定为bool
   >> // sort只有前两个参数时，默认将[first, last)区间内元素升序排列；
   >> // sort有第三个参数时，需要使用自定义函数，且该函数返回值为bool类型；
   >> // 若返回true，则 num1 与 num2 保持原有顺序；
   >> // 若返回false, 则 num1 与 num2 交换顺序；
   >>   
-  >> for_each(a, a+4, [=](int x) { cout << x << " ";} );
+  >> for_each(a, a+4, [](int& x) { cout << x << " ";} );
   >> // for_each(iterator first, iterator last, Function f)
   >> // for_each会把迭代器指向元素的值，作为参数，传给第三个参数（函数对象）
   >> // 可以替换为：

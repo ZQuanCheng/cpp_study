@@ -1208,6 +1208,9 @@ student_one
 
 >
 > **第四种：仿函数的应用**，这个时候结构体中没有直接的小于号重载，定义一个比较函数，程序说明
+>
+> `仿函数（functor）`又称为`函数对象（function object）`是一个`能行使函数功能的类`。<font color="yellow">本质上是类 </font>。仿函数的语法几乎和我们普通的函数调用一样，不过`作为仿函数的类，都必须重载operator()运算符`，`仿函数与Lamdba表达式的作用是一致的`。
+>
 ```c++
 #include <iostream>
 #include <string>
@@ -2060,6 +2063,9 @@ student_one
 
 >
 > **第四种：仿函数的应用**，这个时候结构体中没有直接的小于号重载，定义一个比较函数，程序说明
+>
+> `仿函数（functor）`又称为`函数对象（function object）`是一个`能行使函数功能的类`。<font color="yellow">本质上是类 </font>。仿函数的语法几乎和我们普通的函数调用一样，不过`作为仿函数的类，都必须重载operator()运算符`，`仿函数与Lamdba表达式的作用是一致的`。
+> 
 ```c++
 #include <iostream>
 #include <string>

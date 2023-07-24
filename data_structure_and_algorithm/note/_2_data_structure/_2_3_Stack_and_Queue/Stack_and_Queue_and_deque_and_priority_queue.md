@@ -913,6 +913,8 @@ https://blog.csdn.net/qq_50533529/article/details/124673008
 >
 > **第三种：仿函数的应用**
 >
+> `仿函数（functor）`又称为`函数对象（function object）`是一个`能行使函数功能的类`。<font color="yellow">本质上是类 </font>。仿函数的语法几乎和我们普通的函数调用一样，不过`作为仿函数的类，都必须重载operator()运算符`，`仿函数与Lamdba表达式的作用是一致的`。
+>
 > <font color="yellow"> "仿函数"比较类的定义方式如下（返回true时，前后交换位置）</font>
 > 
 > ```c++
