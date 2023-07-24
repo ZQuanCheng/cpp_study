@@ -313,11 +313,15 @@ public:
 > 
 > **本题还需要`startIndex`来控制`for`循环的起始位置，对于组合问题，什么时候需要`startIndex`呢？**
 >
-> 我举过例子，如果是一个集合来求组合的话，就需要startIndex，例如：77.组合 (`_1_combinations.md`)和216.组合总和III (`_2_combination_sum_iii.md`)
+> <font color="pink">
 >
-> 如果是多个集合取组合，各个集合之间相互不影响，那么就不用startIndex，例如：17.电话号码的字母组合(`_3_letter_combinations_of_a_phone_number.md`)
+> 我举过例子，如果是一个集合来求组合的话，就需要`startIndex`，例如：77.组合 (`_1_combinations.md`)和216.组合总和III (`_2_combination_sum_iii.md`)
+>
+> 如果是多个集合取组合，各个集合之间相互不影响，那么就不用`startIndex`，例如：17.电话号码的字母组合(`_3_letter_combinations_of_a_phone_number.md`)
+>
+> </font>
 > 
-> **注意以上我只是说求组合的情况，如果是排列问题，又是另一套分析的套路，后面我再讲解排列的时候就重点介绍。**
+> **<font color="gree">注意以上我只是说求组合的情况，如果是排列问题，又是另一套分析的套路，后面我再讲解排列的时候就重点介绍。</font>**
 >
 > 代码如下：
 >
