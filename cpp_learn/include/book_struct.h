@@ -28,6 +28,7 @@ struct Books
 // 因为.c源文件和main.cpp同时包含.h头文件，导致具体定义的对象重复定义，编译器报错。
 */
 
+
 void printBook_1( struct Books book );
 void printBook_2( Books book );              // 前面不加struct关键词，g++编译器也可以识别到结构体类型
 

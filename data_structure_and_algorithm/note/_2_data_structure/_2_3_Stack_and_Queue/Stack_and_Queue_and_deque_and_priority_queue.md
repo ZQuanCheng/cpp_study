@@ -195,8 +195,8 @@
 > ```c++
 > #include<queue>
 > queue<int> q;
-> q.push()      //1. 入队列，队尾插入元素。即 std::depue::push_back()
-> q.pop()       //2. 出队列，队头删除元素。即 std::depue::pop_front()
+> q.push()      //1. 入队列，队尾插入元素。即 std::deque::push_back()
+> q.pop()       //2. 出队列，队头删除元素。即 std::deque::pop_front()
 > q.size()      //3. 返回队列中元素个数，求队列的大小 ，
 > q.empty()     //4. 判断队列是否为空，如果队列为空则返回 true, 否则返回 false;
 > q.front()     //5. 返回队头元素的引用
@@ -301,17 +301,19 @@
 > #endif
 > ```
 > 二者只有`pop()`方法的删除位置区别.
+>
+> 
 > `protected` 声明的成员,其作用范围大于 `private` ,小于 `public` .即: `private < protected < public`. 与 `private` 内部的成员相比, `protected` 支持本类的派生类访问保护成员.
 >
 > 
 
 
-#### 字符串类型`string` 也有类似栈的操作
+#### 字符串类型`string` 和 数组 `vector` 也有类似栈的操作
 
-> `string::empty()`
-> `string::back()`
-> `string::push_back()`
-> `string::pop_back()`
+> `string::empty()`      `vector::empty()`
+> `string::back()`       `vector::back()`
+> `string::push_back()`  `vector::push_back()`
+> `string::pop_back()`   `vector::pop_back()`
 > 
 > 等等有很多，可以看看这些用法
 > 
@@ -338,7 +340,7 @@ https://blog.csdn.net/qq_50533529/article/details/124673008
 > https://blog.csdn.net/weixin_57761086/article/details/126802156
 >
 >
-> 优先队列是一种容器适配器，采用了堆（`heap`, 本质上完全二叉树）这样的数据结构，保证了第一个元素总是整个优先队列中**最大的**(或**最小的**)元素。
+> 优先队列是一种容器适配器，采用了堆（`heap`, 本质上`完全二叉树`）这样的数据结构，保证了第一个元素总是整个优先队列中**最大的**(或**最小的**)元素。
 > 
 > 优先队列默认使用`vector`作为底层存储数据的容器，在`vector`上使用了堆算法将`vector`中的元素构造成堆的结构，所以其实我们就可以把它当作堆，**凡是需要用堆的位置，都可以考虑优先队列**。(所以需要先学习堆)
 >
@@ -376,7 +378,7 @@ https://blog.csdn.net/qq_50533529/article/details/124673008
 > //大堆：每个结点的值都不大于它的双亲结点，堆顶元素是最大的。 又叫（大顶堆，大根堆）
 > //小堆：每个结点的值都不小于它的双亲结点，堆顶元素是最小的。 
 > 
-> priority_queue<int,vector<int>,greater<int> > pq2;
+> priority_queue<int,vector<int>, greater<int>> pq2;
 > // less<int>表示数字大的优先级越大，greater<int>表示数字小的优先级越大。 
 > ```
 >
@@ -764,26 +766,26 @@ https://blog.csdn.net/qq_50533529/article/details/124673008
 >
 > `集合std::set`(`key`就是`value`)
 >
-> * `less`: `key`越小，优先级越高，越靠近队头（`begin()`）。即按`key`升序
+> * `less`: `key`越小，优先级越高，越靠近`队头`（`begin()`）。即按`key`升序
 >
-> * `greater`: `key`越大，优先级越高，越靠近队头（`begin()`）。即按`key`降序
+> * `greater`: `key`越大，优先级越高，越靠近`队头`（`begin()`）。即按`key`降序
 >
 > `映射std::map`(`pair<key, value>`)
 >
-> * `less`: `key`越小，优先级越高，越靠近队头（`begin()`）。即按`key`升序
+> * `less`: `key`越小，优先级越高，越靠近`队头`（`begin()`）。即按`key`升序
 >
-> * `greater`: `key`越大，优先级越高，越靠近队头（`begin()`）。即按`key`降序
+> * `greater`: `key`越大，优先级越高，越靠近`队头`（`begin()`）。即按`key`降序
 >
 > 
 > `优先级队列std::priority_queue`
 >
-> * `less`: `key`越小，优先级越高，越靠近队头。对应大顶堆/大根堆(`top()`指向的队尾元素最大`max`). 取出的元素顺序为降序
-> * `greater`: `key`越大，优先级越高，越靠近队头。对应小顶堆/小根堆(`top()`指向的队尾元素最小`min`). 取出的元素顺序为升序序
+> * `less`: `key`越小，优先级越高，越靠近`队头`。对应大顶堆/大根堆(`top()`指向的`队尾`元素最大`max`). 取出的元素顺序为降序
+> * `greater`: `key`越大，优先级越高，越靠近`队头`。对应小顶堆/小根堆(`top()`指向的队尾元素最小`min`). 取出的元素顺序为升序
 > 
 > 注：
 > 
 > `优先级队列std::priority_queue`的`std::less`和`std::sort()函数`的`std::less`功能正好相反。
-> > 其实`sort(vec.begin(), vec.end(), less<int>());`和`priority_queue<int, vector<int>, less<int>> vec;`都是升序，只不过`std::priority_queue`只有`top()`这个取值函数，只能从队尾取元素，导致元素取出后是降序。
+> > 其实`sort(vec.begin(), vec.end(), less<int>());`和`priority_queue<int, vector<int>, less<int>> vec;`都是升序，只不过`std::priority_queue`只有`top()`这个取值函数，只能从`队尾`取元素，导致元素取出后是降序。
 > 
 > `优先级队列std::priority_queue`的`std::greater`和`std::sort()函数`的`std::greater`功能正好相反
 > > 其实`sort(vec.begin(), vec.end(), greater<int>());`和`priority_queue<int, vector<int>, greater<int>> vec;`都是降序，只不过`std::priority_queue`只有`top()`这个取值函数，只能从队尾取元素，导致元素取出后是升序。
@@ -1116,8 +1118,8 @@ https://blog.csdn.net/qq_50533529/article/details/124673008
 > class top_max {
 > public:
 >     bool operator()(const pair<string, int>& front, const pair<string, int>& back) {
->         return front.second < back.second; // top最小
->         // return front.second > back.second; // top最大
+>         return front.second < back.second; // top最大
+>         // return front.second > back.second; // top最小
 > 
 >         // 返回true时，交换位置，front排在back的后面
 >         // 这里是按照递减序列排序（top最大）
@@ -1163,7 +1165,7 @@ https://blog.csdn.net/qq_50533529/article/details/124673008
 > > 
 > > 大家对这个比较运算在建堆时是如何应用的，为什么左大于右就会建立小顶堆，反而建立大顶堆比较困惑。
 > > 
-> > <font color="yellow"> 例如我们在写快排的`cmp`函数的时候，`return left>right` 就是从大到小，`return left<right` 就是从小到大。</font>
+> > <font color="yellow"> 例如我们在写快排的`cmp`函数的时候，`return left > right` 就是从大到小，`return left < right` 就是从小到大。</font>
 > > 
 > > <font color="yellow"> 优先级队列的定义正好反过来了，可能和优先级队列的源码实现有关（我没有仔细研究），我估计是底层实现上优先队列队首指向后面，队尾指向最前面的缘故！</font>
 > > 
@@ -1357,7 +1359,7 @@ https://blog.csdn.net/qq_50533529/article/details/124673008
 > 
 > emplace_back(type) 对应 push_back(type)
 > 
-> emplace_front(type) 对应于 push_front()
+> emplace_front(type) 对应于 push_front(type)
 > 
 > emplace(i, type) 对应于 insert(iterator, value)
 >

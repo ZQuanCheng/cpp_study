@@ -697,7 +697,7 @@
 
 
 > 
-> `<stdlib.h>`中的函数只能实现从字符串向`int`的转变，没有内置函数可以直接将`int`转为`string`或`const char*`类型
+> `<stdlib.h>`中的函数只能实现从`字符串`向`int`的转变，没有内置函数可以直接将`int`转为`string`或`const char*`类型
 > 
 > ```c++
 > string s1 = "123"; 
@@ -706,7 +706,7 @@
 > #include <cstdlib> 
 > // 注： atoi()：将 const char*类型 转换为 int类型。
 > // 注： stoi()：将 string类型 转换为 int类型。
-> // 注： stol（）：将 string类型 转换为 long int类型。
+> // 注： stol()：将 string类型 转换为 long int类型。
 > 
 > 一般转换的字符串长度不超过10
 > ```

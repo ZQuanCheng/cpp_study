@@ -43,7 +43,16 @@ https://www.geeksforgeeks.org/sorting-algorithms/
 
 > 
 > **算法复杂度**
-> 
+>
+> |  方法   | 最好时间复杂度  | 空间复杂度 | 稳定性  | 如何记忆 |
+> |  ----  | ----  | ----  | ----  | ----  |
+> | 插入/希尔  | $O(n)$ | $O(1)$ | 稳定 |每轮往后扩展一个数字，该数字从后往前移动，直到放入正确位置 |
+> | 冒泡  | $O(n)$ | $O(1)$ | 稳定 | 每轮递减结束位置`[0, end]`，从`0`开始，大的向上冒，直到`end`|
+> | 选择  | $O(n^2)$ | $O(1)$ | 不稳定 | 每轮递增开始位置`[start. n-1]`，确定范围内最小位置的索引`min_index`，然后`swap(nums[i], nums[min_index]);`| 
+> | 快速  | $O(nlog_{2}{n})$ | $O(nlog_{2}{n})$ | 不稳定 | `挖坑填数+分治法` |
+> | 归并  | $O(nlog_{2}{n})$ | $O(n)$ | 稳定 | <font color="yellow">不会写</font> |
+> | 堆 | $O(nlog_{2}{n})$ | $O(1)$ | 不稳定 | <font color="yellow">不会写</font>: 每轮递减结束位置`[0, end]`，构造堆，然后`swap(nums[0], nums[end]);` |
+>  12
 > <div align=center>
 > <img src="./images/algorithm_complexity_1.jpg" style="zoom:100%;"/>
 > <img src="./images/algorithm_complexity_2.png" style="zoom:100%;"/>
@@ -179,7 +188,7 @@ int main()
 >  
 > **第二轮：**
 >
-> `5` 和 `1` 比，`1` 比 `5` 小，元素 `5` 后移，然后 `2` 和 `1` 比，`1` 比 `2` 小，元素 `2` 也**后移**（这里要事先将待排序的元素保存下来，不然被后移的元素覆盖就找不到了）
+> `5` 和 `1` 比，`1` 比 `5` 小，元素 `5` 后移，然后 `2` 和 `1` 比，`1` 比 `2` 小，元素 `2` 也**后移**（这里要`事先将待排序的元素保存下来，不然被后移的元素覆盖就找不到了`）
 >    
 > <div align=center>
 > <img src="./images/insert_sort_3.png" style="zoom:100%;"/>
@@ -192,7 +201,29 @@ int main()
 > <img src="./images/insert_sort_4.png" style="zoom:100%;"/>
 > </div>
 >
-> **代码如下：**
+> **按照图中的操作，代码可以这样写：**
+>
+> ```c++
+> void insertSort(vector<int>& nums)
+> {
+>     for(int i=1; i < nums.size(); i++) {
+> 
+>         // 从i往前，将i移动到满足顺序的位置
+>         for(int j=i; j > 0; j--) {
+>             if(nums[j-1] > nums[j]) {
+>                 swap(nums[j], nums[j-1]);
+>             }
+>             else {
+>                 break; // 满足顺序后，更前面的就不用检查了
+>             }
+>         }
+> 
+>     }
+> }
+> ```
+>
+>
+> **但是，如果是要体现插入，代码应该这样写：**
 >
 > ```c++
 > void insertSort(vector<int>& nums)
@@ -410,7 +441,7 @@ int main()
 > > 内循环则是依次递减：`nums.size() − 1 − i`层
 > > 
 >
-> **代码如下：**
+> **原始版代码如下：**
 >
 > ```c++
 > // 冒泡排序 Bubble Sort 方法一
@@ -430,6 +461,28 @@ int main()
 >     }
 > }    
 > ```
+>
+> **原始版 或者这样写：**
+>
+> ```c++
+> // 冒泡排序 Bubble Sort 方法二
+> // 从第一个元素开始，与后面的元素逐个比较，如果顺序不对就交换，直到没有可比较的元素为止。
+> void bubbleSort(vector<int>& nums)
+> {   
+>     // 将所有相邻元素比较，小的放左侧，大的放右侧
+>     // n次循环，将最大值冒泡到顶部（数组尾部），每次循环得到一个最大值
+>     for(int end = nums.size()-1; end > 0; end--) {  // 结束位置变化
+>         // 第1次循环已经将最大的值放在数组末尾nums.size()-1了
+>         // 第2次循环只需要冒泡到倒数第2个位置，将第2大的值放在倒数第2位
+>         // 第3次循环只需要冒泡到倒数第3个位置，将第3大的值放在倒数第3位
+>         // ...
+>         for(int i = 0; i < end; i++) {
+>             if(nums[i] > nums[i+1]) swap(nums[i], nums[i+1]);
+>         }
+>     }
+> }    
+> ```
+>
 > 
 > **优化版本：**
 >
@@ -464,7 +517,35 @@ int main()
 >     }
 > }  
 > ```
+>
+> **优化版本 或者这样写：**
+>
+> ```c++
+> void bubbleSort(vector<int>& nums)
+> {   
+>     // 冒泡排序 Bubble Sort 方法一
+>     // n次循环，将最大值冒泡到顶部（数组尾部），每次循环得到一个最大值
+>     for(int end = nums.size()-1; end > 0; end--) {
+>         // 第1次循环已经将最大的值放在数组末尾nums.size()-1了
+>         // 第2次循环只需要冒泡到倒数第2个位置，将第2大的值放在倒数第2位
+>         // 第3次循环只需要冒泡到倒数第3个位置，将第3大的值放在倒数第3位
+>         // ...
 > 
+>         bool flag = false; // 设置flag，一轮循环中未出现次序改变，直接停止算法
+>         for(int i = 0; i < end; i++) {
+>             if(nums[i] > nums[i+1]) {
+>                 swap(nums[i], nums[i+1]);
+>                 flag = true; //当发生交换，false变为true，这时还不确定数组是否全部有序，应进行下一次循环
+>             }
+>         }
+> 		//但若某一趟中一次元素交换都没有，即依然为flag = false
+> 		//那么表明所剩待排序列已经有序
+> 		//不必再进行趟数比较，外层循环应该结束，即此时if (!flag) break; 跳出循环
+>         if(!flag) break;
+>     }
+> }  
+> ```
+>
 > **补充： 我第一次写冒泡排序是下面这样，不知道算不算冒泡**
 >
 > ```c++
@@ -514,8 +595,9 @@ int main()
 >
 > <font color="yellow">
 > 
-> * 冒泡排序是每次将最大的元素放到最后
-> * 选择排序是每次将最小的元素放到开头
+> * 冒泡排序是每次将最大的元素放到最后，但是每轮都要一个个冒泡
+> * 选择排序是每次将最小的元素放到开头，只需要找出最小的元素，然后`swap(nums[i], nums[min_loc]);`
+> 
 > </font>
 >
 > **代码如下：**
@@ -531,10 +613,10 @@ int main()
 >         // 第2次循环只需要从nums[1]开始遍历，将最小的元素与nums[1]交换位置
 >         // 第3次循环只需要从nums[2]开始遍历，将最小的元素与nums[2]交换位置
 >         // ...    
->         // 找出最小的一个元素
+>         // 找出最小的一个元素，寻找[start,n)区间里的最小值
 >         int min_loc = i;
 >         for(int j = i+1; j < nums.size(); j++) {
->             if(nums[j] < nums[min_loc]) min_loc = j;
+>             if(nums[j] < nums[min_loc]) min_loc = j; //更新索引		
 >         } 
 >         // 最小的元素和遍历的第一个元素nums[i]交换
 >         swap(nums[i], nums[min_loc]);
@@ -542,12 +624,44 @@ int main()
 > }
 > ```
 > 
-
+>
+> **或者这样写：**
+> 
+> ```c++
+> // 选择排序 Selection Sort
+> void selectSort(vector<int>& nums)
+> {
+>     // 从头到尾扫描序列，找出最小的一个元素的索引，将该元素与第一个元素交换位置
+>     // n次循环，将最小值放到开头，每次循环得到一个最小值    
+>     for(int start = 0; start < nums.size(); start++) {
+>         // 第1次循环已经将最小值放在数组开头
+>         // 第2次循环只需要从nums[1]开始遍历，将最小的元素与nums[1]交换位置
+>         // 第3次循环只需要从nums[2]开始遍历，将最小的元素与nums[2]交换位置
+>         // ...    
+>         // 找出最小的一个元素
+>         int min_index = start;
+>         for(int i=start + 1; i < nums.size(); i++) {
+>             if(nums[i] < nums[min_index]) min_index = i; //更新索引		
+>         } 
+>         // 最小的元素和遍历的第一个元素nums[i]交换
+>         swap(nums[start], nums[min_index]);
+>     }
+> }
+> ```
+> 
+> 
+>
 
 
 --------------------------------------------------------------------------------
 
 ### 快速排序 `Quick Sort`
+
+>
+> <font color="yellow">三种实现方法 </font>
+>
+> https://blog.csdn.net/C_Trip/article/details/126624319
+> 
 
 >
 > 快排是**不稳定**的算法，但是在**大部分场景都适合使用**，尤其是**大数据量场景中性能优势明显**。
@@ -598,28 +712,32 @@ int main()
 > <img src="./images/quick_sort_1.png" style="zoom:100%;"/>
 > </div>
 >
-> 初始时，`i = 0;  j = 9;   X = a[i] = 72`
+> 初始时，`left = 0;  right = 9;   X = a[left] = 72`
 >
-> 由于已经将 `a[0]` 中的数保存到 `X` 中，可以理解成在数组 `a[0]` 上挖了个坑，可以将其它数据填充到这来。
+> 由于已经将 `a[left]` 中的数保存到 `X` 中，可以理解成在数组 `a[left]` 上挖了个坑，可以将其它数据填充到这来。
 >
-> 从`j`开始向前找一个比`X`小或等于`X`的数。当`j=8`，符合条件，将`a[8]`挖出再填到上一个坑`a[0]`中。`a[0]=a[8]; i++;`  这样一个坑`a[0]`就被搞定了，但又形成了一个新坑`a[8]`，这怎么办了？简单，再找数字来填`a[8]`这个坑。这次从`i`开始向后找一个大于`X`的数，当`i=3`，符合条件，将`a[3]`挖出再填到上一个坑中`a[8]=a[3]; j--;`
+> 从`right`开始向前找一个比`X`小或等于`X`的数。当`right=8`，符合条件，将`a[right]`挖出再填到上一个坑`a[left]`中。`a[left]=a[right]; left++;`  这样一个坑`a[lef]`就被搞定了，
+> 
+> `left = 1;  right = 8;   X = 72`
+> 
+> 但又形成了一个新坑`a[right]`，这怎么办了？简单，再找数字来填`a[right]`这个坑。这次从`left`开始向后找一个大于`X`的数，当`left=3`，符合条件，将`a[left]`挖出再填到上一个坑中`a[right]=a[left]; right--;`
 > 
 > 数组变为：
 >    
 > <div align=center>
 > <img src="./images/quick_sort_2.png" style="zoom:100%;"/>
 > </div>
->
-> `i = 3;   j = 7;   X=72`
+> 
+> `left = 3;   right = 7;   X=72`
 >
 > 再重复上面的步骤，先从后向前找，再从前向后找。
 >
-> 从`j`开始向前找，当`j=5`，符合条件，将`a[5]`挖出填到上一个坑中，`a[3] = a[5]; i++;`
+> 从`right`开始向前找，当`right=5`，符合条件，将`a[right]`挖出填到上一个坑中，`a[left] = a[right]; left++;`
 >
-> 从`j`开始向前找，当`j=5`，符合条件，将`a[5]`挖出填到上一个坑中，`a[3] = a[5]; i++;`
+> 从`left`开始向后找，当`left=5`，由于`left==right`退出。
 >
-> 此时，`i = j = 5`，而`a[5]`刚好又是上次挖的坑，因此将`X`填入`a[5]`。
->
+> 此时，`left = right = 5`，而`a[right]`刚好又是上次挖的坑，因此将`X`填入`a[right]`。
+> 
 > 数组变为：
 >    
 > <div align=center>
@@ -630,10 +748,10 @@ int main()
 >
 > 对挖坑填数进行总结:
 >
-> 1. `i =L; j = R;` 将基准数挖出形成第一个坑`a[i]`。
-> 2. `j--`由后向前找比它小的数，找到后挖出此数填前一个坑`a[i]`中。
-> 3. `i++`由前向后找比它大的数，找到后也挖出此数填到前一个`坑a[j]`中。
-> 4. 再重复执行`2，3`二步，直到`i==j`，将基准数填入`a[i]`中。
+> 1. `left = start; right = end;` 将基准数`base = a[left]`挖出, 形成第一个坑`a[left]`。
+> 2. `right--`由后向前找比它小的数，找到后挖出此数填前一个坑`a[left]`中。
+> 3. `left++`由前向后找比它大的数，找到后也挖出此数填到前一个`坑a[right]`中。
+> 4. 再重复执行`2，3`二步，直到`left==right`，将基准数`base`填入`a[left=right]`中。
 >
 > 照着这个总结很容易实现挖坑填数的代码：
 >
@@ -642,23 +760,23 @@ int main()
 > **代码如下：**
 > 
 > ```c++
-> void quickSort(vector<int>& nums,int cur_left,int cur_right)
+> void quickSort(vector<int>& nums,int start,int end)
 > {
 >     // 如果cur_left 和 cur_right 位置不合理，说明不需要排序了
->     if(cur_left >= cur_right) return;
+>     if(start >= end) return;
 >     
 >     // 注1，有的书上是以中间的数作为基准数的，
 >     // 要实现这个方便非常方便，直接将中间的数和第一个数进行交换就可以了。
->     // swap(nums[cur_left], nums[(cur_left + cur_right) / 2]); 
+>     // swap(nums[start], nums[(start + end) / 2]); 
 >     // 为了防止溢出，可以这样
->     // swap(nums[cur_left], nums[cur_left + (cur_right - cur_left) / 2]); 
+>     // swap(nums[start], nums[start + (end - start) / 2]); 
 > 
 > 
 >     // 基准
->     int base = nums[cur_left];
+>     int base = nums[start];
 >     // 双指针法: 保证left指针左侧都是小于base的，right指针右侧都是大于base的
->     int left = cur_left;    // 左指针left  初始化为子表最左侧
->     int right = cur_right;  // 右指针right 初始化为子表最右侧
+>     int left = start;    // 左指针left  初始化为子表最左侧
+>     int right = end;  // 右指针right 初始化为子表最右侧
 >     
 >     // 开始处理子表
 >     // 基准值已经暂存，left所指向的位置有一个坑
@@ -687,8 +805,8 @@ int main()
 >     nums[left] = base;
 >     
 >     // 递归调用
->     quickSort(nums, cur_left, left - 1);
->     quickSort(nums, right + 1, cur_right);    
+>     quickSort(nums, start, left - 1);
+>     quickSort(nums, right + 1, end);    
 > 
 > }
 > ```
@@ -1819,16 +1937,36 @@ int main()
 >
 > 堆排序是利用堆这种数据结构设计的排序算法，堆具备以下特点：
 >
-> 1）完全二叉树. 
+> 1）`完全二叉树. `
 > 
-> 2）大顶堆：二叉树根结点值都大于或等于其左右子树结点的值
+> 2）`大顶堆：二叉树根结点值都大于或等于其左右子树结点的值. `
+> > `arr[i] >= arr[2i+1] && arr[i] >= arr[2i+2] // i 对应第几个节点，i从0开始编号`
+> >    
+> > <div align=center>
+> > <img src="./images/heap_sort_1.png" style="zoom:100%;"/>
+> > </div>
+> > 
 > 
-> 3）小顶堆：根结点的值都小于或等于其左右子树结点的值。
+> 3）`小顶堆：根结点的值都小于或等于其左右子树结点的值。`
+> > `arr[i] <= arr[2i+1] && arr[i] <= arr[2i+2] // i 对应第几个节点，i从0开始编号`
+> >    
+> > <div align=center>
+> > <img src="./images/heap_sort_2.png" style="zoom:100%;"/>
+> > </div>
+> > 
 > 
 > **基本思想**
->
-> 先把数组构造成一个大顶堆（父亲节点大于其子节点）, 然后把堆顶（数组最大值，数字第一个元素）和数组最后一个元素交换， 这样就把最大值放到了数组最后边。把数组长度`n-1`, 再进行构造堆，把剩余的第二大值放到堆顶，输出堆顶（放到剩余未排序数组最后面）。依次类推，直至数组排序完成。
->
+> 
+> <font color="gree">
+> 
+> 1. 先把数组构造成一个大顶堆（父亲节点大于其子节点）, 
+> 
+> 2. 然后把`堆顶`（数组最大值，数字第一个元素）`和数组最后一个元素交换`， 这样就把最大值放到了数组最后边。
+> 
+> 3. 把数组长度`n-1`, 再进行构造堆，把剩余的第二大值放到堆顶，输出堆顶（放到剩余未排序数组最后面）。
+> 
+> 4. `依次类推`，直至数组排序完成。</font>
+> 
 > **二叉树的性质：**
 >
 > 在第一个元素的索引为 `0` 的情形中： 即根元素用 `arr[0]` 表示
@@ -1845,92 +1983,70 @@ int main()
 > 
 >  索引为 `i` 的父结点的索引是`floor( (i−1) / 2 )`; 即`arr[ floor( (i−1) / 2 ) ];`
 > 
+> 
 > **基本思路：**
+>
+> https://blog.csdn.net/m0_73096566/article/details/128418046
+>
+> https://blog.csdn.net/cativen/article/details/124810686
 >
 > * `Step1：`建立大根堆,将`n`个元素组成的无序序列构建一个大顶堆。(第`1`层`1`个，第`2`层`2`个，第`3`层`4`个, ...)
 >    
 > <div align=center>
-> <img src="./images/heap_sort_1.png" style="zoom:60%;"/>
+> <img src="./images/heap_sort_3.png" style="zoom:100%;"/>
 > </div>
 >
 > 从最后一个叶子节点开始，从左到右，从下到上调整，将完全二叉树调整为大顶堆。
 >
-> > 1. 找到第一个**非叶子**结点`4`，由于`4`的左结点`7`比`4`大，所以交换`4`和`7`，交换后为大顶堆结构。
+> > 1. 找到第一个**非叶子**结点`6`，由于`6`的右子结点`9`比`6`大，所以交换`6`和`9`，交换后为大顶堆结构。
 > >    
 > > <div align=center>
-> > <img src="./images/heap_sort_2.png" style="zoom:60%;"/>
+> > <img src="./images/heap_sort_4.png" style="zoom:100%;"/>
 > > </div>
 > > 
-> > 2.找到第二个**非叶子**结点`6`，由于`6`的右结点`8`比`6`大，所以交换`6`和`8`，交换后符合大顶堆结构。
+> > 2.找到第二个**非叶子**结点`4`，由于`4`的左子结点`9`比`4`大，所以交换`4`和`9`，交换后符合大顶堆结构。
 > >    
 > > <div align=center>
-> > <img src="./images/heap_sort_3.png" style="zoom:60%;"/>
+> > <img src="./images/heap_sort_5.png" style="zoom:100%;"/>
 > > </div>
 > > 
+> > 
+> > 3.这时，交换导致了子根`[4,5,6]`结构混乱，继续调整，`[4,5,6]`中`6`最大，交换`4`和`6`。
+> >    
+> > <div align=center>
+> > <img src="./images/heap_sort_6.png" style="zoom:100%;"/>
+> > </div>
+> > 
+> > 此时，我们就将一个无序序列构造成了一个大顶堆。
 >
-> * `Step2：`交换堆元素，交换堆尾元素和堆首元素，使堆尾元素为最大元素；
+> * `Step2：`交换堆元素，将堆顶元素与末尾元素进行交换，使末尾元素最大；
 >    
 > <div align=center>
-> <img src="./images/heap_sort_4.png" style="zoom:60%;"/>
+> <img src="./images/heap_sort_7.png" style="zoom:100%;"/>
 > </div>
 >
 > * `Step3：`重建大根堆，将前`n − 1`个元素组成的无序序列调整为大顶堆。
-> 
-> * `Step4：`重复执行步骤二和步骤三，直到整个序列有序
+>    
+> <div align=center>
+> <img src="./images/heap_sort_8.png" style="zoom:100%;"/>
+> </div>
 >
-> **我的代码如下（迭代法）**
+> * `Step4：`重复执行步骤二和步骤三，直到整个序列有序
+>    
+> <div align=center>
+> <img src="./images/heap_sort_9.png" style="zoom:100%;"/>
+> </div>
+>
+> 
 > 
 > ```c++
-> void heapSort(vector<int>& nums) {
->     // 堆排序
->     // 设置标志，当一轮遍历完成，flag未变成true，则停止
->     bool flag = false;
->     // 每轮都会将最大值放在数组最后，所以每轮遍历的结尾。将堆的长度缩短一个长度
->     for(int end = nums.size()-1; end >= 1; end--) {
->         // 标志位先置false
->         flag = false;
->         
->         // 1. 从右到左，从下到上检查，倒序遍历
->         // 将所有非叶子节点（父节点）的值，设置为父节点、左孩子、有孩子三者的最大值
->         for(int i=end; i >= 0; i--) {
->             // 检查是否为非叶子节点（父节点）: 如果是则将父节点、左孩子、有孩子的最大值放在父节点
->             if(2*i + 1 <= end || 2*i + 2 <= end) { // 存在左孩子或右孩子，即为非叶子节点（父节点）
->                 // 如果左孩子存在，且值大于父节点
->                 if(2*i + 1 <= end && nums[2*i + 1] > nums[i]) {
->                     swap(nums[i], nums[2*i + 1]); 
->                     flag = true;
->                 }
->                 // 如果右孩子存在，且值大于（左孩子和父节点的较大值）
->                 if(2*i + 2 <= end && nums[2*i + 2] > nums[i]) {
->                     swap(nums[i], nums[2*i + 2]); 
->                     flag = true;
->                 }
->                 // 上面两个步骤可以将三者的最大值放在父节点
->                 
->             }
->             // 如果左右孩子都存在，要让左孩子 >= 右孩子
->             if(2*i + 1 <= end && 2*i + 2 <= end) { 
->                 if(nums[2*i + 1] < nums[2*i + 2]) swap(nums[2*i + 1], nums[2*i + 2]);
->                 flag = true;
->             } 
->         }
-> 
->         // 如果上面发生了数值的交换flag = true;，则说明堆排序未结束，执行
->         // 2. 交换堆尾元素和堆首元素，使堆尾元素为最大元素；
->         if(flag) swap(nums[0], nums[end]);
->         // 如果上面遍历完都没有发生变动，说明排序已完成
->         if(!flag) break;
-> 
->     } // for(int end = nums.size()-1; end >= 1; end--) {
-> 
-> }
 > // 注： 
-> // 索引为 i 的父结点的索引是floor((i−1)/2);
+> // 索引为 i 的父结点的索引是floor((i−1)/2) = (i−1)/2;
 > // 索引为 i 的左孩子的索引是( 2 ∗ i + 1 );
-> // 索引为 i 的右孩子的索引是( 2 ∗ i + 2 );
+> // 索引为 i 的右孩子的索引是( 2 ∗ i + 2 ); 
 > ```
 > 
-> **递归法（没看懂，还是我的迭代法好懂）**
+> **递归法**
 >
 > https://blog.csdn.net/CltCj/article/details/122664204
 >
@@ -1951,43 +2067,192 @@ int main()
 >  *	   
 >  */
 > 
-> //构造大顶堆	
-> void maxheap_down(vector<int>&nums,int len,int index)
+> // 构造大顶堆	
+> // 参数： 原始集合nums，堆首索引start，堆尾索引end
+> void heapAdjust(vector<int>& nums, int start, int end)
 > {
-> 	int left = 2 * index + 1;//左(left)孩子的位置
-> 	int right = 2 * index + 2;//右(right)孩子的位置
-> 	
-> 	int maxIdx = index;//默认当前结点为最大
-> 	if (left<len && nums[left]>nums[maxIdx]) maxIdx = left;
-> 	if (right<len && nums[right]>nums[maxIdx]) maxIdx = right;
-> 
-> 	if (maxIdx != index)
+> 	int temp = nums[start];
+> 	for (int i = 2 * start + 1; i <= end; i = i * 2 + 1)
 > 	{
-> 		swap(nums[maxIdx], nums[index]);
-> 		maxheap_down(nums,len, maxIdx);
+>       // 把当前左子树和右子树的数据作比较，
+> 		if (i < end && nums[i] < nums[i + 1])//有右孩子并且左孩子小于右孩子
+> 		{
+> 			i++;
+> 		}//i一定是左右孩子的最大值
+> 		if (nums[i] > temp)
+> 		{
+> 			nums[start] = nums[i];
+> 			start = i;
+> 		}
+> 		else
+> 		{
+> 			break;
+> 		}
 > 	}
+> 	nums[start] = temp;
 > }
 > 
-> void heapSort(vector<int>& nums,int size)
+> void heapSort(vector<int>& nums)
 > {
-> 	
-> 	//构建大顶堆
-> 	for (int i = size/2 - 1; i >= 0; i--)
-> 	{
-> 
-> 		maxheap_down(nums, size,i);
+> 	int len = nums.size();
+>    
+> 	// 第一次构建大顶堆，从后往前依次调整
+> 	// 索引为 i 的父结点的索引是floor((i−1)/2);
+> 	// 由于最后一个叶子节点的索引为nums.size()-1, 
+> 	// 则最后一个非叶子节点为其父节点，索引为floor((nums.size()-1−1)/2)，
+> 	// 即floor(nums.size()/2 - 1) = nums.size()/2 - 1 = len/2 - 1；
+> 	// 所以从len/2 - 1往前遍历即可
+> 	for (int i = len/2 - 1; i >= 0; i--)   // int i = (len-1-1)/2
+> 	{	
+> 		heapAdjust(nums, i, len-1);  // 第一次end = nums.size()-1
 > 	}
 > 
-> 	//调制大顶堆
-> 	for (int i = size - 1; i >= 1; i--)
+>   
+> 	// 调制大顶堆：每次构建完之后，交换首尾，缩小长度(end--)，重新构建
+> 	// 第一次是nums[0], nums[nums.size()-1]交换
+> 	for (int end = len - 1; end >= 1; end--)
 > 	{
-> 		swap(nums[0], nums[i]);
-> 		maxheap_down(nums, i, 0);
+> 		swap(nums[0], nums[end]);  // 将其与末尾元素进行交换，此时末尾就为最大值。
+> 		heapAdjust(nums, 0, end-1); // 将剩余n-1个元素重新构造成一个堆
 > 	}
 > }
 > ```
 > 
 > 
+> 
+> **实机跑一下，看看过程对不对：**
+>
+> ```c++
+> #include <iostream> 
+> #include <vector>
+> using namespace std;
+> 
+> void print(vector<int>& nums)
+> {
+> 	/*for (auto i : nums)*/
+> 	for (vector<int>::iterator it = nums.begin(); it != nums.end(); it++)
+> 	{
+> 		std::cout << *it << " ";
+> 	}
+> 	std::cout << std::endl;
+> }
+> 
+> 
+> void heapAdjust(vector<int>& nums, int start, int end)
+> {
+> 	int temp = nums[start];
+> 	for (int i = 2 * start + 1; i <= end; i = i * 2 + 1)
+> 	{
+>       // 把当前左子树和右子树的数据作比较，
+> 		if (i < end && nums[i] < nums[i + 1])//有右孩子并且左孩子小于右孩子
+> 		{
+> 			i++;
+> 		}//i一定是左右孩子的最大值
+> 		if (nums[i] > temp)
+> 		{
+> 			nums[start] = nums[i];
+> 			start = i;
+> 
+>             cout << "start = " << start << ", end = " << end << ", After heapAdjust: ";
+>             print(nums);    
+> 
+> 		}
+> 		else
+> 		{
+> 			break;
+> 		}
+> 	}
+> 	nums[start] = temp;
+> 
+>     cout << "start = " << start << ", end = " << end << ", After heapAdjust: ";
+>     print(nums);        
+> }
+> 
+> 
+> void heapSort(vector<int>& nums)
+> {
+> 	int len = nums.size();
+>    
+> 	// 第一次构建大顶堆，从后往前依次调整
+> 	// 索引为 i 的父结点的索引是floor((i−1)/2);
+> 	// 由于最后一个叶子节点的索引为nums.size()-1, 
+> 	// 则最后一个非叶子节点为其父节点，索引为floor((nums.size()-1−1)/2)，
+> 	// 即floor(nums.size()/2 - 1) = nums.size()/2 - 1 = len/2 - 1；
+> 	// 所以从len/2 - 1往前遍历即可
+> 	for (int i = len/2 - 1; i >= 0; i--)   // int i = (len-1-1)/2
+> 	{	
+> 		heapAdjust(nums, i, len-1);  // 第一次end = nums.size()-1
+> 	}
+> 
+>   
+> 	// 调制大顶堆：每次构建完之后，交换首尾，缩小长度(end--)，重新构建
+> 	// 第一次是nums[0], nums[nums.size()-1]交换
+> 	for (int end = len - 1; end >= 1; end--)
+> 	{
+> 		swap(nums[0], nums[end]);  // 将其与末尾元素进行交换，此时末尾就为最大值。
+> 
+>         cout << "end = " << end << ", After swap: ";
+>         print(nums);
+> 
+> 		heapAdjust(nums, 0, end-1); // 将剩余n-1个元素重新构造成一个堆
+>     
+> 	}
+> }
+> 
+> 
+> int main()
+> {
+> 
+> 	  vector<int> nums = { 4, 6, 8, 5, 9 };
+> 	  cout << "begin: " ;
+> 	  print(nums);
+> 	  cout << endl;
+> 	  
+> 	  heapSort(nums);
+> 
+> 	  cout << "final: " ;
+> 	  print(nums);
+> 
+> 	  cout << endl;
+> 	  cout << endl;
+> 	  pause();
+> 
+> 	  return 0;
+> }
+> ```
+>
+> 
+>
+> **实机测试运行结果如下：**
+>
+> ```c++
+> begin: 4 6 8 5 9 
+> 
+> start = 4, end = 4, After heapAdjust: 4 9 8 5 9 
+> start = 4, end = 4, After heapAdjust: 4 9 8 5 6 
+> start = 1, end = 4, After heapAdjust: 9 9 8 5 6 
+> start = 4, end = 4, After heapAdjust: 9 6 8 5 6 
+> start = 4, end = 4, After heapAdjust: 9 6 8 5 4 
+> end = 4, After swap: 4 6 8 5 9 
+> start = 2, end = 3, After heapAdjust: 8 6 8 5 9 
+> start = 2, end = 3, After heapAdjust: 8 6 4 5 9 
+> end = 3, After swap: 5 6 4 8 9 
+> start = 1, end = 2, After heapAdjust: 6 6 4 8 9 
+> start = 1, end = 2, After heapAdjust: 6 5 4 8 9 
+> end = 2, After swap: 4 5 6 8 9 
+> start = 1, end = 1, After heapAdjust: 5 5 6 8 9 
+> start = 1, end = 1, After heapAdjust: 5 4 6 8 9 
+> end = 1, After swap: 4 5 6 8 9 
+> start = 0, end = 0, After heapAdjust: 4 5 6 8 9 
+> 
+> final: 4 5 6 8 9 
+> ```
+> 
+> 
+
+
+
+
 
 
 
@@ -2021,8 +2286,8 @@ int main()
 > 
 > `优先级队列std::priority_queue`
 >
-> * `less`: `key`越小，优先级越高，越靠近队头。对应大顶堆/大根堆(`top()`指向的队尾元素最大`max`). 取出的元素顺序为降序
-> * `greater`: `key`越大，优先级越高，越靠近队头。对应小顶堆/小根堆(`top()`指向的队尾元素最小`min`). 取出的元素顺序为升序序
+> * `less`: `key`越小，优先级越高，越靠近队头。对应大顶堆/大根堆(`top()`指向的队尾元素最大`max`). `取出`的元素`顺序`为`降序`
+> * `greater`: `key`越大，优先级越高，越靠近队头。对应小顶堆/小根堆(`top()`指向的队尾元素最小`min`). `取出`的元素`顺序`为`升序`
 > 
 > 注：
 > 

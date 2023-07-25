@@ -521,6 +521,8 @@
   > <br>
   > <br>
   >   
+  > <font color="yellow"> 删除指定范围的元素：v.erase(iter_1, iter_2); </font> 
+  >   
   > 具体看下删除后是不是首位地址没变
   > ```c++  
   > // vector<int> nums = {3,2,2,3};
@@ -566,9 +568,9 @@
 
 *
   > <font color="yellow"> 删除区间 ( 左闭右开 ) ：</font> <br> 
-  > <font color="yellow"> v.erase(iterator first, iterator last); </font> //删除[first, last)范围内的所有元素。左闭右开区间 <br>
+  > <font color="yellow"> v.erase(iterator first, iterator last); </font> //删除[first, last)范围内的所有元素。`左闭右开区间` <br>
   > 例1：<br>
-  > v.erase( v.begin() + i, v.begin() + j ); //删除区间[i, j),左闭右开区间 即[i, j-1] ( i < j ) <br> 
+  > `v.erase( v.begin() + i, v.begin() + j );` //删除区间[i, j),左闭右开区间 即[i, j-1] ( i < j ) <br> 
   > ```c++
   > vector<int> v = {0,1,2,3,4,5,6,7,8,9};  
   > // v.erase(iterator first, iterator last); 删除[first, last)范围内的所有元素。
@@ -590,7 +592,7 @@
   > //超出范围后，具体数值看具体情况了
   > ``` 
   > 例2：<br> 
-  > v.erase( v.begin() + i, v.end() - j );  //删除区间,只留下开头i个，结尾j个<br>
+  > `v.erase( v.begin() + i, v.end() - j );`  //删除区间,只留下开头i个，结尾j个<br>
   > 这里之所以能剩下结尾j个，不是j-1个，是因为v.end()所指向的是结尾位置的下一个位置
   > 例1：<br>
   > ```c++
@@ -752,6 +754,44 @@
 
 
 
+*
+  > <font color="yellow"> 删除对应条件的元素：remove_if(); </font>   <br>
+  > remove_if应用实例
+  >> ```c++
+  >> #include <algorithm> 
+  >> vector<int> v = {1, 2, 3, 4, 5, 6, 7, 8, 9};
+  >> int x = 5;
+  >> v.erase(remove_if(v.begin(), v.end(), [=](int i) { 
+  >>     return i < x;}), v.end());
+  >> // 显示每一个元素
+  >> for_each(v.begin(), v.end(), [](int i) { 
+  >>     cout << i << endl;});
+  >> ``` 
+  >> 运行结果
+  >> ```c++  
+  >> 5  
+  >> 6 
+  >> 7 
+  >> 8 
+  >> 9 
+  >> ```  
+  >> 分析
+  >> ```c++ 
+  >> remove_if(iterator first, iterator las, function f);  
+  >> // 前两个参数表示迭代的起始位置和这个起始位置所对应的停止位置。
+  >> // 最后一个参数：传入一个回调函数，如果回调函数返回为真，则将当前所指向的参数移到尾部。
+  >> // 返回值是被移动区域的首个元素。  
+  >>  
+  >> v.erase(iterator first, iterator last); 
+  >> //删除[first, last)范围内的所有元素。左闭右开区间
+  >>   
+  >> v.erase(remove_if(v.begin(), v.end(), 
+  >>                 [=](int i) { return i < x;}), v.end());
+  >> // remove_if先把小于5的值全部移动到尾部(5,6,7,8,9,1,2,3,4)，且返回迭代器指针指向1,
+  >> // v.erase把从1到最后一个位置的元素全部删除
+  >> ```
+
+
 
 --------------------------------------------------------------------------------
 
@@ -760,10 +800,10 @@
 
 ### vector的各种操作的底层逻辑
 * <font color="yellow"> 扩容 </font>
-  > * std : : vector和std : : array的底层数据结构,就是array[ ]数组。<br>
-  > * array[ ]数组和std : : array容器，是静态分配空间，一旦分配了空间的大小，就不可以再改变了<br>
-  > * <font color="green">vector容器的容量增长是按照容器现在容量的一倍进行增长。 先复制2倍的vector空间，再删除原来1倍的vector空间。空间复杂度增大。</font> <br>
-  > * 当vector中的可用空间耗尽时，就要动态扩大内部数组的容量。直接在原有物理空间的基础上追加空间？这不现实。数组特定的地址方式要求，物理空间必须地址连续，而我们无法保证其尾部总是预留了足够空间可供拓展。一种方法是，申请一个容量更大的数组，并将原数组中的成员都搬迁至新空间，再在其后方进行插入操作。新数组的地址由OS分配，与原数据区没有直接的关系。新数组的容量总是取作原数组的两倍。<br>
+  > * `std : : vector和std : : array的底层数据结构,就是array[ ]数组。`<br>
+  > * `array[ ]`数组和`std : : array`容器，是静态分配空间，一旦分配了空间的大小，就不可以再改变了<br>
+  > * <font color="green">`vector`容器的容量增长是按照容器现在容量的一倍进行增长。 先复制`2`倍的`vector`空间，再删除原来`1`倍的`vector`空间。空间复杂度增大。</font> <br>
+  > * 当`vector`中的可用空间耗尽时，就要动态扩大内部数组的容量。直接在原有物理空间的基础上追加空间？这不现实。数组特定的地址方式要求，`物理空间必须地址连续`，而我们无法保证其尾部总是预留了足够空间可供拓展。一种方法是，`申请一个容量更大的数组，并将原数组中的成员都搬迁至新空间，再在其后方进行插入操作。新数组的地址由OS分配，与原数据区没有直接的关系。新数组的容量总是取作原数组的两倍`。<br>
 
 * 插入和删除
   > * 插入给定值的过程是，先找到要插入的位置，然后将这个位置（包括这个位置）的元素向后整体移动一位，然后将该位置的元素复制为给定值。
@@ -787,8 +827,8 @@ https://blog.csdn.net/alidada_blog/article/details/83029438
   >> * 三者的存储都是连续的，可以进行随机访问
 
 > * 不同点
-  >> * array[]是不安全的，std::array和std::vecto是比较安全的（有效的避免越界等问题）
-  >> * array[]和std::array对象存储在相同的内存区域（栈）中，vector对象存储在自由存储区（堆）
+  >> * `array[]`是不安全的，`std::array`和`std::vector`是比较安全的（有效的避免越界等问题）
+  >> * `array[]`和`std::array`对象存储在相同的内存区域（`栈`）中，`vector`对象存储在自由存储区（`堆`）
   >> * std::array可以将一个对象赋值给另一个std::array对象，但是数组array[]不行
   >> * std::vector属于变长的容器，即可以根据数据的插入和删除重新构造容器容量；但是std::array和array[]属于定长容器
   >> * std::vector和std::array提供了更好的数据访问机制，即可以使用front()和back()以及at()（at()可以避免a[-1]访问越界的问题）访问方式，使得访问更加安全。而array[]只能通过下标访问，在写程序中很容易出现越界的错误

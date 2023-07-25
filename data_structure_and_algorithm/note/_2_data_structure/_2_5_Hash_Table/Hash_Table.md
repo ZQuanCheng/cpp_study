@@ -25,7 +25,7 @@
 > 
 > <font color="yellow">
 > 
-> 我们用`std::unorder_maped<key, obj>`，很多时候都是为了判断每个`key`的个数
+> 我们用`std::unordered_map<key, obj>`，很多时候都是为了判断每个`key`的个数
 >
 > 即，我们的`key`为一个元素，`obj`为这个值出现的次数
 >
@@ -75,11 +75,11 @@
 > // hashCode       哈希码, 是一种算法, 看具体情况
 > 
 > // 已知
-> * index = hashFunction(name)
-> * hashFuncion() = hashCode() % tableSize
+> 1. index = hashFunction(name)
+> 2. hashFuncion() = hashCode() % tableSize
 > 
 > // 得到
-> * index = hashCode(name) % tableSize
+> index = hashCode(name) % tableSize
 > 
 > ```
 
@@ -240,9 +240,9 @@
 > 
 > * <font color="yellow">都是优先使用`std::unordered_xxx` (`xxx` = `set`或`map`)</font>
 >
-> * <font color="yellow">如果需要`key`是有序的，则使用`std::multixxx` (`xxx` = `set`或`map`)</font>
+> * <font color="yellow">如果需要`key`是有序的，则使用`std::xxx` (`xxx` = `set`或`map`)</font>
 >
-> * <font color="yellow">如果要求不仅`key`有序还要有重复`value`的话，才需要使用`std::xxx`(`xxx` = `set`或`map`)</font>
+> * <font color="yellow">如果要求不仅`key`有序还要有重复`value`的话，才需要使用`std::multixxx`(`xxx` = `set`或`map`)</font>
 >
 > * 虽然`std::xxx`、`std::multixxx`的底层实现并不是哈希表，而是红黑树，但是从使用方式的角度来说，还是哈希法的使用方式，即`key`和`value`。所以使用这些数据结构来解决映射问题的方法，我们依然称之为哈希法
 >

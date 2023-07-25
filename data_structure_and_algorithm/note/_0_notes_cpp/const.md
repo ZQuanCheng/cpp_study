@@ -188,3 +188,68 @@
   > </div>
 
 
+
+
+
+
+
+#### char * 和 char []
+
+>
+> 按理说下面的两句代码是一样的
+>
+> ```c++
+> char *p = "hello";
+> 
+> char a[] = "hello";
+> ```
+> 
+> 但是实际上，这两种写法都不足以体现其本质，本质上是
+>
+> ```c++
+> const char *p = "hello"; // char *p = "hello";
+> 
+> char *const a = "hello"; //char a[] = "hello";
+> ```
+>
+> 一个是常量指针；一个是指针常量
+> 
+> `（指向）常量（的）指针pointers to constant`：指向的数据不可变，但是指针可以改变来指向别的地方
+>
+> 
+> `指针常量constant pointer`：指向固定的内存位置，该位置的值可以更改
+> 
+> 所以，
+> 
+> `p指向的内容是不能修改的，但是p可以修改`
+>
+> `a指向的内容可以修改，但是a不可以修改`
+>
+> <br>
+> <br>
+> <br>
+> 
+> 
+> 如果`char *s`出现在函数形参列表中，本质上是`const char *s`
+>
+> https://blog.csdn.net/Scofield971031/article/details/88421258
+>
+> 
+> 
+> ```c++
+> int substring(char* s, char a) // 函数内，s指向的内容，只读
+> 
+> 最好改为
+> 
+> int substring(char s[], char a) // 函数内可以修改s指向的内容
+> ```
+>
+
+
+
+
+
+
+
+
+
