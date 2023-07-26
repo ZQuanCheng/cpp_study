@@ -48,17 +48,19 @@ https://www.geeksforgeeks.org/sorting-algorithms/
 > |  ----  | ----  | ----  | ----  | ----  |
 > | 插入/希尔  | $O(n)$ | $O(1)$ | 稳定 |每轮往后扩展一个数字，该数字从后往前移动，直到放入正确位置 |
 > | 冒泡  | $O(n)$ | $O(1)$ | 稳定 | 每轮递减结束位置`[0, end]`，从`0`开始，大的向上冒，直到`end`|
-> | 选择  | $O(n^2)$ | $O(1)$ | 不稳定 | 每轮递增开始位置`[start. n-1]`，确定范围内最小位置的索引`min_index`，然后`swap(nums[i], nums[min_index]);`| 
+> | 选择  | $O(n^2)$ | $O(1)$ | 不稳定 | 每轮递增开始位置`[start. n-1]`，确定范围内最小位置的索引`min_index`，然后`swap(nums[start], nums[min_index]);`| 
 > | 快速  | $O(nlog_{2}{n})$ | $O(nlog_{2}{n})$ | 不稳定 | `挖坑填数+分治法` |
 > | 归并  | $O(nlog_{2}{n})$ | $O(n)$ | 稳定 | <font color="yellow">不会写</font> |
 > | 堆 | $O(nlog_{2}{n})$ | $O(1)$ | 不稳定 | <font color="yellow">不会写</font>: 每轮递减结束位置`[0, end]`，构造堆，然后`swap(nums[0], nums[end]);` |
->  12
+> 
 > <div align=center>
 > <img src="./images/algorithm_complexity_1.jpg" style="zoom:100%;"/>
 > <img src="./images/algorithm_complexity_2.png" style="zoom:100%;"/>
 > </div>
 >
->  
+> 
+> 
+> 
 > **稳定**：如果`a`原本在`b`前面，而`a=b`，排序之后`a`仍然在`b`的前面。
 > 
 > **不稳定**：如果`a`原本在`b`的前面，而`a=b`，排序之后 `a` 可能会出现在 `b` 的后面。
