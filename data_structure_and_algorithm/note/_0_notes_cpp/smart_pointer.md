@@ -96,7 +96,81 @@
 
 
 
+#### 夏铭珺给的参考代码
 
+```c++
+template <typename T>
+class SharedPtr {
+private:
+    size_t* m_count;
+    T* m_ptr;
+public: 
+    //构造函数
+    SharedPtr() : m_ptr(nullptr), m_count(new size_t) {}
+    SharedPtr(T* ptr) : m_ptr(ptr), m_count(new size_t) {*m_count = 1;}
+    //析构函数
+    ~SharedPtr() {
+        --(*m_count);
+        //判断是否要释放资源
+        if (*m_count == 0) {
+            delete m_ptr;
+            delete m_count;
+            m_ptr = nullptr;
+            m_count = nullptr;
+        }
+    }
+    //拷贝构造函数
+    SharedPtr(const SharedPtr& ptr) {
+        if (this != &ptr) {
+            m_count = ptr.m_count;
+            m_ptr = ptr.m_ptr;
+            ++(*m_count);
+        }
+    }
+    //拷贝赋值运算
+    SharedPtr& operator=(const SharedPtr& ptr) {
+        if (this->m_ptr == ptr.m_ptr) {
+            return *this;
+        }
+        if (this->m_ptr) {
+            if (--(*this->m_count) == 0) {
+              delete this->m_ptr;
+              delete this->m_count;
+              this->m_ptr = nullptr;
+              this->m_count = nullptr;
+            }
+        }
+        this->m_ptr = ptr.m_ptr;
+        this->m_count =ptr.m_count;
+        *m_count++;
+        return *this;
+    }
+    //移动构造函数
+    SharedPtr(SharedPtr&& ptr) : m_count(ptr.m_count), m_ptr(ptr.m_ptr) {
+        ptr->m_ptr =nullptr;
+        ptr->m_count = nullptr;
+    }
+    //移动赋值运算符
+    SharedPtr& operator=(SharedPtr&& ptr) {
+        SharedPtr(ptr).swap(*this);
+        return *this;
+    }
+    
+    //解引用
+    T& operator*() {return *m_ptr;}
+    //箭头运算
+    T* operator->() {return m_ptr;}
+    //重载bool操作符
+    operator bool() {return m_ptr == nullptr;}
+    T* get() {return m_ptr;}
+    size_t use_count() {return *m_count;}
+    bool unique() {return *m_count == 1;}
+    void swap(SharedPtr& ptr) {
+        std::swap(this->m_ptr, ptr.m_ptr);
+        std::swap(this->m_count, ptr.m_count):
+   }
+}
+```
 
 
 
