@@ -685,19 +685,24 @@ int main()
 >
 > **基本思想：**
 > 
-> * 任取一个元素（如：第一个）为中心
+> * 任取一个元素（如：第一个）为基准
 > 
 > * 所有比它小或等于的元素一律前放，比它大的元素一律后放，形成左右两个子表。
 > 
-> * 对各子表重新选择中心元素并依此规则调整。（递归思想）
+> * 对各子表重新选择基准元素并依此规则调整。（递归思想）
 > 
 > * 直到每个子表的元素只剩一个
 >
-> 注： 有的书上是以中间的数作为基准数的，要实现这个方便非常方便，直接将中间的数和第一个数进行交换就可以了。
+> <font color="pink">注： 有的书上是以中间的数作为基准数的，要实现这个方便非常方便，直接将中间的数和第一个数进行交换就可以了。</font>
 >
 > 具体理论可以参考[王卓老师讲的快速排序](https://www.bilibili.com/video/BV1nJ411V7bd/?p=164&vd_source=048483965bec207cb2d804a53cf61534)
 >
 
+
+
+
+
+#### 实现1：挖坑填数法
 
 > 
 > <font color="yellow">我们看这个博客 https://www.runoob.com/w3cnote/quick-sort.html </font>
@@ -751,8 +756,8 @@ int main()
 > 对挖坑填数进行总结:
 >
 > 1. `left = start; right = end;` 将基准数`base = a[left]`挖出, 形成第一个坑`a[left]`。
-> 2. `right--`由后向前找比它小的数，找到后挖出此数填前一个坑`a[left]`中。
-> 3. `left++`由前向后找比它大的数，找到后也挖出此数填到前一个`坑a[right]`中。
+> 2. `right--`由后向前找比`base`小的数，找到后挖出此数填前一个坑`a[left]`中。
+> 3. `left++`由前向后找比`base`大的数，找到后也挖出此数填到前一个`坑a[right]`中。
 > 4. 再重复执行`2，3`二步，直到`left==right`，将基准数`base`填入`a[left=right]`中。
 >
 > 照着这个总结很容易实现挖坑填数的代码：
@@ -794,7 +799,7 @@ int main()
 >         }
 >         // 这时候右侧由于被挖出，right指向的位置出现一个坑
 >         // 需要找出left指向的大于基准的值
->         while(left < right && nums[left] < base) {
+>         while(left < right && nums[left] <= base) {
 >             left++;
 >         }
 >         // 将左侧大于base的值挖出，填进right指向的坑，然后right指针左移
@@ -804,7 +809,85 @@ int main()
 >         }    
 >     }
 >     // while结束时，left == right, 还剩下一个中间坑
->     nums[left] = base;
+>     int meeti = left;
+>     nums[meeti] = base;
+>     
+>     // 递归调用
+>     quickSort(nums, start, left - 1);
+>     quickSort(nums, right + 1, end);    
+> 
+> }
+> ```
+> 
+> 
+
+
+
+#### 实现2：左右指针交换法（挖坑填数也是双指针，但是具体过程有所不同）
+
+> 
+> <font color="gree">
+> 
+> 对左右指针法进行总结:
+>
+> 1. `left = start; right = end;` 将基准数的索引暂存`base = left`
+> 2. `right--`由后向前找比`a[base]`小的数。
+> 3. `left++`由前向后找比`a[base]`大的数。
+> 4. `swap(&a[right], &a[left]);`将左右指针所指的内容进行交换
+> 5. 再重复执行`2, 3, 4`二步，直到`left==right`，将基准索引`a[base]`和相遇位置`a[left=right]`交换`swap(&a[left], &a[base]);`
+>
+> </font>
+> 
+> 
+> > <font color="yellow">左右指针交换法 和  挖坑填数 的差别如下大：</font>
+> > 
+> > 
+> >    
+> > <div align=center>
+> > <img src="./images/quick_sort_4.jpg" style="zoom:100%;"/>
+> > </div>
+> 
+> 
+> 
+> 
+>
+> **代码如下：**
+> 
+> ```c++
+> void quickSort(vector<int>& nums,int start,int end)
+> {
+>     // 如果cur_left 和 cur_right 位置不合理，说明不需要排序了
+>     if(start >= end) return;
+>     
+>     // 注1，有的书上是以中间的数作为基准数的，
+>     // 要实现这个方便非常方便，直接将中间的数和第一个数进行交换就可以了。
+>     // swap(nums[start], nums[(start + end) / 2]); 
+>     // 为了防止溢出，可以这样
+>     // swap(nums[start], nums[start + (end - start) / 2]); 
+> 
+> 
+>     // 基准
+>     int base = start;
+>     // 双指针法: 保证left指针左侧都是小于base的，right指针右侧都是大于base的
+>     int left = start;    // 左指针left  初始化为子表最左侧
+>     int right = end;  // 右指针right 初始化为子表最右侧
+>     
+>     // 开始处理子表
+>     while(left < right) {
+>         // 需要找出right指向的小于基准的值
+>         while(left < right && nums[right] >= nums[base]) {
+>             right--;
+>         }
+>         // 需要找出left指向的大于基准的值
+>         while(left < right && nums[left] <= nums[base]) {
+>             left++;
+>         }
+>         // 将左右指针所指的内容进行交换
+>         swap(nums[right], nums[left]); 
+>     }
+>     // while结束时，left == right, 还剩下基准值，需要放在中间
+>     int meeti = left;
+>     swap(nums[meeti], nums[base]);
 >     
 >     // 递归调用
 >     quickSort(nums, start, left - 1);
@@ -821,7 +904,180 @@ int main()
 
 
 
+
+
+
+
+
+#### 关于快排的基准值的选取
+
+
+>
+> https://blog.csdn.net/zou_albert/article/details/107405455
+> 
+> <font color="pink">1. 固定位置选取基准值</font>
+> 
+> > 快速排序之所比较快，因为相比冒泡排序，每次交换是跳跃式的。每次排序的时候设置一个基准点，将小于等于基准点的数全部放到基准点的左边，将大于等于基准点的数全部放到基准点的右边。这样在每次交换的时候就不会像冒泡排序一样每次只能在相邻的数之间进行交换，交换的距离就大的多了。因此总的比较和交换次数就少了，速度自然就提高了。
+> >  
+> > 
+> > `在最坏的情况下，可能是相邻的两个数进行了交换(退化为冒泡排序)。例如，如果待排序的数组基本有序,那可能就变成每次划分都是n-1和1, 即每次划分只能使待排序序列减一,就退化成O(n^2)了`
+> > 
+> > `因此快速排序的最差时间复杂度和冒泡排序是一样的都是 O(N^2)，它的平均时间复杂度为 O(N*logN)`
+> >  
+> >  
+> > <div align=center>
+> > <img src="./images/quick_sort_5.png" style="zoom:100%;"/>
+> > </div>
+> > 
+> > ```c++
+> > int SelectPivot(int arr[],int low,int high)  
+> > {  
+> >     return arr[low];//选择选取序列的第一个元素作为基准  
+> > }  
+> > ```
+> > 
+> > > * 上面的算法，每次递归，都是以第一个数为基准。
+> > > 
+> > > * 有的书上是以中间的数作为基准数的，要实现这个方便非常方便，直接将中间的数和第一个数进行交换就可以了
+> > > 
+> > > * 或者以最后一个数作为基准数，就可以直接将最后一个数和第一个数进行交换就可以了
+> > 
+> > <font color="gree">测试数据：</font>
+> >  
+> > <div align=center>
+> > <img src="./images/quick_sort_6.png" style="zoom:100%;"/>
+> > </div>
+> > 
+> > <font color="gree">测试数据分析：</font>
+> >  
+> > 如果输入序列是随机的，处理时间可以接受的。如果数组已经有序时，此时的分割就是一个非常不好的分割。因为每次划分只能使待排序序列减一，此时为最坏情况，快速排序沦为起泡排序，时间复杂度为Θ(n^2)。而且，输入的数据是有序或部分有序的情况是相当常见的。因此，使用第一个元素作为枢纽元是非常糟糕的，
+> >  
+> > <font color="gree">为了避免这个情况，就引入了下面两个获取基准的方法。</font>
+> 
+> 
+>
+> 
+>
+> 
+>
+> 
+> <font color="pink">2. 随机选取基准值</font>
+>
+> > <font color="gree">基本思想：</font>
+> > 
+> > > 选取待排序列中任意一个数作为基准值。
+> >
+> > <font color="gree">引入的原因：</font>
+> > 
+> > > 在待排序列是部分有序时，固定选取枢轴使快排效率底下，要缓解这种情况，就引入了随机选取枢轴
+> > 
+> > ```c++
+> > /*随机选择枢轴的位置，区间在low和high之间*/  
+> > int SelectPivotRandom(int arr[],int low,int high)  
+> > {  
+> >     //产生枢轴的位置  
+> >     srand((unsigned)time(NULL));  
+> >     int pivotPos = rand()%(high - low) + low;  
+> > 
+> >     //把枢轴位置的元素和low位置元素互换，此时可以和普通的快排一样调用划分函数  
+> >     swap(arr[pivotPos],arr[low]);  
+> >     return arr[low];  
+> > }  
+> > ```
+> > 
+> > 
+> > <font color="gree">测试数据：</font>
+> >  
+> > <div align=center>
+> > <img src="./images/quick_sort_7.png" style="zoom:100%;"/>
+> > </div>
+> > 
+> > <font color="gree">测试数据分析：</font>
+> >  
+> > 这是一种`相对安全的策略`。由于枢轴的位置是随机的，那么产生的分割也不会总是会出现劣质的分割。在`整个数组数字全相等时，仍然是最坏情况，时间复杂度是O(n2）`。实际上，随机化快速排序得到`理论最坏情况的可能性仅为1/(2n）`。所以随机化快速排序可以`对于绝大多数输入数据达到O(nlogn）的期望时间复杂度`。
+> >  
+> > 
+>
+> 
+>
+> 
+> <font color="pink">3. 三数取中法，选取基准元</font>
+> > 
+> > <font color="gree">基本思想:</font>
+> > 
+> > > `取第一个数，最后一个数，第（N/2）个数，三个数中数值中间的那个数作为基准值`。
+> > > 
+> > > `举个例子，对于int a[] = { 2,5,4,9,3,6,8,7,1,0};，‘2’、‘3’、‘0’，分别是第一个数，第（N/2）个是数以及最后一个数，三个数中3最大，0最小，2在中间，所以取2为基准值。`
+> > 
+> > 
+> > <font color="gree">引入的原因：</font>
+> > 
+> > > 虽然随机选取枢轴时，减少出现不好分割的几率，但是还是`最坏情况下还是O(n^2）`，要缓解这种情况，就引入了三数取中选取枢轴
+> > 
+> > 
+> > 
+> > ```c++
+> > /*函数作用：取待排序序列中low、mid、high三个位置上数据，选取他们中间的那个数据作为枢轴*/  
+> > int SelectPivotMedianOfThree(int arr[],int low,int high)  
+> > {  
+> >     int mid = low + ((high - low) >> 1);//计算数组中间的元素的下标  
+> > 
+> >     //使用三数取中法选择枢轴  
+> >     if (arr[mid] > arr[high])//目标: arr[mid] <= arr[high]  
+> >     {  
+> >         swap(arr[mid],arr[high]);  
+> >     }  
+> >     if (arr[low] > arr[high])//目标: arr[low] <= arr[high]  
+> >     {  
+> >         swap(arr[low],arr[high]);  
+> >     }  
+> >     if (arr[mid] > arr[low]) //目标: arr[low] >= arr[mid]  
+> >     {  
+> >         swap(arr[mid],arr[low]);  
+> >     }  
+> >     //此时，arr[mid] <= arr[low] <= arr[high]  
+> >     return arr[low];  
+> >     //low的位置上保存这三个位置中间的值  
+> >     //分割时可以直接使用low位置的元素作为枢轴，而不用改变分割函数了  
+> > } 
+> > ```
+> > 
+> > 
+> > <font color="gree">分析：</font>
+> > 
+> > > 最佳的划分是将待排序的序列分成等长的子序列，最佳的状态我们可以使用序列的中间的值，也就是第N/2个数。可是，这很难算出来，并且会明显减慢快速排序的速度。这样的中值的估计可以通过随机选取三个元素并用它们的中值作为枢纽元而得到。事实上，随机性并没有多大的帮助，因此一般的做法是使用左端、右端和中心位置上的三个元素的中值作为枢纽元。显然使用三数中值分割法消除了预排序输入的不好情形，并且减少快排大约14%的比较次数
+> > 
+> > 
+> > <font color="gree">测试数据：</font>
+> >  
+> > <div align=center>
+> > <img src="./images/quick_sort_8.png" style="zoom:100%;"/>
+> > </div>
+> > 
+> > <font color="gree">测试数据分析：</font>
+> >  
+> > 使用三数取中选择枢轴优势还是很明显的，但是`还是处理不了重复数组`
+> >  
+> > 
+> 
+> 
+> 
+>
+
+
+
+
+
+
+
+
+
+
+
+
+
 #### 比较我自己写的 快排代码 和 完美的快排代码 的 性能差距
+
 > 
 > 
 > **我自己写的代码如下** 
