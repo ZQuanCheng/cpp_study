@@ -119,7 +119,7 @@
   > // 使用Lambda表达式遍历vector
   > for_each(v.begin(), v.end(), [](int i) { cout << i << " "; });
   > // https://blog.csdn.net/weixin_43165135/article/details/125526408
-  > 
+  > ```
   > 输出结果为：
   > ```c++  
   > 5 4 3 2 1
