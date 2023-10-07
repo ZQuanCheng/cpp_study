@@ -129,6 +129,79 @@ public:
 >
 > 
 
+
+
+
+#### 快慢指针法
+
+```c++
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode *detectCycle(ListNode *head) {
+        // 空链表
+        if(head == nullptr) return head;
+
+        // 虚拟头节点
+        // ListNode* dummyHead = new ListNode(0);
+        // dummyHead->next = head;
+
+        // 快慢指针法
+        // slow指针每次移动一个节点        
+        // fast指针每次移动两个节点
+        ListNode* slow = head;
+        ListNode* fast = head;
+
+        // 相对于slow来说，fast是一个节点一个节点的靠近slow的，
+        // 1. 只要无环，fast就会比slow先到达终点， fast == nullptr || fast->next == nullptr 两种情况都不允许再移动
+        // 2. 只要有环，fast就会比slow先进入环；不管进入环时，fast和slow差距多远，最终fast一定会和slow重合。
+
+        while(fast != nullptr && fast->next != nullptr) {  // 只要fast还可以移动，就继续进行
+            // 移动指针
+            slow = slow->next;
+            fast = fast->next->next;
+            
+            // 只要相遇，就说明有环，这时候需要判断环的入口点
+            if(slow == fast) { 
+                // 定义：头节点head、环形入口点loop_start、指针相遇点 meet
+                // 设 从 头节点head 到 环形入口点loop_start 距离 x
+                //    从 环形入口点loop_start 到 指针相遇点 meet 距离 y
+                //    从 指针相遇点 meet 到 环形入口点loop_start 距离 z （y + z 即为环形周长）        
+                // 我们要计算的就是x
+                // 由于 slow走过的节点数 * 2 = fast走过的节点数 * 2   
+                // 即   (x + y) * 2 = x + n*(y + z) + y    
+                // 消掉x + y, 有 x + y = n*(y + z)
+                // x = n*(y + z) - y =  (n-1)*(y + z) + z
+                // 这就意味着，从头节点出发一个指针ptr1，从相遇处出发另一个指针ptr2，两者每次都移动一个节点
+                // 两者相遇的地方，就是环形入口处
+
+                ListNode* ptr1 = head; // 从头节点出发一个指针ptr1
+                ListNode* ptr2 = fast; // 从相遇处出发另一个指针ptr2
+                while(ptr1 != ptr2) {
+                    ptr1 = ptr1->next;
+                    ptr2 = ptr2->next;                    
+                }
+                return ptr2;
+            }
+        }
+
+        // 无环
+        return nullptr;
+    }
+};
+
+```
+
+
+
+
 #### 代码随想录 
 
 > 

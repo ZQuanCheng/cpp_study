@@ -44,7 +44,7 @@
 > ```c++
 > #include <cstring> 
 > strlen()、strcat()、strcpy()、strcmp()、
-> strstr()、strchr()、
+> strstr()、strchr()、strncpy()
 > isupper()、islower()、toupper()、tolower()
 > ```
 > 
@@ -299,7 +299,7 @@
 
 * **3. 读入未知数目的 `string` 对象**
 >
-> 和内置类型的输入操作一样，`strin`g 的输入操作符也会返回所读的数据流。因此，可以把输入操作作为判断条件。下面的程序将从标准输入读取一组 `string` 对象，然后在标准输出上逐行输出：
+> 和内置类型的输入操作一样，`string` 的输入操作符也会返回所读的数据流。因此，可以把输入操作作为判断条件。下面的程序将从标准输入读取一组 `string` 对象，然后在标准输出上逐行输出：
 > 
 > ```c++
 > string word;
@@ -385,7 +385,7 @@
 > **3. `string`对象加上一个字符（或字符串）字面值**
 >>
 >> 首先问一个问题：
->> <font color="green"> 因为历史原因以及为了与 `C` 语言兼容，字符串字面值"value"与标准库 string 类型不是同一种类型。</font>
+>> <font color="green"> 因为历史原因以及为了与 `C` 语言兼容，字符串字面值`"value"`与标准库 `string` 类型不是同一种类型。</font>
 >>
 >> <font color="yellow"> 那为什么`string`对象可以加上字符或字符串字面值？</font>
 >>
@@ -459,7 +459,7 @@
 >> <img src="./images/string_2.jpg"  width="" height="" alt="no photo" title="栈" style="zoom:100%;"/>
 >> </div>
 >> 
->> * `auto`通过初始化它的表达式来推断变量的类型，即`auto`声明的变量**必须初始化**。
+>> * `auto`通过变量初始化表达式来推断变量的类型，即`auto`声明的变量**必须初始化**。
 >> * `decltype`是直接通过某一个表达式来获取数据类型，**不需要进行初始化**。
 >> 
 >> 我们想要将`index`的类型与`s.size()`相同，但是`auto`会把`index`的初始值设定为`size`的值，这时候我们需要用`decltype`。
@@ -741,7 +741,7 @@
 > {
 >    int i = 1897;
 >    string s = itos(i); 
->    cout << "i=" << i << ", s = " << s << endl;
+>    cout << "i = " << i << ", s = " << s << endl;
 >    return 0;
 > }
 > ```
@@ -950,7 +950,7 @@
 > #include <cstdlib> 
 > // 注： atoi()：将 const char*类型 转换为 int类型。
 > // 注： stoi()：将 string类型 转换为 int类型。
-> // 注： stol（）：将 string类型 转换为 long int类型。
+> // 注： stol()：将 string类型 转换为 long int类型。
 > 
 > 一般转换的字符串长度不超过10
 > ```
